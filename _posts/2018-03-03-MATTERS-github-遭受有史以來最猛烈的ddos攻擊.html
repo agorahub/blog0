@@ -1,0 +1,30 @@
+---
+layout: post
+title: Github 遭受有史以來最猛烈的DDOS攻擊
+date: 2018-03-03 11:09:53.000000000 +00:00
+categories: matters
+tags: blog
+author: Isaac
+---
+
+<p>上文剛剛提到 Github上軟件工程師們玩的小把戲：<a href="https://matters.news/forum/?post=a6ba8961-ca0e-4721-90ac-078ccb54e1f1" dangerouslysetinnerhtml="{{" __html: 對比中國憲法版本的變動細節}}>對比中國憲法版本的變動細節</a>。沒過幾天，承載這一內容的Github網站（也是唯一在中國沒有被封的大型社羣網站）周三就遭受了有史以來最猛烈的攻擊。當天（香港時間周四凌晨2:30am左右)Github 服務器在段時間內受到超過每秒1.35T（1350G/s)的DDOS攻擊，導致網站中斷服務達數分鍾。根據目前已經公布的信息暫時無法判斷“中國憲法版本對比”和攻擊事件之間的關聯度，但是歷史線索是 Github 曾經遭受過幾次來自“<a href="https://arstechnica.com/information-technology/2015/04/ddos-attacks-that-crippled-github-linked-to-great-firewall-of-china/" dangerouslysetinnerhtml="{{" __html: 國家支持}}>國家支持</a>”的攻擊，而且<a href="https://www.bankinfosecurity.com/github-hit-by-its-largest-ddos-attack-a-8058" dangerouslysetinnerhtml="{{" __html: 指向中國}}>指向中國</a>。   </p><p>DDOS（“分布式<a href="https://zh.wikipedia.org/zh-hk/%E9%98%BB%E6%96%B7%E6%9C%8D%E5%8B%99%E6%94%BB%E6%93%8A" dangerouslysetinnerhtml="{{" __html: 洪水攻擊}}>洪水攻擊</a>”）攻擊是最原始也是最生硬的攻擊網站的方式，就是利用海量的假請求，讓網站交通阻塞，導致其無法訪問。常見的DDOS方法有人肉（如<a href="https://zh.wikipedia.org/zh-hk/%E5%B1%B1%E4%B8%9C%E8%93%9D%E7%BF%94%E6%8A%80%E5%B8%88%E5%AD%A6%E9%99%A2" dangerouslysetinnerhtml="{{" __html: 藍翔技校}}>藍翔技校</a>）和肉雞（<a href="https://www.ithome.com.tw/node/39761" dangerouslysetinnerhtml="{{" __html: 如botnet}}>如Botnet</a>）兩種方式。與以往不同的是，這次針對 Github 網站的攻擊利用了更加智能的方式（甚至是<a href="http://www.itpro.co.uk/machine-learning/30588/hackers-could-weaponise-ai-with-devastating-consequences" dangerouslysetinnerhtml="{{" __html: 人工智能技術}}>人工智能技術</a>），而且無需設置很多攻擊服務器，只是<a href="https://thehackernews.com/2018/02/memcached-amplification-ddos.html" dangerouslysetinnerhtml="{{" __html: 僞造一些ip地址訪問網絡上的緩存服務器(memcache)}}>僞造一些IP地址訪問網絡上的緩存服務器(Memcache)</a>，然後引流到被攻擊網站。由於一些設計上的漏洞，這些緩存服務器能夠將假的訪問請求放大數十倍投向目標網站，所以可以產生“鏈式”反應，有點像核彈的機制（忽然想到了普京日前吹噓的新型核彈）。     </p><p>不過，大型網站的安全措施也在與日俱增。這次Github遭受的攻擊雖然史無前例，但是反應迅速，也和其他網絡安全服務之間有良好的默契。所以Github 網站幾乎在短時間內（大約10分鍾左右）就恢復了正常。眼見攻擊很快被化解，發起攻擊的黑客（機構）也只好悻悻而去。</p><p></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" onerror="this.srcset='https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" onerror="this.srcset='https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png'">
+
+        <source type="image/webp" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png">
+
+        <img src="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption></figcaption></figure><p></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" onerror="this.srcset='https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" onerror="this.srcset='https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png'">
+
+        <source type="image/webp" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png">
+
+        <img src="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" srcset="https://matters-server-production.s3-ap-southeast-1.amazonaws.com/embed/e23f81a7-7f70-4509-bbc5-97180f6187e6/535855c69e88ab8da057f94346bd7b5d556fcb49b401db9a6a8ae16d873e466b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption></figcaption></figure><p></p><p></p>
