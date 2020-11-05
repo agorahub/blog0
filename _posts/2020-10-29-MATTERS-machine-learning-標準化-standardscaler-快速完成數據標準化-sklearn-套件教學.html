@@ -1,0 +1,412 @@
+---
+layout: post
+title: Machine Learning - 標準化（StandardScaler）- 快速完成數據標準化 - Sklearn 套件教學
+date: 2020-10-29 12:16:21.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><p><a href="https://github.com/chwang12341/Machine-Learning/blob/master/Standard-Scaler/Standard-Scaler-Sklearn/Sklearn_Standard_Scaler.ipynb" target="_blank">Github完整程式連結</a></p><p><br></p><p><strong>哈囉哈囉，不知道大家在閱讀這篇前，有先閱讀過我的上一篇針對標準化說明的文章嗎XD，那篇詳細說明了標準化是什麼、有什麼用、標準化種類介紹及公式計算，Python程式碼實作等等，而這篇就不會重複上一篇的觀念喔，這一篇會帶大家使用Sklearn（強大的的機器學習套件）來進行各種標準化的實作喔，那讓我們開始吧！！</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.webp" onerror="this.srcset='https://assets.matters.news/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.jpeg" onerror="this.srcset='https://assets.matters.news/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.webp">
+
+        <img src="https://assets.matters.news/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.jpeg" srcset="https://assets.matters.news/processed/540w/embed/071ee202-a27c-47ff-b0da-1e4a79e1b8c9.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：Christina Morillo，連結：Pexels</span></figcaption></figure><h2><br></h2><p><br></p><p><br></p><h2><strong>標準化的步驟</strong></h2><h2><strong> </strong></h2><h4><strong>Step1: 導入數據集與所需的套件 </strong></h4><ul><li>這邊我使用的是鼎鼎大名的鳶尾花數據集（Iris Dataset），相信大家進行機器學習練習的路上，時常會以它來當作數據集，所以對它很不陌生</li><li>簡單介紹一下鳶尾花數據集，數據集中有 "sepal_length", "sepal_width", "petal_length", "petal_width", "species", "species_id"這些特徵欄位，也就是有花萼長度與寬度、花瓣的長度與寬度，和花的種類與標籤編號這些特徵資料，非常適合進行分類問題的分析，像是Machine Learning中的KNN近鄰演算法，這我也會在之後的文章與大家介紹喔</li></ul><pre class="ql-syntax">## 導入sklearn 標準化套件
+from sklearn import preprocessing
+​
+## 導入繪圖套件
+import plotly.express as px
+​
+## 導入數據處理套件
+import pandas as pd
+​
+## 使用Plotly Express的內建數據集
+iris_data = px.data.iris()
+​
+## 顯示數據
+iris_data
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.webp" onerror="this.srcset='https://assets.matters.news/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.png" onerror="this.srcset='https://assets.matters.news/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.webp">
+
+        <img src="https://assets.matters.news/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.png" srcset="https://assets.matters.news/processed/540w/embed/fb6f913c-4d0d-4606-b9d3-9c47c5d7b8cf.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>Step2: 原始資料進行繪圖 </strong></h4><ul><li>這邊我拿'sepal_length' 與 'petal_length' 特徵來當X軸與Y軸，顏色用'species'來根據種類繪製不同顏色，大家也可以自己試試拿不同的特徵欄位來當X軸與Y軸喔</li></ul><pre class="ql-syntax">## 這邊我拿'sepal_length' 與 'petal_length' 特徵來當X軸與Y軸，顏色用'species'來根據種類繪製不同顏色 
+## 原始資料進行繪圖
+fig = px.scatter(iris_data, x = 'sepal_length', y = 'petal_length', color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><p><strong>執行結果</strong></p><figure class="image"><img src="https://matters.news/@CHWang/machine-learning-%25E6%25A8%2599%25E6%25BA%2596%25E5%258C%2596-standard-scaler-%25E5%25BF%25AB%25E9%2580%259F%25E5%25AE%258C%25E6%2588%2590%25E6%2595%25B8%25E6%2593%259A%25E6%25A8%2599%25E6%25BA%2596%25E5%258C%2596-sklearn-%25E5%25A5%2597%25E4%25BB%25B6%25E6%2595%2599%25E5%25AD%25B8-bafyreibpusofl5b3tt43ovknw2mnjzrmekfldelelyl33luzkfzc4k6loy" referrerpolicy="no-referrer"><figcaption><span></span></figcaption></figure><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f4348bd3-c388-410a-82d8-56942dceab49.webp" onerror="this.srcset='https://assets.matters.news/embed/f4348bd3-c388-410a-82d8-56942dceab49.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f4348bd3-c388-410a-82d8-56942dceab49.png" onerror="this.srcset='https://assets.matters.news/embed/f4348bd3-c388-410a-82d8-56942dceab49.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/f4348bd3-c388-410a-82d8-56942dceab49.webp">
+
+        <img src="https://assets.matters.news/embed/f4348bd3-c388-410a-82d8-56942dceab49.png" srcset="https://assets.matters.news/processed/540w/embed/f4348bd3-c388-410a-82d8-56942dceab49.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>Step3: 標準化前的數據準備 </strong></h4><ul><li>由於進行標準化的過程中，我們輸入進去的數據不可以是字串（string）形式，所以我們需要把species這個特徵欄位拿掉，然而species_id這個特徵欄位雖然是數值，但是它不需要進行標準化，所以也拿掉</li><li>拿掉species這個特徵欄位的同時，記得將其保存於一個變數之中，它會是我們後面繪圖，需要用來以顏色區別鳶尾花種類的依據</li></ul><pre class="ql-syntax">## 將species特徵欄位數據獨立出來，目的是讓正規化後的圖，可以用嚴肅想是物種不同
+iris_species = iris_data.loc[:,'species']
+​
+## 將沒辦法進行標準化的特徵欄位先拿出來
+iris_data = iris_data.drop(['species','species_id'], axis = 1)
+​
+## 顯示數據
+iris_data
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.webp" onerror="this.srcset='https://assets.matters.news/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.png" onerror="this.srcset='https://assets.matters.news/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.webp">
+
+        <img src="https://assets.matters.news/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.png" srcset="https://assets.matters.news/processed/540w/embed/e9020e7b-7b8a-40af-863b-6fffd895fae3.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h4><strong>Step4: 標準化（Standard Scaler）</strong></h4><h4><strong> </strong></h4><h6><strong>方法一： Z-Score 將數據呈現正態分佈與中心化 </strong></h6><ul><li>說明：數據將會在進行標準化（Z-Score）後，會呈現正態分佈喔，而且標準化後的數據集平均值為0標準差為1 （詳細的說明與算法會在前一篇我針對標準化文章的介紹喔，有興趣的大家可以參考參考）</li><li>使用套件： 使用sklearn中的preprocessing.StandardScaler()來執行</li><li>函數格式： sklearn.preprocessing.StandardScaler(copy = True, with_mean = True, with_std = True)</li><li>參數說明</li></ul><pre class="ql-syntax">copy: 在原始資料中進行縮放，預設為
+​
+True with_mean: 在標準化縮放前，將數據的分佈進行中心化處理，預設為True 
+​
+with_std: 將數據資料縮放成單位標準差，預設為True 
+</pre><ul><li>程式碼範例： 我先將數據進行標準化- Z-Score後，並將"species"種類加回這個數據集中，並進行視覺化</li></ul><pre class="ql-syntax">## 使用標準化Z-Score套件
+z_score_scaler = preprocessing.StandardScaler()
+​
+## 對數據進行標準化
+iris_z_score = z_score_scaler.fit_transform(iris_data)
+​
+## 轉換成DataFrame
+iris_z_score = pd.DataFrame(iris_z_score)
+​
+## 將species數據結合起來
+iris_z_score['species'] = iris_species
+​
+​
+print(iris_z_score)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_z_score, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.webp" onerror="this.srcset='https://assets.matters.news/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.png" onerror="this.srcset='https://assets.matters.news/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.webp">
+
+        <img src="https://assets.matters.news/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.png" srcset="https://assets.matters.news/processed/540w/embed/5a844c26-f3ed-4842-9a89-dd837ce3f57d.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><strong>完整程式碼</strong></p><pre class="ql-syntax">## 導入sklearn 標準化套件
+from sklearn import preprocessing
+​
+## 導入繪圖套件
+import plotly.express as px
+​
+## 導入數據處理套件
+import pandas as pd
+​
+## 使用Plotly Express的內建數據集
+iris_data = px.data.iris()
+​
+## 顯示數據
+iris_data
+​
+## 這邊我拿'sepal_length' 與 'petal_length' 特徵來當X軸與Y軸，顏色用'species'來根據種類繪製不同顏色 
+## 原始資料進行繪圖
+fig = px.scatter(iris_data, x = 'sepal_length', y = 'petal_length', color = 'species')
+​
+## 顯示圖像
+fig.show()
+​
+## 將species特徵欄位數據獨立出來，目的是讓正規化後的圖，可以用嚴肅想是物種不同
+iris_species = iris_data.loc[:,'species']
+​
+## 將沒辦法進行標準化的特徵欄位先拿出來
+iris_data = iris_data.drop(['species','species_id'], axis = 1)
+​
+## 顯示數據
+iris_data
+​
+## 使用標準化Z-Score套件
+z_score_scaler = preprocessing.StandardScaler()
+​
+## 對數據進行標準化
+iris_z_score = z_score_scaler.fit_transform(iris_data)
+​
+## 轉換成DataFrame
+iris_z_score = pd.DataFrame(iris_z_score)
+​
+## 將species數據結合起來
+iris_z_score['species'] = iris_species
+​
+​
+print(iris_z_score)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_z_score, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><ul><li>小叮嚀： 由於進行標準化後欄位名稱會改變成數字，所以記得將X軸與Y軸的值賦予對應的數值喔，大家可以自行使用這四個特徵來做X軸與Y軸的搭配喔</li><li>我們來看一下計算Z-Score所需的平均與標準差的值，在這四個特徵中分別為多少</li><li>從上面的結果可以看出，雖然會有一點點的誤差，但基本上進行標準化- Z-Score後的數據，平均值為0，標準差為1喔</li></ul><h4><br></h4><h4><br></h4><p><strong>方法二： Min-Max - 線性歸一化 </strong></p><ul><li>說明： 數據將會在進行Min-Max線性歸一化後，歸一化後的數據值會介於0～1之間</li><li>使用套件： 使用sklearn中的preprocessing.MinMaxScaler()來執行</li><li>函數格式： sklearn.preprocessing.MinMaxScaler(feature_range = (0,1), copy = True)</li><li>參數說明</li></ul><pre class="ql-syntax">copy: 在原始資料中進行縮放，預設為True 
+​
+feature_range: 設定輸出結果的數據資料值範圍，預設為（0,1），代表介於0～1之間 
+</pre><ul><li>程式碼範例：</li></ul><pre class="ql-syntax">## 使用標準化Min-Max套件
+min_max_scaler = preprocessing.MinMaxScaler(feature_range = (0,1))
+​
+## 對數據進行標準化
+iris_min_max = min_max_scaler.fit_transform(iris_data)
+​
+## 轉換為Data Frame格式
+iris_min_max = pd.DataFrame(iris_min_max)
+​
+## 接回species種類特徵的資料
+iris_min_max['species'] = iris_species
+​
+print(iris_min_max)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_min_max, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.webp" onerror="this.srcset='https://assets.matters.news/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.png" onerror="this.srcset='https://assets.matters.news/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.webp">
+
+        <img src="https://assets.matters.news/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.png" srcset="https://assets.matters.news/processed/540w/embed/530804fc-42df-45e9-976c-3ca8c4f3706f.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p>完整程式碼</p><pre class="ql-syntax">## 導入sklearn 標準化套件
+from sklearn import preprocessing
+​
+## 導入繪圖套件
+import plotly.express as px
+​
+## 導入數據處理套件
+import pandas as pd
+​
+## 使用Plotly Express的內建數據集
+iris_data = px.data.iris()
+​
+## 顯示數據
+iris_data
+​
+## 這邊我拿'sepal_length' 與 'petal_length' 特徵來當X軸與Y軸，顏色用'species'來根據種類繪製不同顏色 
+## 原始資料進行繪圖
+fig = px.scatter(iris_data, x = 'sepal_length', y = 'petal_length', color = 'species')
+​
+## 顯示圖像
+fig.show()
+​
+## 將species特徵欄位數據獨立出來，目的是讓正規化後的圖，可以用嚴肅想是物種不同
+iris_species = iris_data.loc[:,'species']
+​
+## 將沒辦法進行標準化的特徵欄位先拿出來
+iris_data = iris_data.drop(['species','species_id'], axis = 1)
+​
+## 顯示數據
+iris_data
+​
+## 使用標準化Min-Max套件
+min_max_scaler = preprocessing.MinMaxScaler(feature_range = (0,1))
+​
+## 對數據進行標準化
+iris_min_max = min_max_scaler.fit_transform(iris_data)
+​
+## 轉換為Data Frame格式
+iris_min_max = pd.DataFrame(iris_min_max)
+​
+## 接回species種類特徵的資料
+iris_min_max['species'] = iris_species
+​
+print(iris_min_max)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_min_max, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><h4><br></h4><h4><br></h4><p><strong>方法三： MaxAbs 標準化 </strong></p><ul><li>說明： 進行MaxAbs標準化後，因為計算公式的關係，當X為最大值時，標準化後等於1，最小值則會轉化為-1，所以數據會縮放到介於-1～1之前喔，這樣的方式使我們的數據分佈的型態不會有變化喔</li><li>由於這次用的數據集中不會有負數的值，所以不能呈現出介於-1～1之間的數據集數值，我在前一篇的教學中，有手動加入負值 並自行寫函式來實現MaxAbs，有興趣的大家可以參考看看XD</li><li>使用函數： 使用preprocessing.MaxAbsScaler()來執行</li><li>函數格式：sklearn.preprocessing.MaxAbsScaler(copy = True)</li><li>參數說明</li></ul><pre class="ql-syntax">copy: 在原始資料中進行縮放，預設為True 
+</pre><ul><li>程式碼範例</li></ul><pre class="ql-syntax">## 使用標準化MaxAbs函數
+maxabs_scaler = preprocessing.MaxAbsScaler()
+​
+## 對數據進行標準化轉換
+iris_maxabs = maxabs_scaler.fit_transform(iris_data)
+​
+## 轉換成Data Frame格式
+iris_maxabs = pd.DataFrame(iris_maxabs)
+​
+## 接回species特徵種類的資料
+iris_maxabs['species'] = iris_species
+​
+print(iris_maxabs)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_maxabs, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.webp" onerror="this.srcset='https://assets.matters.news/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.png" onerror="this.srcset='https://assets.matters.news/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.webp">
+
+        <img src="https://assets.matters.news/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.png" srcset="https://assets.matters.news/processed/540w/embed/cf152f81-659d-4f6b-b80c-97b10ac25ec1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><strong>完整程式碼</strong></p><pre class="ql-syntax">## 導入sklearn 標準化套件
+from sklearn import preprocessing
+​
+## 導入繪圖套件
+import plotly.express as px
+​
+## 導入數據處理套件
+import pandas as pd
+​
+## 使用Plotly Express的內建數據集
+iris_data = px.data.iris()
+​
+## 顯示數據
+iris_data
+​
+## 這邊我拿'sepal_length' 與 'petal_length' 特徵來當X軸與Y軸，顏色用'species'來根據種類繪製不同顏色 
+## 原始資料進行繪圖
+fig = px.scatter(iris_data, x = 'sepal_length', y = 'petal_length', color = 'species')
+​
+## 顯示圖像
+fig.show()
+​
+## 將species特徵欄位數據獨立出來，目的是讓正規化後的圖，可以用嚴肅想是物種不同
+iris_species = iris_data.loc[:,'species']
+​
+## 將沒辦法進行標準化的特徵欄位先拿出來
+iris_data = iris_data.drop(['species','species_id'], axis = 1)
+​
+## 顯示數據
+iris_data
+​
+## 使用標準化MaxAbs函數
+maxabs_scaler = preprocessing.MaxAbsScaler()
+​
+## 對數據進行標準化轉換
+iris_maxabs = maxabs_scaler.fit_transform(iris_data)
+​
+## 轉換成Data Frame格式
+iris_maxabs = pd.DataFrame(iris_maxabs)
+​
+## 接回species特徵種類的資料
+iris_maxabs['species'] = iris_species
+​
+print(iris_maxabs)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_maxabs, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><h4><br></h4><h4><br></h4><p><strong>方法四： RobustScaler </strong></p><ul><li>說明： 當數據中出現異常值（離群點），如果使用Z-Score會導致數據失去這樣的特性此時就是RobustScaler的時機點，它對於數據中心化與縮放的統計資料是基於百分位數的，所以不受少量離群點的影響，它也擁有較強的參數調節能力，能針對數據中心化與縮放進行更強的調節</li><li>使用方法： 使用preprocessing.RobustScaler來執行</li><li>函數格式： sklearb.preprocessing.RobustScaler(with_centering = True, with_scaling = True, quantile_range = (25.0,75.0), copy = True)</li><li>參數說明</li></ul><pre class="ql-syntax">copy: 在原始資料中進行縮放，預設為True 
+​
+with_centering: 在資料縮放前，先將數據資料中心化，預設為True 
+​
+with_scaling: 將數據資料縮放到四分位數的範圍內，預設為True 
+​
+quantile_range: 預設為（25.0,75.0），也就是IQR(Interquartile Range)的計算方法，它代表第1四分位數（前25%的分位數）與第3四分位數（前75%的分位數） 之間的範圍距離 
+</pre><ul><li>程式碼範例</li></ul><pre class="ql-syntax">## 使用標準化RobustScaler函數
+rs_scaler = preprocessing.RobustScaler()
+​
+## 對數據進行標準化
+iris_rs = rs_scaler.fit_transform(iris_data)
+​
+## 轉換為Data Frame格式
+iris_rs = pd.DataFrame(iris_rs)
+​
+## 將species特徵種類的資料接上
+iris_rs['species'] = iris_species
+​
+print(iris_rs)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_rs, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9f6c464f-aab9-4657-bf83-e246241d3121.webp" onerror="this.srcset='https://assets.matters.news/embed/9f6c464f-aab9-4657-bf83-e246241d3121.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9f6c464f-aab9-4657-bf83-e246241d3121.png" onerror="this.srcset='https://assets.matters.news/embed/9f6c464f-aab9-4657-bf83-e246241d3121.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/9f6c464f-aab9-4657-bf83-e246241d3121.webp">
+
+        <img src="https://assets.matters.news/embed/9f6c464f-aab9-4657-bf83-e246241d3121.png" srcset="https://assets.matters.news/processed/540w/embed/9f6c464f-aab9-4657-bf83-e246241d3121.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><strong>完整程式碼</strong></p><pre class="ql-syntax">## 導入sklearn 標準化套件
+from sklearn import preprocessing
+​
+## 導入繪圖套件
+import plotly.express as px
+​
+## 導入數據處理套件
+import pandas as pd
+​
+## 使用Plotly Express的內建數據集
+iris_data = px.data.iris()
+​
+## 顯示數據
+iris_data
+​
+## 這邊我拿'sepal_length' 與 'petal_length' 特徵來當X軸與Y軸，顏色用'species'來根據種類繪製不同顏色 
+## 原始資料進行繪圖
+fig = px.scatter(iris_data, x = 'sepal_length', y = 'petal_length', color = 'species')
+​
+## 顯示圖像
+fig.show()
+​
+## 將species特徵欄位數據獨立出來，目的是讓正規化後的圖，可以用嚴肅想是物種不同
+iris_species = iris_data.loc[:,'species']
+​
+## 將沒辦法進行標準化的特徵欄位先拿出來
+iris_data = iris_data.drop(['species','species_id'], axis = 1)
+​
+## 顯示數據
+iris_data
+​
+## 使用標準化RobustScaler函數
+rs_scaler = preprocessing.RobustScaler()
+​
+## 對數據進行標準化
+iris_rs = rs_scaler.fit_transform(iris_data)
+​
+## 轉換為Data Frame格式
+iris_rs = pd.DataFrame(iris_rs)
+​
+## 將species特徵種類的資料接上
+iris_rs['species'] = iris_species
+​
+print(iris_rs)
+​
+## 繪圖，由於進行標準化後的欄位名稱會改變成數字，所以記得將X軸與Y軸的值，給予對應的數值
+fig = px.scatter(iris_rs, x = 0, y = 2, color = 'species')
+​
+## 顯示圖像
+fig.show()
+</pre><ul><li><strong>由於數據集中沒有什麼異常值，所以RobustScaler與MaxAbs繪製出來的圖形幾乎一樣</strong></li></ul><p><br></p><p><br></p><p><strong>這一篇我們學會了如何使用sklearn裡面的套件來幫助我們完成數據標準化（Standard Scaler），大家可以自行試試拿拿看手邊的數據進行標準化，如果有在學習機器學習演算法的大家，也可以試試有沒有進行標準化（Standard Scaler），數據預測準確率是否有明顯差距，感謝大家的閱讀，希望有幫助到您～～</strong></p><h2><br></h2><h2><br></h2><h2><strong>Reference</strong></h2><p><a href="https://www.itread01.com/content/1547172790.html" target="_blank">https://www.itread01.com/content/1547172790.html</a></p><p><a href="http://estat.ncku.edu.tw/topic/desc" target="_blank">http://estat.ncku.edu.tw/topic/desc</a> stat/base/variance.html</p><p><a href="https://kknews.cc/zh-tw/code8q32em4.html" target="_blank">https://kknews.cc/zh-tw/code8q32em4.html</a></p><p><a href="https://ithelp.ithome.com.tw/articles/10197357" target="_blank">https://ithelp.ithome.com.tw/articles/10197357</a></p>

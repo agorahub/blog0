@@ -1,0 +1,82 @@
+---
+layout: post
+title: 使用JSFiddle在文章中添加表格（上）
+date: 2020-10-29 12:25:25.000000000 +00:00
+categories: matters
+tags: blog
+author: Sokiraon
+---
+
+<p>爲方便整理，本人將本文與<a href="https://matters.news/@sokiraon/%E4%BD%BF%E7%94%A8js-fiddle%E5%AF%A6%E7%8F%BE%E6%96%87%E7%AB%A0%E4%B8%80%E9%8D%B5%E8%BD%89%E6%8F%9B%E7%B0%A1-%E7%B9%81%E9%AB%94-bafyreihtmtb6gr4fue35pjyukw4yae3iyedq3ii6pt4miueio4toyfuqgy" target="_blank">之前一篇同類文章</a>一起歸到了新創建的標籤<a href="https://matters.news/tags/VGFnOjMwMzM3" target="_blank">#JSFiddle教學</a>下，實際上也是順帶教大家一些簡單的前端知識。歡迎有興趣的朋友追蹤！</p><hr><p>Matters的編輯器並不原生支持插入表格，因此最簡單的解決方法，是將表格截圖後作為圖片插入。但是，由於平台往往會對上傳的圖片進行壓縮，最終呈現出的質量難以得到保證。本文旨在利用JSFiddle，實現在文章中快速地插入美觀的表格。</p><hr><p>一個最簡單的、兩行兩列的表格只需幾行HTML代碼：</p><pre class="ql-syntax"><table>
+<tr>
+<th>Name</th>
+<th>Sex</th>
+</tr>
+<tr>
+<td>John</td>
+<td>Male</td>
+</tr>
+</table>
+</pre><p>這裏：</p><ul><li><table>是<strong>根標籤</strong>，聲明了一個<strong>表格對象</strong></li><li><table>以<strong>行</strong>為單位組織，每一行用一個<strong><tr></strong>包裹（Table Row的縮寫）</li><li>“行”裏可以存放兩類標籤，<th>和<td>，每一個標籤都對應一個<strong>單元格</strong>（Table Cell）。其中<th>定義了<strong>表頭</strong>（Table Header），<td>定義了<strong>數據</strong>（Table Data）。</li></ul><p>瀏覽器在處理這段代碼時，會將表頭加粗，並且把數據和表頭對齊：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.webp" onerror="this.srcset='https://assets.matters.news/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.png" onerror="this.srcset='https://assets.matters.news/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.webp">
+
+        <img src="https://assets.matters.news/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.png" srcset="https://assets.matters.news/processed/540w/embed/7d80ae2e-e516-4d96-b301-30669ecb11e6.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>結果我還是用了圖片（笑）</span></figcaption></figure><hr><p><strong>邊框</strong>（Border）可以幫助我們區分表格中不同的數據單元。爲設置邊框，我們需要添加一些CSS代碼。</p><p>CSS的全稱爲<strong>層疊樣式表</strong>（Cascading Style Sheets），用於爲網站設置外觀。它通過“選擇對象並設置屬性”的方式來工作。CSS的基本語法如下：</p><pre class="ql-syntax"><選擇器> {
+    <屬性>: <值>;
+}
+</pre><p><strong>選擇器</strong>選擇了一個或一系列我們想要施加影響的HTML對象，它有三種基本形式：對象名、對象ID（以‘#’為前綴）和對象所屬的類（Class，以‘.’為前綴）。例如，<strong>table</strong>就是一種選擇器，它選擇了HTML代碼中的所有table對象。選擇器可以同時使用多個，這時，選擇的結果是它們的<strong>併集</strong>。</p><p><strong>屬性</strong>（Property）和<strong>值</strong>（Value）共同指定了一個樣式，它會作用於選擇器所選擇的對象。常見的屬性有color（顏色）、font-size（字體大小）等。不同的屬性接受不同類型的值。</p><p>大概就先介紹到這裏。爲了添加邊框，我們要選擇table、th、td三種對象，設置它們的border屬性：</p><pre class="ql-syntax">table, th, td {
+border: 1px solid black;
+}
+</pre><p>border屬性需要接受三個值：邊框寬度、邊框樣式和顏色，寬度和顏色可以缺省。詳見MDN上的<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/border" target="_blank">這篇指南</a>。</p><p>這裡，我們就定義了寬度為<strong>一個像素</strong>、<strong>實線</strong>、<strong>黑色</strong>的邊框。效果爲：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.webp" onerror="this.srcset='https://assets.matters.news/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.png" onerror="this.srcset='https://assets.matters.news/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.webp">
+
+        <img src="https://assets.matters.news/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.png" srcset="https://assets.matters.news/processed/540w/embed/3d767085-a8fd-43a3-9a8f-9a21ad59cb3b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>添加border後的效果</span></figcaption></figure><p>一些朋友可能會更喜歡單條邊框。爲此，我們需要設置border-collapse屬性為“collapse”：</p><pre class="ql-syntax">table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+}
+</pre><p>“collapse”屬性值會使得相鄰單元格<strong>共享同一個邊框</strong>。效果爲：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.webp" onerror="this.srcset='https://assets.matters.news/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.png" onerror="this.srcset='https://assets.matters.news/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.webp">
+
+        <img src="https://assets.matters.news/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.png" srcset="https://assets.matters.news/processed/540w/embed/9ceeeec0-8391-4314-848d-4fbfa7cf1dd1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>單條邊框的效果</span></figcaption></figure><hr><p>現在有一個問題：單元格之間太過緊密，感覺文字就都是堆在一起，很不美觀。爲此，我們要向表格添加<strong>邊距</strong>這項屬性。</p><p>邊距分兩種：<strong>外邊距</strong>（Margin）和<strong>內邊距</strong>（Padding）。在CSS中，元素以<strong>框盒模型</strong>進行組織，每一個元素都以一個“盒”的形式呈現。外邊距設置於元素的<strong>邊框之外</strong>，控制元素與元素之間的距離；內邊距則設置於元素的內容（Content）和邊框<strong>之間</strong>。詳見MDN上的<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Box_Model/Introduction_to_the_CSS_box_model" target="_blank">這篇指南</a>。顯然，我們這裏要用到的是<strong>內邊距</strong>。</p><p>內邊距可以接收一至四個值。當我們傳入一個值時，CSS將這個值應用於所有的四個方向；傳入兩個值時，CSS將它依序應用到“上下”和“左右”兩個方向；傳入三個值時，CSS將它先應用到“上”，然後是“左和右”，最後是“下”；傳入四個值時，按順時針方向應用到上、右、下、左四個方向。</p><p>因此，以下三種寫法是等同的：</p><pre class="ql-syntax">padding: 5px  10px;
+padding: 5px  10px  5px;
+padding: 5px  10px  5px  10px;
+</pre><p>假如我們只想限定某個方向的邊距，也是可以的。以下兩種寫法是等同的：</p><pre class="ql-syntax">padding: 5px  10px  5px  10px;
+
+padding-top: 5px;
+padding-right: 10px;
+padding-bottom: 5px;
+padding-left: 5px;
+</pre><p>這裏囉嗦一句：編寫代碼時，總要力求其可讀性，所以大家在選擇自己喜好的寫法時，也要考慮到這點。</p><p>這裏，我們不妨就選擇傳四個值的寫法。新添加一條樣式，設置到th、td兩類元素上（因爲我們是要對表格的<strong>每個單元</strong>進行操作）：</p><pre class="ql-syntax">th, td {
+padding: 5px 10px 5px 10px;
+}
+</pre><p>效果爲：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.webp" onerror="this.srcset='https://assets.matters.news/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.png" onerror="this.srcset='https://assets.matters.news/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.webp">
+
+        <img src="https://assets.matters.news/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.png" srcset="https://assets.matters.news/processed/540w/embed/4cd7157a-2075-49b9-9b9c-b62f75b99031.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>設置了內邊距後的效果</span></figcaption></figure><p>是不是美觀了許多？</p><p>最終的JSFiddle代碼貼在下面：</p><figure class="embed-code"><div class="iframe-container"><iframe loading="lazy" src="https://jsfiddle.net/Sokiraon/t0gycfvb/embedded/" frameborder="0" allowfullscreen="false" sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div><figcaption><span>完整的JSFiddle代碼</span></figcaption></figure><hr><p>好了，上半部分就寫到這裏，相信大家現在都對表格有一些瞭解了（還沒有的話，就在評論區向我拍磚吧(～￣▽￣)～）。</p><p>下半部分中，我將介紹更多的概念和方法，教大家創建一個真正現代的Web表格，敬請期待！( •̀ ω •́ )✧</p>
