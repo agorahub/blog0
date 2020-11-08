@@ -1,0 +1,97 @@
+---
+layout: post
+title: 使用JSFiddle在文章中添加表格（下）
+date: 2020-11-08 12:16:46.000000000 +00:00
+categories: matters
+tags: blog
+author: Sokiraon
+---
+
+<p>在<a href="https://matters.news/@sokiraon/%E4%BD%BF%E7%94%A8js-fiddle%E5%9C%A8%E6%96%87%E7%AB%A0%E4%B8%AD%E6%B7%BB%E5%8A%A0%E8%A1%A8%E6%A0%BC-%E4%B8%8A-bafyreiegpsdqraqlalm36gocdt6sybg5qipv74wti3glsz5llcyvikg2vi" target="_blank">上一篇文章</a>中，我們談到了如何使用HTML創建一個表格，並通過CSS對其進行簡單美化。先溫習一下：</p><figure class="embed-code"><div class="iframe-container"><iframe loading="lazy" src="https://jsfiddle.net/Sokiraon/t0gycfvb/embedded/" frameborder="0" allowfullscreen="false" sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div><figcaption><span>上一次的表格</span></figcaption></figure><p>對於一個兩行兩列的表格而言，上面的代碼就已足夠。但是，倘若我們要處理一個規模很大的表格，又該如何呢？按照上面的方法，我們可能不得不在HTML裏寫上一大堆的<th>和<td>，不僅觀感不好，而且還容易出錯。</p><p>有一種想法是，我們可以把表格的「排版」與其中的「數據」分離。在這種情況下，「排版」只處理「數據」的表現形式，而不關心後者具體是什麼——後者的改變不會對前者產生影響。</p><p>這裏，隆重請出我們今天的主角——Vue！</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.webp" onerror="this.srcset='https://assets.matters.news/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.png" onerror="this.srcset='https://assets.matters.news/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.webp">
+
+        <img src="https://assets.matters.news/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.png" srcset="https://assets.matters.news/processed/540w/embed/8c30def1-af94-42a7-b11e-8c129f2c8748.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Vue</span></figcaption></figure><p>Vue是所謂的「前端開發框架」。它擴展了JS代碼的功能，並爲開發者提供了許多便於使用的「語法糖」。Vue的渲染是「響應式」的，這意味着它可以追蹤數據的變化，並實時做出改變——你也許已經注意到了，這十分貼合我們之前提出的應用場景。</p><hr><p>在JSFiddle中引入Vue相當簡單，只需在JS選單中選擇Vue擴展：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.webp" onerror="this.srcset='https://assets.matters.news/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.png" onerror="this.srcset='https://assets.matters.news/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.webp">
+
+        <img src="https://assets.matters.news/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.png" srcset="https://assets.matters.news/processed/540w/embed/0b15923b-e895-4e40-8df5-b36f0edf4dc9.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>在JSFiddle引入Vue</span></figcaption></figure><p>...好吧，其實這並不是全部。在使用Vue之前，我們需要先將其「實例化」。首先是HTML的部分：</p><pre class="ql-syntax"><!--HTML-->
+<div id='app'>
+</div>
+</pre><p>我們聲明了一個<div>元素。<div>是所謂「內容劃分元素」（Content Division Element），它是一個「容器」，用於承載別的元素，從而將HTML代碼邏輯上地劃分爲多個「塊」，方便開發者管理。這裏，我們就是要把Vue「掛載」到這個<div>元素。注意我們給<div>設置了一個id，這是爲了我們在JS代碼中可以「索引到」它。</p><p>下面，我們在JS中寫入以下代碼：</p><pre class="ql-syntax">new Vue({
+el: '#app',
+})
+</pre><p>我們用new Vue()函數來創建一個實例，並傳入了一個參數“#app”給el屬性，也就是指定了Vue所要掛載的對象。“#app”是CSS選擇器語法，其中“#”表示要索引的是id屬性。</p><p>到此爲止，我們已經完成了Vue的實例化，現在，可以開始使用了！</p><hr><p>Vue提供給我們將數據和HTML分離的功能，方法是在JS中定義數據，並在HTML中使用「模板語法」進行調用。定義數據十分簡單，只需傳給data參數即可：</p><pre class="ql-syntax">new Vue({
+el: '#app',
+data: {
+name: 'John',
+},
+})
+</pre><p>數據採用「鍵-值」對的形式進行存儲。這裏，我們就是聲明了一個值爲“John”，以”name“爲鍵的數據。該數據可以這樣在HTML中被調用：</p><pre class="ql-syntax"><!--HTML-->
+<div id='app'>
+<h1>{{ name }}</h1>
+</div>
+</pre><p>注意到h1標籤的內容是{{ name }}，而不是我們通常會傳入的純文本值。這就是「模板語法」，它以一組<strong>雙大括號</strong>爲外殼，中間則是你想要顯示的內容。這裏，模板會查找到Vue實例中定義的數據，並進行替換。渲染後的效果爲：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.webp" onerror="this.srcset='https://assets.matters.news/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.png" onerror="this.srcset='https://assets.matters.news/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.webp">
+
+        <img src="https://assets.matters.news/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.png" srcset="https://assets.matters.news/processed/540w/embed/d12301a1-6af4-44ba-92c7-e3a2714af630.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>模板語法的渲染效果</span></figcaption></figure><p>模板語法不僅支持傳入鍵，還支持<strong>JavaScript表達式</strong>。因此，我們可以把數據稍微定義得複雜一點：</p><pre class="ql-syntax">data: {
+name: {
+firstName: 'John',
+lastName: 'Wester',
+},
+}
+</pre><p>這裏，我們把name定義爲了一個<strong>對象</strong>（object），這是JS中的一種數據類型。firstName和lastName叫做對象的<strong>屬性</strong>（property），它可以被理解爲附加到對象上的變量。屬性通過{變量名}<strong>.</strong>{屬性名}的方式索引。所以，我們可以在模板中這樣寫：</p><pre class="ql-syntax"><p>First Name: {{ name.firstName }}</p>
+<p>Last Name: {{ name.lastName }}</p>
+</pre><p>渲染效果爲：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.webp" onerror="this.srcset='https://assets.matters.news/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.png" onerror="this.srcset='https://assets.matters.news/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.webp">
+
+        <img src="https://assets.matters.news/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.png" srcset="https://assets.matters.news/processed/540w/embed/c8d8f14a-0b87-4078-97ab-d44bafa739a3.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>稍微複雜一點的模板語法</span></figcaption></figure><p>有了這些知識，你大概知道要怎麼改造我們之前那個表格了：</p><figure class="embed-code"><div class="iframe-container"><iframe loading="lazy" src="https://jsfiddle.net/Sokiraon/djz36pk4/16/embedded/" frameborder="0" allowfullscreen="false" sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div><figcaption><span>初步改造後的表格</span></figcaption></figure><hr><p>但是，這個方案依然不完美。一個顯而易見的問題就是，我們必須提前知道表頭有兩個、表格數據有name和sex兩個屬性，否則就無從下手。有沒有方法可以解決呢？</p><p>這裏，祭出第二個殺器——Vue的「列表渲染」。它允許我們以類似編程語言中循環語句的形式，來將一個數組渲染爲一組列表。例如，在上面的例子裏，我們是將headers聲明爲了一個數組，並用取下標的形式來獲取表頭數據。改用列表渲染後就可以這樣：</p><pre class="ql-syntax"><tr>
+<th v-for='header in headers'>
+{{ header }}
+</th>
+</tr>
+</pre><p>v-for指定了我們獲取數據的方式，需要使用“item in items”形式的特殊語法。如同它的形式所顯示的那樣，v-for會<strong>遍歷</strong>items數組中的每一個元素，並把每一次遍歷到的元素<strong>標記爲</strong>item；然後，你就可以像引用普通的數據那樣在模板裏引用item。</p><p>想當然地，我們也可以對表格的數據部分做同樣的操作。首先，我們把JS中定義的數據進一步地規範化：</p><pre class="ql-syntax">data: {
+headers: ['Name', 'Sex'],
+content: [
+{
+Name: 'John',
+Sex: 'Male',
+},
+                {
+Name: 'Nancy',
+Sex: 'Female',
+},
+],
+}
+</pre><p>這裏，我們把content也定義爲了數組，因爲在真實的使用場景中，表格肯定會有很多行；並且，我們要確保content中的對象的<strong>屬性名</strong>與headers中的<strong>值</strong>相匹配。爲了體現出列表渲染的能力，我們多添加了一行數據。</p><p>相應地，HTML中這樣寫：</p><pre class="ql-syntax"><tr v-for='item in content'>
+<td v-for="key in headers">
+{{ item[key] }}
+</td>
+</tr>
+</pre><p>這裏，我們用了兩個v-for。第一個用於遍歷content，第二個用於遍歷content中的每個屬性；出於抽象的目的，我們假設自己預先並不知道數據中會有哪些鍵，因此便採取了用headers中的值來索引的方法。</p><p>完整的代碼爲：</p><figure class="embed-code"><div class="iframe-container"><iframe loading="lazy" src="https://jsfiddle.net/Sokiraon/djz36pk4/23/embedded/" frameborder="0" allowfullscreen="false" sandbox="allow-scripts allow-same-origin allow-popups"></iframe></div><figcaption><span>引入了列表渲染和模板語法後的表格代碼</span></figcaption></figure><hr><p>在這篇文章中，我們通過引入Vue，基本實現了表格的「排版」與「數據」的分離。當然，由於篇幅的原因，還有很多有趣的地方沒有講到（比如，現在這個表格還是太醜...），還請大家原諒。</p><p>敬請期待下一篇！</p>
