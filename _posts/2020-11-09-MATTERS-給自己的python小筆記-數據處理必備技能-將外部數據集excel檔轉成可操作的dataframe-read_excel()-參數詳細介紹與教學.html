@@ -1,0 +1,408 @@
+---
+layout: post
+title: 給自己的Python小筆記 - 數據處理必備技能 - 將外部數據集Excel檔轉成可操作的DataFrame - read_excel() 參數詳細介紹與教學
+date: 2020-11-09 12:41:10.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<p><br></p><p><a href="https://github.com/chwang12341/Learn-Python-/blob/master/excel_operation/read_excel/%E7%B5%A6%E8%87%AA%E5%B7%B1%E7%9A%84Python%E5%B0%8F%E7%AD%86%E8%A8%98%20-%20%E6%95%B8%E6%93%9A%E8%99%95%E7%90%86%E5%BF%85%E5%82%99%E6%8A%80%E8%83%BD%20-%20%E5%B0%87%E5%A4%96%E9%83%A8%E6%95%B8%E6%93%9A%E9%9B%86Excel%E6%AA%94%E8%BD%89%E6%88%90%E5%8F%AF%E6%93%8D%E4%BD%9C%E7%9A%84DataFrame%20-%20read_csv()%20%E5%8F%83%E6%95%B8%E8%A9%B3%E7%B4%B0%E4%BB%8B%E7%B4%B9%E8%88%87%E6%95%99%E5%AD%B8.md" target="_blank">Github完整程式連結</a></p><h1><strong> </strong></h1><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4f38b5dc-c205-4d68-86f6-24360f150375.webp" onerror="this.srcset='https://assets.matters.news/embed/4f38b5dc-c205-4d68-86f6-24360f150375.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4f38b5dc-c205-4d68-86f6-24360f150375.jpeg" onerror="this.srcset='https://assets.matters.news/embed/4f38b5dc-c205-4d68-86f6-24360f150375.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/4f38b5dc-c205-4d68-86f6-24360f150375.webp">
+
+        <img src="https://assets.matters.news/embed/4f38b5dc-c205-4d68-86f6-24360f150375.jpeg" srcset="https://assets.matters.news/processed/540w/embed/4f38b5dc-c205-4d68-86f6-24360f150375.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：cottonbro，連結：Pexels</span></figcaption></figure><p><br></p><p>嗨嗨，今天來介紹一個我在工作上常用到的一個函式 - pandas.read_excel()，它幫助我讀取Excel檔的資料，並轉換成Python可以進行數據處理的DataFrame格式，是一個非常常用的函式 過去我導入的數據集（Excel檔）幾乎都只有一張工作表work sheet，所以一導入就是我要的資料，但就在距離今天不久前，我同事找我分析某份數據集，但它是在某份Excel檔中的第二個工作表（work sheet）裡，當然也是有很麻煩的解決辦法，就是複製第二張工作表的內容，然後貼到另一份新的Excel檔中，就搞定了，但是我總不能每次都這樣，要是有上萬份的檔案，都要這樣處理，我就Amazing了XD，所以我就想仔細地瞭解一下pandas.read_excel()底下到底有哪些參數可以使用，是否可以幫助我解決這個問題，並把我學習到的記錄下來，幫助自己與有需要的大家，下次遇到這個問題，就能夠輕鬆解決</p><p><br></p><p><br></p><h2><strong>pandas.read_excel()是要做什麼的？</strong></h2><ul><li>它幫助我們將Excel檔導入進我們的Python程式中，並轉換成DataFrame格式，方便我們使用Python來對數據進行操作，</li><li>它可以導入我們Local端的文件，或從URL上讀取文件，像是Github就有像<a href="https://raw.githubusercontent.com/plotly/datasets/master/data.csv" target="_blank">https://raw.githubusercontent.com/plotly/datasets/master/data.csv</a> 這樣的網址可以讀取網址上的csv數據集data</li><li>但它所導入的副檔名須符合像xls, xlsx. xlsm, xlsb和odf的檔案</li></ul><h2><br></h2><h2><strong>pandas.read_excel()參數</strong></h2><pre class="ql-syntax">read_excel(io, sheet_name=0, header=0, names=None, index_col=None, usecols=None, squeeze=False, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skiprows=None, nrows=None, na_values=None, keep_default_na=True, verbose=False, parse_dates=False, date_parser=None, thousands=None, comment=None, skipfooter=0, convert_float=True, mangle_dupe_cols=True, **kwds)
+</pre><p>我接下來會用實作的方式帶大家瞭解這些參數的意義</p><h2><br></h2><h2><strong>補充： 如何使用Jupyter Notebook快速取得這個函數的參數，以及這個參數的說明呢？ </strong></h2><p><strong>兩種方式</strong></p><ul><li>第一種： 使用help()函數來幫忙，像是help(pd.read_excel)</li><li>第二種： 把pd.read_excel()打字的輸入線移到函數括號內，並按下Shift + Tab，就會跳出資訊了</li></ul><h2><br></h2><h2><strong>實作用的數據介紹 </strong></h2><p>這份是我自己捏造的數據集喔，我有放在Github上，大家可以下載下來當練習用，這份Excel檔中，有三頁工作表，如下圖第一張工作表是顧客的基本資料，第二張是消費記錄表，第三張是旅遊記錄表</p><p>圖一： 數據集Excrl檔中 - 有三頁工作表</p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.webp" onerror="this.srcset='https://assets.matters.news/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.png" onerror="this.srcset='https://assets.matters.news/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.webp">
+
+        <img src="https://assets.matters.news/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.png" srcset="https://assets.matters.news/processed/540w/embed/d46f69bc-a354-4759-982c-ecd6bf019e46.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>圖二： 第一張工作表</p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.webp" onerror="this.srcset='https://assets.matters.news/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.png" onerror="this.srcset='https://assets.matters.news/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.webp">
+
+        <img src="https://assets.matters.news/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.png" srcset="https://assets.matters.news/processed/540w/embed/1a09324f-8bf0-44a7-92f5-4a8b9a1ba6ce.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>圖三： 第二張工作表</p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.webp" onerror="this.srcset='https://assets.matters.news/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.png" onerror="this.srcset='https://assets.matters.news/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.webp">
+
+        <img src="https://assets.matters.news/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.png" srcset="https://assets.matters.news/processed/540w/embed/35d9f45c-9f68-4480-bfbf-4a8a1ddc4469.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>圖四： 第三張工作表</p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.webp" onerror="this.srcset='https://assets.matters.news/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.png" onerror="this.srcset='https://assets.matters.news/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.webp">
+
+        <img src="https://assets.matters.news/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.png" srcset="https://assets.matters.news/processed/540w/embed/43a3e623-6a91-4dd8-9e35-9bdc0a76d80c.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h2><strong>參數的介紹與實作 </strong></h2><h4><strong>1. io: 欲導入的Excel檔路徑與檔名，像是io = "填入位置路徑 + 檔名"，也可以直接省略io =，直接填入位置路徑加檔名就好 </strong></h4><p>程式碼範例</p><pre class="ql-syntax">## 導入Pandas 套件
+import pandas as pd
+​
+## 讀取檔案
+df = pd.read_excel('data/dataset_example.xlsx')
+​
+## 顯示資料
+df
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.webp" onerror="this.srcset='https://assets.matters.news/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.png" onerror="this.srcset='https://assets.matters.news/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.webp">
+
+        <img src="https://assets.matters.news/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.png" srcset="https://assets.matters.news/processed/540w/embed/e0629b13-84b5-4224-bfd0-8d1eddf75ab4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>2. sheet_name(str, int, list, or None, default 0) : 讀取指定的工作表 </strong></h4><p><strong>可以傳入參數的格式</strong></p><ul><li>傳入整數(ex. 0,1,2...): 指定特定位置的工作表，像0就是第一張工作表，1就是第二張工作表，以此類推，預設為0，表示導入第一張工作表，並轉換返回一個DataFrame格式的資料表</li><li>傳入字串（string）: 指定特定名稱的工作表，像是"Consumption_Record"就是指定導入名稱為"Consumption_Record"的工作表，並轉換返回一個DataFrame格式的資料表</li><li>傳入串列(ex. [0,1]): 一次導入多個工作表，像[0,1]就是指一次導入第一張與第二張工作表，也可以像[2,"Consumption_Record"]就是導入第三張與名為"Consumption_Record"的工作表，它會返回一個OrderDict類型的數據，並會將這些工作表合併於一個list中</li><li>傳入None: 表示將全部工作表載入，它會返回一個OrderDict類型的數據，並會將這些數據合併在一個list中</li></ul><p><strong>程式碼範例</strong></p><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 讀取第三章工作表
+a_int = pd.read_excel('data/dataset_example.xlsx', sheet_name = 2)
+​
+## 讀取'Consumption_Record'工作表
+b_string = pd.read_excel(io = 'data/dataset_example.xlsx', sheet_name = 'Consumption_Record')
+​
+## 讀取第一張與第三張的工作表
+c_list = pd.read_excel(io = 'data/dataset_example.xlsx', sheet_name = [0,2])
+​
+## 讀取第三張與'Consumption_Record'工作表
+d_list = pd.read_excel(io = 'data/dataset_example.xlsx', sheet_name = [2, 'Consumption_Record'])
+​
+## 讀取全部的工作表
+e_all = pd.read_excel(io = 'data/dataset_example.xlsx', sheet_name = None)
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.webp" onerror="this.srcset='https://assets.matters.news/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.png" onerror="this.srcset='https://assets.matters.news/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.webp">
+
+        <img src="https://assets.matters.news/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.png" srcset="https://assets.matters.news/processed/540w/embed/2a6bf33c-a5fd-4fca-a3a7-4626b644dce9.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.webp" onerror="this.srcset='https://assets.matters.news/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.png" onerror="this.srcset='https://assets.matters.news/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.webp">
+
+        <img src="https://assets.matters.news/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.png" srcset="https://assets.matters.news/processed/540w/embed/c3b4ac4e-c64e-4869-b245-3324a596c646.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>補充： 從上面的結果，如果我們是傳入一個串列list，像是c_list與d_list那樣，就可以在結果上用像是c_list[2], d_list["Consumption_Record"]，來將合併成OrderDict的數據類型，再次分開成單獨的DataFrame格式，但要指定為我們sheet_name的切割方式，像是如下的程式碼，如果我輸入c_list[1]這樣會報錯，大家要注意這一點</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 顯示數據
+#c_list[0]
+c_list[2]
+## 顯示數據
+#d_list[2]
+d_list['Consumption_Record']
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.webp" onerror="this.srcset='https://assets.matters.news/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.png" onerror="this.srcset='https://assets.matters.news/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.webp">
+
+        <img src="https://assets.matters.news/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.png" srcset="https://assets.matters.news/processed/540w/embed/493c314f-7ba2-4cc9-94f8-d8759bbbe430.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>3. header(int, list of int, default 0): 指定哪一列為最上方的列名 </strong></h4><p><br></p><p><strong>參數可以傳入的格式</strong></p><ul><li>整數（int）: 傳入1，代表指定第二列為列名，以此類推，預設為0，代表指定第一列為列名</li><li>串列：將串列中的列位置都當成是列名，讓多列同時成為列名，像是[0,1,2]就是將第1、2、3列都成為列名</li><li>傳入None: 表示不使用任何數據裡的列當成是列名</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 讀取第一張工作表，且以第一列當列名
+a_int = pd.read_excel('data/dataset_example.xlsx', header = 0)
+​
+## 讀取第一張工作表，且以第三列為列名
+b_int = pd.read_excel('data/dataset_example.xlsx', header = 2)
+​
+## 讀取第一張工作表，且以第一，二，三列當列名
+c_list = pd.read_excel('data/dataset_example.xlsx', header = [0,1,2])
+​
+## 讀取第一張工作表，且不以任何數據列當列名
+d = pd.read_excel('data/dataset_example.xlsx', header = None)
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.webp" onerror="this.srcset='https://assets.matters.news/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.png" onerror="this.srcset='https://assets.matters.news/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.webp">
+
+        <img src="https://assets.matters.news/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.png" srcset="https://assets.matters.news/processed/540w/embed/3107927a-6bf0-4796-80ce-2e60c9d1b6ea.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.webp" onerror="this.srcset='https://assets.matters.news/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.png" onerror="this.srcset='https://assets.matters.news/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.webp">
+
+        <img src="https://assets.matters.news/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.png" srcset="https://assets.matters.news/processed/540w/embed/02a96c2a-9ac9-45e1-88d5-53bfce95b2d9.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li><strong>小提醒： 當指定列名為原數據的哪些列或哪一列時，在它上面的列都會被拿掉，像是header = 2的話，原數據前二列的數據就會被拿掉，只產生指定第三列以下的數據列</strong></li></ul><h4><br></h4><h4><br></h4><p><strong>4. names(array-like, default None): 指定一個自定義的列名 </strong></p><p><strong>可以傳入參數的格式</strong></p><ul><li>串列（list）: 傳入自定義的名稱，但要注意數量要與原數據的列名一樣數量</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+a_list = pd.read_excel('data/dataset_example.xlsx', names = ['顧客編號', '姓名', '年齡', '身高', '體重', 
+                              '性別', '職業'])
+​
+## 顯示數據
+a_list
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.webp" onerror="this.srcset='https://assets.matters.news/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.png" onerror="this.srcset='https://assets.matters.news/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.webp">
+
+        <img src="https://assets.matters.news/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.png" srcset="https://assets.matters.news/processed/540w/embed/298b79ff-6812-41d7-a04e-d0510ce3155e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>5. nrows(int default None): 指定欲讀取前多少行 </strong></h4><p><strong>可以傳入參數的格式</strong></p><ul><li>整數（int）: 傳入整數，像是傳入6代表讀取前面6行 程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 只導入前四行數據
+a_int = pd.read_excel('data/dataset_example.xlsx', nrows = 4)
+​
+## 顯示數據
+a_int
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7eccf833-1592-435b-ac95-2c391bceebeb.webp" onerror="this.srcset='https://assets.matters.news/embed/7eccf833-1592-435b-ac95-2c391bceebeb.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7eccf833-1592-435b-ac95-2c391bceebeb.png" onerror="this.srcset='https://assets.matters.news/embed/7eccf833-1592-435b-ac95-2c391bceebeb.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/7eccf833-1592-435b-ac95-2c391bceebeb.webp">
+
+        <img src="https://assets.matters.news/embed/7eccf833-1592-435b-ac95-2c391bceebeb.png" srcset="https://assets.matters.news/processed/540w/embed/7eccf833-1592-435b-ac95-2c391bceebeb.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>6. na_values(scaler, str, list-like, or dict, default None): 將指定的欄位字串，改成NaN </strong></h4><p>可以傳入參數的格式</p><ul><li>字串（str）：像是如果是用我的範圍數據集傳入'M'，就會將所有'M'的欄位改成NaN</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 將所有'M'的欄位改成NaN 
+a_str = pd.read_excel('data/dataset_example.xlsx', na_values = 'M')
+​
+## 顯示數據
+a_str
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.webp" onerror="this.srcset='https://assets.matters.news/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.png" onerror="this.srcset='https://assets.matters.news/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.webp">
+
+        <img src="https://assets.matters.news/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.png" srcset="https://assets.matters.news/processed/540w/embed/dfc0a446-7827-4ec6-ad4d-7c62a53c3a34.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>7. keep_default_na(bool, default True): 是否將原本為空值的數據導入，並給予NaN </strong></h4><p>可以傳入參數的格式</p><ul><li>Boolean: 傳入True 或 False，預設為True，代表導入空值，並填為NaN</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 不要傳入有空值的數據
+a_bool = pd.read_excel('data/dataset_example.xlsx', keep_default_na = False)
+​
+## 顯示數據
+a_bool
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.webp" onerror="this.srcset='https://assets.matters.news/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.png" onerror="this.srcset='https://assets.matters.news/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.webp">
+
+        <img src="https://assets.matters.news/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.png" srcset="https://assets.matters.news/processed/540w/embed/6ae72cce-8f69-401e-9ee6-08eca2aa1ea7.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>8. skiprows(list-like): 將指定的行數跳過不導入進來 </strong></h4><p><br></p><p><strong>可以傳入參數的格式</strong></p><ul><li>整數（int）: 如果為1，就是跳過第一行，為6，就是跳過第6行，以此類推</li><li>串列（list）: 可以指定跳過哪些行，像是[1,4,5,6] 就是跳過1,4,5,6行</li><li>lambda函數： 可以使用lambda來指定欲跳過的行</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 跳過第二行
+a_int = pd.read_excel('data/dataset_example.xlsx', skiprpws = 2)
+​
+## 跳過1,3,6行
+b_list = pd.read_excel('data/dataset_example.xlsx', skiprpws = [1,3,6])
+​
+## 跳過偶數行
+c_func = pd.read_excel('data/dataset_example.xlsx', skiprpws = lambda x: x%2 == 0)
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/50362ed1-aec1-41f3-931e-40367be705d2.webp" onerror="this.srcset='https://assets.matters.news/embed/50362ed1-aec1-41f3-931e-40367be705d2.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/50362ed1-aec1-41f3-931e-40367be705d2.png" onerror="this.srcset='https://assets.matters.news/embed/50362ed1-aec1-41f3-931e-40367be705d2.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/50362ed1-aec1-41f3-931e-40367be705d2.webp">
+
+        <img src="https://assets.matters.news/embed/50362ed1-aec1-41f3-931e-40367be705d2.png" srcset="https://assets.matters.news/processed/540w/embed/50362ed1-aec1-41f3-931e-40367be705d2.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>9. index_col(int, list of int, default None): 指定哪一列為索引列 </strong></h4><p><br></p><p><strong>可以傳入參數的格式</strong></p><ul><li>整數（int）: 指定哪一列為索引列</li><li>None: 為預設的值，代表它會自動幫我們創建一列，以0開始的索引列</li><li>串列（list）: 指定哪些列為索引列</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 把第一列當成索引列
+a_int = pd.read_excel('data/dataset_example.xlsx', index_col = 0)
+​
+## 不把數據中任何一列當成索引列
+b_none = pd.read_excel('data/dataset_example.xlsx', index_col = None)
+​
+## 把第一，四，六列當成索引列
+c_list = pd.read_excel('data/dataset_example.xlsx', index_col = [0,3,5])
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.webp" onerror="this.srcset='https://assets.matters.news/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.png" onerror="this.srcset='https://assets.matters.news/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.webp">
+
+        <img src="https://assets.matters.news/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.png" srcset="https://assets.matters.news/processed/540w/embed/e58fda46-0dbf-4fe6-b8b8-66dffeeb836f.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>10. true_values & false_values(list, default None): 指定數據中的哪些值，為True或False </strong></h4><p>可以傳入參數的格式</p><ul><li>串列（list）: 指定數據中哪些要轉為True或False的值，像是true_values['M']就是把數據中的'M'轉為True，false_values['M']就是把數據中的'M'轉為False</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 將數據集中的'M'改為True，'F'改為Fasle
+a_list = pd.read_excel('data/dataset_example.xlsx', true_values = ['M'], false_values = ['F'])
+​
+## 顯示數據
+a_list
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.webp" onerror="this.srcset='https://assets.matters.news/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.png" onerror="this.srcset='https://assets.matters.news/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.webp">
+
+        <img src="https://assets.matters.news/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.png" srcset="https://assets.matters.news/processed/540w/embed/29094e84-aefa-4d0d-93cf-945a2f56b88e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>11. dtype(Type name or dict of column -> type, default None): 改變數據類型，預設為None，代表不改變原數據類型 </strong></h4><p><strong>可以傳入參數的格式</strong></p><ul><li>Pandas 所以包含的所有數據類型</li></ul><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cc7b06db-e493-49d9-94bc-896d1b918787.webp" onerror="this.srcset='https://assets.matters.news/embed/cc7b06db-e493-49d9-94bc-896d1b918787.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cc7b06db-e493-49d9-94bc-896d1b918787.png" onerror="this.srcset='https://assets.matters.news/embed/cc7b06db-e493-49d9-94bc-896d1b918787.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/cc7b06db-e493-49d9-94bc-896d1b918787.webp">
+
+        <img src="https://assets.matters.news/embed/cc7b06db-e493-49d9-94bc-896d1b918787.png" srcset="https://assets.matters.news/processed/540w/embed/cc7b06db-e493-49d9-94bc-896d1b918787.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>程式碼範例</li></ul><p><strong>原本的數據類型 </strong></p><pre class="ql-syntax">## 導入pandas套件 
+import pandas as pd
+​
+## 導入原本數據的前七行數據
+a = pd.read_excel('data/dataset_example.xlsx', nrows = 7)
+​
+## 顯示數據資訊
+a.info()
+</pre><p><strong>更改過後的數據類型：先將最後一列NaN值拿掉，並將Age, Height 和 Weight改為浮點數類型</strong></p><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 先將最後一列有NaN值得拿掉，並將Age、Height和Weight改為浮點數類型
+a = pd.read_excel('data/dataset_example.xlsx', nrows = 7, dtype = {2: 'float64', 3:'float64', 4:'float64'})
+​
+## 顯示數據資訊
+a.info()
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f26c592b-7ffc-46af-859c-026c31d210c7.webp" onerror="this.srcset='https://assets.matters.news/embed/f26c592b-7ffc-46af-859c-026c31d210c7.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f26c592b-7ffc-46af-859c-026c31d210c7.png" onerror="this.srcset='https://assets.matters.news/embed/f26c592b-7ffc-46af-859c-026c31d210c7.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/f26c592b-7ffc-46af-859c-026c31d210c7.webp">
+
+        <img src="https://assets.matters.news/embed/f26c592b-7ffc-46af-859c-026c31d210c7.png" srcset="https://assets.matters.news/processed/540w/embed/f26c592b-7ffc-46af-859c-026c31d210c7.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>12. usecols(int, str, list-like, or callable default None): 指定讀取excel中哪些列 </strong></h4><p><strong>可以傳入參數的格式</strong></p><ul><li>串列（list）: 指定要解析哪幾列</li><li>None: 預設值為None，代表解析所有列</li><li>字串（list）: 指定Excel檔中列的字母序號，使用":"來代表列字母序號的範圍，","來代表要指定哪些列，像是"A:E"，代表解析A到E列，而"A,C,E:F"，代表解析A、E和E到F列</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 指定解析第1與4列
+a_list = pd.read_excel('data/dataset_example.xlsx', usecols = [0,3])
+​
+## 指定解析A列到C列
+a_str1 = pd.read_excel('data/dataset_example.xlsx', usecols = 'A:C')
+​
+## 指定解析A列到C列
+a_str2 = pd.read_excel('data/dataset_example.xlsx', usecols = 'A,C')
+​
+## 指定解析A列、B列和D到F列
+a_str3 = pd.read_excel('data/dataset_example.xlsx', usecols = 'A,B ,D:F')
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.webp" onerror="this.srcset='https://assets.matters.news/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.png" onerror="this.srcset='https://assets.matters.news/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.webp">
+
+        <img src="https://assets.matters.news/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.png" srcset="https://assets.matters.news/processed/540w/embed/1266f5c2-c52e-418f-9f0e-ffa01eee8240.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.webp" onerror="this.srcset='https://assets.matters.news/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.png" onerror="this.srcset='https://assets.matters.news/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.webp">
+
+        <img src="https://assets.matters.news/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.png" srcset="https://assets.matters.news/processed/540w/embed/889bf56c-e5c7-49f5-9ee5-e7dca882317f.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>13. squeeze(bool, default False): 當指定解析只有一列時，會回傳成Series格式</strong></h4><p><br></p><p><strong>可以傳入參數的格式</strong></p><ul><li>Boolean: True 或 False，預設為False，為True時，當指定解析的只有一列，會回傳成Series格式</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+## 指定解析一列，並回傳成Series格式
+a = pd.read_excel('data/dataset_example.xlsx', usecols = [2], squeeze = True)
+​
+## 顯示數據類型
+print(type(a))
+​
+## 顯示數據
+a
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.webp" onerror="this.srcset='https://assets.matters.news/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.png" onerror="this.srcset='https://assets.matters.news/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.webp">
+
+        <img src="https://assets.matters.news/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.png" srcset="https://assets.matters.news/processed/540w/embed/89aba9af-d73f-4ff7-8748-5f8e560ebd61.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h3><strong>14. engine(str, default None): 使用哪種的第三方解析庫，都是用來解析Excel檔的</strong></h3><p><strong>可以傳入參數的格式</strong></p><ul><li>第三方解析庫： xlrd, openpyxl, odf</li><li>None: 為預設值，代表不需要使用第三方解析庫</li></ul><h4><br></h4><h4><br></h4><p><strong>15. converters(dict, default None): 使用函數來對指定的列，進行自定義的數據處理，可以使用Python的def或lambda方法</strong></p><p><strong>可以傳入參數的格式</strong></p><ul><li>字典（dict）: 第一個參數是key，為指定的列名或列的序列碼，為函數，可以使用Python的def或lambda方法</li><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入pandas套件
+import pandas as pd
+​
+##將Customer_id那一列都加上100，然後Age那一列，在後面都加上years old
+a = pd.read_excel('data/dataset_example.xlsx', 
+         converters = {0: lambda x: x+100, 2: lambda x: str(x) + " years old"})
+​
+## 顯示數據
+a
+</pre><p><strong>執行結果</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.webp" onerror="this.srcset='https://assets.matters.news/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.png" onerror="this.srcset='https://assets.matters.news/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.webp">
+
+        <img src="https://assets.matters.news/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.png" srcset="https://assets.matters.news/processed/540w/embed/a61781b3-efe2-4675-bab1-21f6d8dac44c.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><ul><li><strong>補充： 更多使用Pandas來導入不同文件格式方法，可以直接參考官網（</strong><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table%EF%BC%89%E7%9A%84%E6%95%B4%E7%90%86%E5%96%94" target="_blank"><strong>https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table）的整理喔</strong></a></li></ul><p><br></p><p><br></p><p><strong>當然還有一些參數我沒有介紹到，但這邊列出了許多我們比較常用到的參數，如果大家想瞭解更多，可以直接使用help(pandas.read_excel)這個方法來查詢所有參數的用法說明喔，對這個方法有了很大的了解後，日後我們需要導入Excel檔的時候，就能在導入前先進行初步的數據處理了，像是我們可以先指定好要解析導入哪些列，才不用通通都導入後，再把用不到的列拿掉，如果遇到擁有很多工作表的時候，也能輕鬆指定我們欲導進來的工作表喔</strong></p><h2><br></h2><h2><br></h2><h2><strong>Reference</strong></h2><p><a href="https://zhuanlan.zhihu.com/p/142972462" target="_blank">https://zhuanlan.zhihu.com/p/142972462</a></p><p><a href="https://blogs.csdn.net/brucewong0516/article/details/79096633" target="_blank">https://blogs.csdn.net/brucewong0516/article/details/79096633</a></p>
