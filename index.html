@@ -9,11 +9,6 @@ layout: default
 {% for post in paginator.posts %}
 <span class="postdate">{{ post.date | preserve_timezones }}</span> • <span class="author"><a href="{{ site.url }}{{ site.baseurl }}/{{ post.categories }}"><b>{{ post.categories.first | upcase }}</b></a></span>
 <h3><a href="{{ site.url }}{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
-<!--
-<div class="content">
-  {{ post.content }}
-</div>
--->
 {% endfor %}
 
 <!-- Pagination links -->
