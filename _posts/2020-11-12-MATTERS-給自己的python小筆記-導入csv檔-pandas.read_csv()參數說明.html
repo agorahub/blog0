@@ -1,0 +1,24 @@
+---
+layout: post
+title: 給自己的Python小筆記 - 導入CSV檔 - pandas.read_csv()參數說明
+date: 2020-11-12 12:12:53.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><p>YoYo，今天來介紹另一種使用Pandas來讀取Excel檔的方法，但這次不同的地方是Excel檔的副檔名需要為CSV檔喔，而我們要使用的是pandas.read_csv()這個方法，由於上一篇介紹過的pandas.read_excel()與這次要分享的方法，在很多參數上是相仿的，所以我這篇就不實作囉，大家可以根據這篇的參數說明自己試試看</p><h2><br></h2><h2><strong>read_csv() & read_excel() 都是導入Excel檔，並轉換成Python可操作的DataFrame格式，那它們最大的差別是什麼？ </strong></h2><p>答案非常簡單，除了參數的差別，它們使用上的不同在，雖然都是導入Excel檔，但是所導入的Excel檔格式並不相同喔，有些Excel檔需要read_csv()來導入，有些則需要read_excel來導入喔</p><h2><br></h2><h2><strong>pandas.read_csv()所有的參數 </strong></h2><p><strong>利用Python查詢pandas.read_csv()所有參數與說明</strong></p><pre class="ql-syntax">import pandas as pd
+​
+help(pd.read_csv)
+</pre><p><strong>所有參數</strong></p><pre class="ql-syntax">read_csv(filepath_or_buffer: Union[str, pathlib.Path, IO[~AnyStr]], sep=',', delimiter=None, header='infer', names=None, index_col=None, usecols=None, squeeze=False, prefix=None, mangle_dupe_cols=True, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, verbose=False, skip_blank_lines=True, parse_dates=False, infer_datetime_format=False, keep_date_col=False, date_parser=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression='infer', thousands=None, decimal: str = '.', lineterminator=None, quotechar='"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, dialect=None, error_bad_lines=True, warn_bad_lines=True, delim_whitespace=False, low_memory=True, memory_map=False, float_precision=None)
+</pre><h2><br></h2><h2><strong>參數介紹 </strong></h2><h4><strong>常使用到的參數</strong></h4><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.webp" onerror="this.srcset='https://assets.matters.news/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.png" onerror="this.srcset='https://assets.matters.news/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.webp">
+
+        <img src="https://assets.matters.news/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.png" srcset="https://assets.matters.news/processed/540w/embed/caa2f0a5-d536-41e9-a530-4584adfb7bb3.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><strong>這篇我想當成是大家在導入CSV檔時候，不用記得所有參數，需要用到的時候，再來看看的小筆記，所以有些可能比較不常用到的參數，我這邊就不做介紹囉，有興趣的大家可以直接參考官網（</strong><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table%EF%BC%89%E5%96%94" target="_blank"><strong>https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table）喔</strong></a></p><p><strong>想知道更多使用Pandas導入不同檔案類型的方法，也可以參考官網這頁（[</strong><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table" target="_blank"><strong>https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table</strong></a><strong>）喔</strong>](<a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html?fbclid=IwAR321Nzr1ADFuL8hNKoSkDF2azeikNPk8qFSfOqLAzzlTLk8bzggolVs8pE#io-read-csv-table" target="_blank">https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html?fbclid=IwAR321Nzr1ADFuL8hNKoSkDF2azeikNPk8qFSfOqLAzzlTLk8bzggolVs8pE#io-read-csv-table</a>）喔)</p><h2><strong>Reference</strong></h2><p><a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table" target="_blank">https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-read-csv-table</a></p><p><a href="https://blog.csdn.net/zhangjianjaEE/article/details/78543743" target="_blank">https://blog.csdn.net/zhangjianjaEE/article/details/78543743</a></p>
