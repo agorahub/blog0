@@ -19,6 +19,8 @@ This page relays the previous campaign -<br>
 - Read and comment in the **Comments** below.
 - Vote 👍 / 👎 to the comments in [**Issue**](https://github.com/agorahub/blog0/issues/2) page.
 
+<div id="add-new-comment" style="text-align:right"><a href="https://github.com/login?return_to=https://github.com/{{page.comments_repo}}/issues/{{page.comments_id}}%23issuecomment-new"><b>Add new comment</b></a></div>
+
 {% include comments.html %}
 
 ## Disclaimer
