@@ -9,39 +9,37 @@ comments_id: 1
 Read blogs on demand.
 
 | Source  | Importer   | Update |
-| ------  | --------   | ------ |
+| :-----  | :-------   | :----- |
 | INITIUM | RSSINITIUM | Daily  |
 | MATTERS | RSSMATTERS | Daily  |
 | VOCUS   | RSSVOCUS   | Daily  |
 
+## Test and Deploy
+
+```
+$ gem install bundler jekyll
+$ vim _config.yml # Configure to test or deploy.
+
+$ bundle exec jekyll serve
+# => Now browse to http://localhost:4000
+
+$ JEKYLL_ENV=production bundle exec jekyll build
+# Copy the compiled codes from _site/ to html server.
+```
 
 ## Import and Commit
 
 ```
-# Customize RSS importers in local gem 'jekyll-import':
-$ ls .../gems/jekyll-import-{version}/lib/jekyll-import/importers/rss*
-# rssinitium.rb rssmatters.rb rssvocus.rb
+$ cd .../gems/jekyll-import-{version}/lib/jekyll-import/importers/
+$ vim rssinitium.rb rssmatters.rb rssvocus.rb # Customize importers.
 
-# Import RSS feeds and commit posts back:
-$ ./_feed.sh  # pull, import, archive, add, commit, push
+$ ./_feed.sh  # Batch import and commit posts.
 ```
 
-## Batch and Automate
+## List of Features
 
-[Check comment](https://github.com/agorahub/news0/issues/1#issuecomment-597540617)
-
-## Test and Deploy
-
-```
-# Edit _config.yml for local bundle test:
-$ gem install bundler jekyll
-$ bundle exec jekyll serve
-# => Now browse to http://localhost:4000
-
-# Edit _config.yml for production bundle:
-$ JEKYLL_ENV=production bundle exec jekyll build
-# Copy the compiled codes from _site/ to your html server.
-```
+- [x] Batch and Automate - Check out the [issue comment](https://github.com/agorahub/news0/issues/1#issuecomment-597540617)
+- [ ] Comment on Posts - Check out the [proposing issue](https://github.com/agorahub/news0/issues/3)
 
 {% include comments.html %}
 
