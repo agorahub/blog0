@@ -39,7 +39,7 @@ $ ./_feed.sh  # Batch import and commit posts.
 ## List of Features
 
 - [x] Batch and Automate - Check out the [issue comment](https://github.com/agorahub/news0/issues/1#issuecomment-597540617)
-- [ ] Comment on Posts - Check out the [proposing issue](https://github.com/agorahub/news0/issues/3)
+- [x] Comment and Review - Check out the [issue comment](https://github.com/agorahub/blog0/issues/3#issuecomment-726799802)
 
 {% include comments.html %}
 
