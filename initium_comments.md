@@ -5,7 +5,7 @@ permalink: /initium_comments/
 comments_repo: agorahub/blog0
 comments_id: 5
 ---
-## [◁ muitinⒾ]({{site.url}}{{site.baseurl}}/initium)
+<h2><a href="{{site.url}}{{site.baseurl}}/initium">◁ muitinⒾ</a></h2>
 
 {% include comment.html %}
 
