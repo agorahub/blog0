@@ -7,7 +7,9 @@ layout: default
 
 <!-- This loops through the paginated posts -->
 {% for post in paginator.posts %}
-<span class="postdate">{{ post.date | preserve_timezones }}</span> • <span class="author"><a href="{{ site.url }}{{ site.baseurl }}/{{ post.categories }}"><b>{{ post.categories.first | upcase }}</b></a></span>
+<span class="postdate">{{ post.date | preserve_timezones }}</span> 
+• <span class="author"><a href="{{site.url}}/{{site.baseurl}}/{{post.categories.first}}_comments/?[{{post.title}}]({{site.url}}{{site.baseurl}}/{{post.url}})"><b>💬</b></a></span> 
+• <span class="author"><a href="{{ site.url }}{{ site.baseurl }}/{{ post.categories }}"><b>{{ post.categories.first | upcase }}</b></a></span>
 <h3><a href="{{ site.url }}{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
 {% endfor %}
 
