@@ -5,7 +5,7 @@ permalink: /matters_comments/
 comments_repo: agorahub/blog0
 comments_id: 6
 ---
-## 💬 srettaⓂ
+## [◁ srettaⓂ]({{site.url}}{{site.baseurl}}/matters)
 
 {% include comment.html %}
 
