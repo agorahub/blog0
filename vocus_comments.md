@@ -5,7 +5,7 @@ permalink: /vocus_comments/
 comments_repo: agorahub/blog0
 comments_id: 7
 ---
-## 💬 sucoⓋ
+## [◁ sucoⓋ]({{site.url}}{{site.baseurl}}/vocus)
 
 {% include comment.html %}
 
