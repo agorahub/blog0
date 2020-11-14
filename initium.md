@@ -12,6 +12,6 @@ layout: page
     <h4><a href="{{ site.url }}{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h4>
     {% endfor %}
   </div>
-  {% endif %}the category comments page
+  {% endif %}
 {% endfor %}
 
