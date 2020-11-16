@@ -1,0 +1,70 @@
+---
+layout: post
+title: 面向 IPFS 的文章平台
+date: 2020-01-23 15:59:01.000000000 +00:00
+categories: matters
+tags: blog
+author: Out65
+---
+
+<p>经常有人想做去中心化的文章平台，有的是想借区块链的东风，有的则是因为对文章的消失感到担忧（估计主要是中国大陆用户）。<a href="https://steemit.com/" target="_blank">Steemit</a> 是一个例子，它<a href="https://steemit.com/faq.html#Can_I_delete_something_I_posted" target="_blank">把文章放在区块链上</a>，同时通过数字货币来激励创作者；<a href="https://matters.news/" target="_blank">Matters</a> 是另一个例子，它把文章副本放在 IPFS 上，同时也通过数字货币来激励创作者；<a href="https://www.matataki.io/" target="_blank">瞬 Metataki</a> 是今天看到的第三个例子，它也把文章副本放在 IPFS 上（自称），同时也通过数字货币来激励创作者（这点我可能说得不准确）。</p><h2>历史渊源</h2><p>前两个企划我知道得稍早一些，也有账号（虽说基本不发东西在上面），感觉它们发展得似乎还不错（不过 Matters 那边的数字货币项目 Likecoin 发邮件太多让我有点烦）。今天偶然听说了 Matataki <sup>[1]</sup>，感觉这大概是 Matters 的中国大陆版 <sup>[2]</sup>。据说<a href="https://github.com/Matataki-io" target="_blank">这项目</a>是国内著名 ACMer <a href="https://www.zhihu.com/question/21066187" target="_blank">岛娘</a>的<a href="https://zhuanlan.zhihu.com/p/37986782" target="_blank">创业项目</a>。</p><p>从时间上来看，Matters 似乎出现得更早。Matataki 的文章 id 似乎是自然数，我找到的<a href="https://www.matataki.io/p/2" target="_blank">第二篇文章</a>发布于「3 月 15 日 15:22」，考虑到「4 月 2 日 11:42」发布的<a href="https://www.matataki.io/p/218" target="_blank">第 218 篇文章</a>有标注年份是 2019 年，我就假设第二篇文章的发布日期是 2019 年的三月十五日了。再加上 GitHub 上 Matataki-io/Matataki-Mobile-FE 的<a href="https://github.com/Matataki-io/Matataki-Mobile-FE/commit/a2073f860e038a11329637fb50c9769468868aa2" target="_blank">首次提交</a>在 2019 年三月，我猜测这个项目大概在 2019 年的三月份成型（顺便说一下， Matataki-io/Matataki-FE 的<a href="https://github.com/Matataki-io/Matataki-Mobile-FE/commit/a2073f860e038a11329637fb50c9769468868aa2" target="_blank">首次提交</a>在 2019 年六月，看来这个站点可能<a href="https://livid.v2ex.com/essays/2012/04/25/v2ex-2to3.html" target="_blank">和 V2EX 一样</a>，也是先适配的手机版本），<a href="https://www.jianshu.com/p/ec1906b71757" target="_blank">这篇文章</a>也证实了我的猜测（不过这篇文章不见得是官方发的）。Matters 的话，虽说我看不出哪篇是最早发布的文章，不过我有找到 <a href="https://matters.news/@ckxpress/blendle-%E4%B8%80%E5%B9%B4%E5%BE%AE%E6%94%AF%E4%BB%98%E6%96%B0%E8%81%9E%E7%B6%93%E9%A9%97%E5%88%86%E4%BA%AB-zdpuB27JjsKjqcsKxDRasQRAQbumVVTWpYHYDYWSUejJMVxxU" target="_blank">2017 年末的文章</a>，也就能说明这个项目最晚在 2017 年就存在了。</p><h2>「存储到 IPFS」</h2><p>IPFS (<strong>I</strong>nter<strong>P</strong>lanetary <strong>F</strong>ile <strong>S</strong>ystem，中文直译过来叫“星际文件系统”) 是一个分布式文件系统，有点像 <a href="https://zeronet.io/" target="_blank">ZeroNet</a>。用户可以向文件系统上提交自己的内容，让全球的 IPFS 节点托管。咱<a href="https://blog.outv.im/2019/put-your-blog-on-many-places/" target="_blank">讲过一点</a>往 IPFS 上放东西的方法，这里不赘述了。</p><p>Matataki 是这么说的：</p><blockquote>在瞬 Matataki 上发布的任一内容都会存储到 IPFS 的网络上，并生成对于该内容的专属哈希值(hash 值) 。</blockquote><blockquote>[<a href="https://www.matataki.io/p/782" target="_blank">source</a>]</blockquote><p>Matters 也这么说：</p><blockquote>所有在 Matters 上發佈的作品（不含評論），皆會上載到星際文件系統（InterPlanetary File System，IPFS）的節點上，實現作品內容的分佈式存儲，完成將數據回歸創作者的第一步。</blockquote><blockquote>[<a href="https://matters.news/about" target="_blank">source</a>]</blockquote><p>也就是说，我们可以假设，作者在 Matataki / Matters 发布的文章将在 IPFS 可见。具体点说，就是我们可以在超过一个 IPFS 节点（尤其是那些用户最多的）找到文章的副本。</p><p>Matters 是这样显示的（以<a href="https://matters.news/@Beckydoor/%E7%94%A8%E6%BC%94%E5%8C%96%E4%BE%86%E8%A7%A3%E9%87%8Bmatters%E4%B8%8A%E7%9A%84%E5%85%A7%E5%AE%B9%E7%AB%B6%E7%88%AD-zdpuB3cJgpAKbxogBBTf1yszsksyEZcEHF9PfBBpJBKztTF2T" target="_blank">此</a>为例）：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.webp" onerror="this.srcset='https://assets.matters.news/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.png" onerror="this.srcset='https://assets.matters.news/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.webp">
+
+        <img src="https://assets.matters.news/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.png" srcset="https://assets.matters.news/processed/540w/embed/ade4656e-e2ca-4423-9977-a33cc8b31b55.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Matters 上的 IPFS 标记</span></figcaption></figure><p><br></p><p>我们也确实能看到，这篇文章确实以这个 hash 出现在好几个 IPFS 节点上了：</p><ul><li><a href="https://ipfs.io/ipfs/QmbaxsyNyWQstEykY3mNXoWwVHyC2bu56jLvqL3gd7mNWb/" target="_blank">https://ipfs.io/ipfs/QmbaxsyNyWQstEykY3mNXoWwVHyC2bu56jLvqL3gd7mNWb/</a></li><li><a href="https://cloudflare-ipfs.com/ipfs/QmbaxsyNyWQstEykY3mNXoWwVHyC2bu56jLvqL3gd7mNWb/" target="_blank">https://cloudflare-ipfs.com/ipfs/QmbaxsyNyWQstEykY3mNXoWwVHyC2bu56jLvqL3gd7mNWb/</a></li></ul><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/48d91620-66ad-4a24-b29c-c18625698e21.webp" onerror="this.srcset='https://assets.matters.news/embed/48d91620-66ad-4a24-b29c-c18625698e21.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/48d91620-66ad-4a24-b29c-c18625698e21.png" onerror="this.srcset='https://assets.matters.news/embed/48d91620-66ad-4a24-b29c-c18625698e21.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/48d91620-66ad-4a24-b29c-c18625698e21.webp">
+
+        <img src="https://assets.matters.news/embed/48d91620-66ad-4a24-b29c-c18625698e21.png" srcset="https://assets.matters.news/processed/540w/embed/48d91620-66ad-4a24-b29c-c18625698e21.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>IPFS 上的 Matters 文章</span></figcaption></figure><p><br></p><p>就连图片都放在 IPFS 上：</p><ul><li><a href="https://cloudflare-ipfs.com/ipfs/QmbaxsyNyWQstEykY3mNXoWwVHyC2bu56jLvqL3gd7mNWb/8bffb1a0-74c2-4246-ae83-6c880aad8ec1.jpeg" target="_blank">https://cloudflare-ipfs.com/ipfs/QmbaxsyNyWQstEykY3mNXoWwVHyC2bu56jLvqL3gd7mNWb/8bffb1a0-74c2-4246-ae83-6c880aad8ec1.jpeg</a></li></ul><p>这样的话，我们认为这篇文章确实在 IPFS 上存在多份副本。</p><p>（是的，这两天 Matters 上大半是武汉肺炎相关的文章，不过这里选用了一篇其它话题的文章。）</p><p>Matataki 是这样显示的（以<a href="https://www.matataki.io/p/218" target="_blank">此</a>为例）：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.webp" onerror="this.srcset='https://assets.matters.news/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.png" onerror="this.srcset='https://assets.matters.news/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.webp">
+
+        <img src="https://assets.matters.news/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.png" srcset="https://assets.matters.news/processed/540w/embed/7d2a4336-9a67-42b3-b2c4-1f0b834f7777.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Matataki 上的 IPFS 标记</span></figcaption></figure><p><br></p><p>点击这个链接（对于这篇文章来说，是<a href="https://www.matataki.io/ipfs/QmezBtn7MKSzppKYoJ6E417R1RgNzUWqvTJMEMS9g2dLmX" target="_blank">这个</a>），可以查看本文在 IPFS 上（经 Matataki 渲染）的版本:</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.webp" onerror="this.srcset='https://assets.matters.news/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.png" onerror="this.srcset='https://assets.matters.news/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.webp">
+
+        <img src="https://assets.matters.news/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.png" srcset="https://assets.matters.news/processed/540w/embed/fd00071c-a5da-40cf-a9ab-e26487efb8be.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>经 Matataki 渲染的 IPFS 上的此文章</span></figcaption></figure><p><br></p><p>原始数据其实是一段 JSON，不过这也算原文了（图片不算。JSON 中文章引用的图片都是非 IPFS 外链）：</p><ul><li><a href="https://ipfs.io/ipfs/QmezBtn7MKSzppKYoJ6E417R1RgNzUWqvTJMEMS9g2dLmX" target="_blank">https://ipfs.io/ipfs/QmezBtn7MKSzppKYoJ6E417R1RgNzUWqvTJMEMS9g2dLmX</a></li></ul><p>不过 Matataki 的文章在其它 IPFS 节点上的副本似乎不多。我在 ipfs.io 和 cloudflare-ipfs.com 试了一些文章，其中的多数（截至本文写作时）似乎都不存在于这些 IPFS 节点上。建议 Matataki 用户在发布文章完成之后通过几个公共 IPFS 节点访问一下你的文章，做个种什么的（ZeroNet 的时候也有不少人这么干就是了）。</p><p>另外顺便说一下，<code>matataki.io/ipfs/</code> 并不是一个完整功能的 IPFS 节点（至少没有 <a href="https://docs.ipfs.io/guides/concepts/ipns/" target="_blank">IPNS</a>），而且似乎也不会托管非 Matataki 的 IPFS 内容。强行试图访问会报错：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c00b0742-2187-467b-acb8-69574ee26976.webp" onerror="this.srcset='https://assets.matters.news/embed/c00b0742-2187-467b-acb8-69574ee26976.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c00b0742-2187-467b-acb8-69574ee26976.png" onerror="this.srcset='https://assets.matters.news/embed/c00b0742-2187-467b-acb8-69574ee26976.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c00b0742-2187-467b-acb8-69574ee26976.webp">
+
+        <img src="https://assets.matters.news/embed/c00b0742-2187-467b-acb8-69574ee26976.png" srcset="https://assets.matters.news/processed/540w/embed/c00b0742-2187-467b-acb8-69574ee26976.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Matataki 的 IPFS 服务不能读取非 Matataki 内容</span></figcaption></figure><p><br></p><p>而且不知道为什么，很多 IPFS 版本都会带上一个没做混淆的邮箱地址（不过有些不含邮箱地址）。总感觉会被邮件地址抓取机器人上来爬…</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.webp" onerror="this.srcset='https://assets.matters.news/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.png" onerror="this.srcset='https://assets.matters.news/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.webp">
+
+        <img src="https://assets.matters.news/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.png" srcset="https://assets.matters.news/processed/540w/embed/566df8a7-dfab-4f2c-9373-1dc595d556dc.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Matataki 发布到 IPFS 上的部分文章的作者 Email 地址</span></figcaption></figure><p><br></p><h2>总之</h2><p>Matters 确实把文章在 IPFS 上保存了复数个富文本内容副本，包含图片。</p><p>Matataki 也尝试把文章以 JSON 形式放在 IPFS 上（不含图片），不过这些内容可能并没有被发布到其它 IPFS 节点上，因此可能仍然只存在一份文章副本。同时，即使文章被发布到多个 IPFS 节点上，这些节点上的文字可能也不是完整的文章。如果 Matataki （或用户使用的其它）的图片托管服务停止，含有图片的文章将不完整。</p><p><strong>一条建议</strong>：最有效的防止文章（以及你所创造的其它内容）不明不白地消失的方法，就是不要把它们只放在中国大陆地区的服务（或服务器）上。如果你不记得 <a href="https://web.archive.org/web/20071124143516/www.livid.cn/immortal/" target="_blank">v2ex 的国内服务器曾经被以莫须有的罪名拔掉网线</a>、不记得 <a href="https://leancloudblog.com/domain-incident/" target="_blank">LeanCloud 域名被不明不白地禁封</a>、也不记得 <a href="https://v2ex.com/t/611406" target="_blank">Gitee 突然因为「涉及违法不良信息」被停止解析</a>的话…没关系，以后一定会有更多这样的事情让你理解这条有趣又有用的建议。</p><h2>脚注</h2><ol><li>嘛… Google Translate 说 Matataki = 「瞬き」，也就是说「瞬 Matataki」这个名字实际上是两个（不同语言的）同义词连接起来得到的。这里就用 Matataki 指代这个项目啦。</li><li>其实 Matters 本身是面向中文写作的，但考虑到其上有太多对于中国大陆「政治不正确」的内容，估计没法在大陆正式地运营，所以才会有人想做「大陆特供版」吧。</li></ol><p><br></p><blockquote>本文为 Blog 上原文删除所有外部链接后的版本。所有修改均以 Blog 原文为准。由于 IPFS 的不可变性，Matters 的副本无法更新。欲查看原文，请参见 <a href="https://blog.outv.im/2020/ipfs-faced-platforms/" target="_blank">Re:Linked</a>。</blockquote><blockquote>本文以 CC BY-NC-SA 4.0 协议发布。</blockquote>

@@ -1,0 +1,10 @@
+---
+layout: post
+title: IPFS原生分发视频 实践
+date: 2020-03-02 08:09:52.000000000 +00:00
+categories: matters
+tags: blog
+author: 劉阿賔
+---
+
+<p>技术原理：请参考关联文章“大陆IPFS无监管网络思想实验”。</p><p>本次是：针对视频文件分发的一次实践，单就效果来看，该功能已经很实用。</p><p>视频资源存放：托管在ipfs pinning 服务提供商的服务器上，服务商名称暂时保密。</p><p>链接地址：<a href="https://patchyvideo.com/#/video?id=5e51e65eb2a1ec0ea40b9f88" target="_blank">https://patchyvideo.com/#/video?id=5e51e65eb2a1ec0ea40b9f88</a>（最终鬼畜二小姐）、<a href="https://patchyvideo.com/#/video?id=5e59b1685a904f577d887ef0" target="_blank">https://patchyvideo.com/#/video?id=5e59b1685a904f577d887ef0</a>（東方哲学音MAD）</p><p>小团队测试效果：国内节点数保持在8个左右，初次访问的资源需寻址5s以上，360p可流畅播放；观察浏览器调试工具Network，视频由不同ip传输的ipfs block加载，不使用单一网关加载，有一定抗封锁能力。</p><p>未来可能：似乎可以使用cloudflare-ipfs加速资源访问</p><p>代码：一个开源js工具函数：<a href="https://github.com/liuabin/simplest-ipfs-video" target="_blank">https://github.com/liuabin/simplest-ipfs-video</a></p>

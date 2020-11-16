@@ -1,0 +1,10 @@
+---
+layout: post
+title: 大陆IPFS构建无监管网络理想实验
+date: 2020-02-11 04:50:10.000000000 +00:00
+categories: matters
+tags: blog
+author: 劉阿賔
+---
+
+<p>[注意] 全文为一篇理想化的思维实验记录，以“理论上”为前提，为作者提出的一种可能技术方向；暂不讨论实验付诸实践时的各种奇葩问题，毕竟作者个人没有足够的精力。</p><p>现状关键字：微博删帖，微信封号，#言论自由 tag海啸般言论被清除，视频图片会根据md5码、图像识别等技术削除。</p><p>解决问题：大陆信息流动被限制在主流网站上，信息自由很容易切断，“冲塔”等什么的行动仅为饱和式攻击，仅在言论监管的边缘游走，传播效应略低。</p><p>本文解决方式：直接跳出主流网站，构建另一种信息流动方式（工作量可见一斑）</p><p>技术基础：IPFS。本文中只需了解的特征：p2p，无中心服务器。详情请查阅文档。</p><p>过去的相关解决方案：将资源上传至IPFS托管（pinning）服务商，例如<a href="https://globalupload.io/" target="_blank">https://globalupload.io/</a>。然后用IPFS网关进行内容寻址（例：<a href="https://ipfs.globalupload.io/QmcXNhZudyazkPWqfgSbApPXUjUCXB9RnGoxSnt2g8Zhfj" target="_blank">https://ipfs.globalupload.io/QmcXNhZudyazkPWqfgSbApPXUjUCXB9RnGoxSnt2g8Zhfj</a>）。Matters上一键将文章转化问国内可访问网址也是这个原理。</p><p>解决方案漏洞：实质上根本没有使用IPFS核心功能。通过中心服务器的IPFS网关寻址，和用浏览器访问baidu.com的集群服务器没什么两样。只要GFW动动小手，一个可用的网关就报废了。</p><p>新解决方案：自然是真正使用IPFS，让每个访问者成为节点。目前ipfs-core两种实现：go 和 js，go可以用在搭建恒久节点，js则可以嵌在网页中，使设配成为节点。</p><p>大体原理：网页中的js-ipfs core启动，连接至DHT分布式哈希表网络（国外），在swarm环路上发现节点，也同时会广播发现。获取资源时向已连接节点广播hash码，这里我把资源托管在pinning服务商的服务器上做的实验，速度略慢3-5s，在增加节点数量后一定会改善。<a href="https://gateway.pinata.cloud/ipfs/QmZL2ajZE5NewYaSELTuexPLGGkJTAM6Uzy7k9vDDH4dvH/" target="_blank">https://gateway.pinata.cloud/ipfs/QmZL2ajZE5NewYaSELTuexPLGGkJTAM6Uzy7k9vDDH4dvH/</a></p><p>未设想充分的地方：关于嵌有节点的网页分发问题，用传统的服务器国内会喝茶，国外会被墙，作者只是想到用H5App。欢迎大家讨论补充。</p><p>未来可预见问题：首先是IPFS连接国外DHT问题，这里感觉可以通过部分节点翻墙来处理；IPFS内容寻址，只能制作静态网页，网页更新也是个问题，或许可以通过rss广播更新hash码什么的，IPNS真心不推荐；js-ipfs需要在本地生成仓库存取文件，可能会涉及跨域访问问题；app的分发可能会有点小问题；至于政府为了断绝IPFS，会不会疯狂到直接物理断网，就不是技术要讨论的范围了。</p><p>最后补充：以上技术尚不能实现用户留言评论，达到真正的“言论自由”；官方给出的解决方案是orbit-db分布式数据库，实现动态网页构建。不过我试了试比ipfs版本号0.4.23还低的这个数据库后，感觉一言难尽，暂时不能列入可行技术方案（暂时不能画这么大的饼）。</p><p>以上</p>

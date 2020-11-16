@@ -1,0 +1,37 @@
+---
+layout: post
+title: 'Re: 生成一个漂亮的 GPG key'
+date: 2020-05-16 17:56:51.000000000 +00:00
+categories: matters
+tags: blog
+author: Out65
+---
+
+<p><strong>注：本文不保证这种方式生成的 GPG key 的安全性。</strong></p><blockquote>最近 <a href="https://keybase.io/blog/keybase-joins-zoom" target="_blank">Keybase 被 Zoom 收购了</a>。由于 Keybase 有个托管私钥的功能，有些曾经托管私钥到 Keybase 上的人担心自己私钥的安全性，想换个 GPG key 来用。</blockquote><p>反正基于各种原因，有人想生成一个 fingerprint 漂亮点的 key 来用。这种时候就可以使用 <a href="https://github.com/lachesis/scallion" target="_blank">scallion</a> 啦。</p><p>Scallion 可以用于生成漂亮的 GPG 密钥或者 .onion 地址 (v2)。至于生成方法，就是纯暴力地生成然后检查 GPG key 或者 .onion 地址是否符合要求。所以这其实是欧皇的游戏：你的运气好，那就很快能生成完毕；运气不好，就可能要等很长很长时间。如果能用到比较好的 GPU 的话，生成/验证速度可以变快很多。</p><h2>步骤</h2><p>首先下载 Scallion。</p><p>用法很简单：</p><pre class="ql-syntax">scallion -k <KEY_LENGTH> --gpg <FINGERPRINT_REGEX>
+</pre><p>这里的正则并不是正则表达式的全集，而是<a href="https://github.com/lachesis/scallion#multipattern-hashing" target="_blank">一个子集</a>，不过大部分情况下也够用了。例如，我想生成一个 fingerprint 以 <code>114514</code> 结尾的 GPG key：</p><pre class="ql-syntax">scallion -k 4096 --gpg '114514$'
+</pre><p>之后 Scallion 就会开始生成。因为是暴力生成，所以并没有什么「生成进度」之类的东西，停止或者重新运行，都不会减少期望工作量。算完之后会给你类似这样的一段 XML：</p><pre class="ql-syntax"><XmlMatchOutput>
+  <!-- (略) -->
+  <PrivateKey>-----BEGIN PGP PRIVATE KEY BLOCK-----
+Version: Scallion
+
+<!-- (略) -->
+-----END PGP PRIVATE KEY BLOCK-----
+</PrivateKey>
+  <!-- (略) -->
+  <PublicExponentBytes>tAD0Pw==</PublicExponentBytes>
+</XmlMatchOutput>
+</pre><p>当然中间的 <code><PrivateKey></code> 块就是我们想要的私钥啦。试着导入一下：</p><pre class="ql-syntax">$ gpg --import key.pri
+gpg: key 0x12AC733D62114514: no valid user IDs
+gpg: this may be caused by a missing self-signature
+gpg: Total number processed: 0
+gpg:           w/o user IDs: 1
+gpg:       secret keys read: 1
+</pre><p>这确实是我们想要的 key，但是似乎没有导入成功。至于如何导入进来：</p><pre class="ql-syntax">$ gpg --allow-non-selfsigned-uid --import key.pri
+gpg: key 0x12AC733D62114514: accepted non self-signed user ID "Scallion UID (replace me)"
+gpg: key 0x12AC733D62114514: public key "Scallion UID (replace me)" imported
+gpg: key 0x12AC733D62114514: secret key imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+gpg:       secret keys read: 1
+gpg:   secret keys imported: 1
+</pre><p>这样就导入成功了。然后用 <code>gpg --edit-key 62114514</code> 删除 Scallion 填入的 uid，加入自己的 uid，你就有了一个 fingerprint 很漂亮的 GPG key 啦。</p><p>至于为什么标题带个"Re:"，当然是为了纪念一下<a href="https://www.animenewsnetwork.com/news/2020-03-09/re-zero-tv-anime-2nd-season-delayed-to-july/.157306" target="_blank">延迟到七月</a>的 Re:0 第二季。</p><blockquote>本文为 Blog 上原文在发布时版本的副本。所有修改均以 Blog 原文为准。由于 IPFS 的不可变性，Matters 的副本无法更新。欲查看原文，请参见 <a href="https://blog.outv.im/2020/scallion-vanity-gpg-key/" target="_blank">Re:Linked</a>。</blockquote><blockquote>本文以 CC BY-NC-SA 4.0 协议发布。</blockquote>

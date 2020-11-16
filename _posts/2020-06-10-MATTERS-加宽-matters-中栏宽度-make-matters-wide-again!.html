@@ -1,0 +1,23 @@
+---
+layout: post
+title: 加宽 Matters 中栏宽度，Make Matters Wide Again!
+date: 2020-06-10 18:50:34.000000000 +00:00
+categories: matters
+tags: blog
+author: Out65
+---
+
+<p>众所周知，或者众所周知但没有特别注意，Matters 在改版之后的界面成为了三栏式。然而，作为主要内容区的中间一栏，宽度却被限定到仅仅 1208px。许多用户都抱怨这一栏过窄。于是我们就做了一条 UserStyles 规则，帮各位轻松地拉宽 Matters 的中间栏。项目名称则化用川普先生之名句式，"Make Matters Wide Again" 啦。</p><p>口说无凭，先来一张对比图好了：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.webp" onerror="this.srcset='https://assets.matters.news/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.png" onerror="this.srcset='https://assets.matters.news/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.webp">
+
+        <img src="https://assets.matters.news/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.png" srcset="https://assets.matters.news/processed/540w/embed/e7da92f2-d53f-49ef-9c1a-0a68c0aeee34.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>对比：应用样式前和应用样式后</span></figcaption></figure><p>是不是感觉中间一栏宽了很多呢？</p><h2>如何安装？</h2><p>首先，在浏览器安装一个 UserScript 管理器插件（我很喜欢 <a href="https://violentmonkey.github.io/get-it/" target="_blank">ViolentMonkey</a>，其它的在<a href="https://greasyfork.org/en/help/installing-user-scripts" target="_blank">这里</a>有列出）或者 UserStyle 管理器插件（我使用的是 <a href="https://add0n.com/stylus.html#features" target="_blank">Stylus</a>；Stylish 之前有过收集用户浏览历史的<a href="https://robertheaton.com/2018/07/02/stylish-browser-extension-steals-your-internet-history/" target="_blank">丑闻</a>，所以不推荐）。如果没有其它 UserScript 需求的话，建议安装 UserStyle 管理器，防止不明来源的脚本被不小心安装。</p><p>之后，到<a href="https://greasyfork.org/en/scripts/405087-make-matters-wide-again" target="_blank">这里</a>点击 "Install this script" （如果你安装了 UserScript 管理器）或者 "Install as user style" （如果你安装了 UserStyle 管理器），在弹出的窗口中再次确认，就可以啦。</p><h2>原理</h2><pre class="ql-syntax">main {
+  max-width: 85vw !important;
+}
+</pre><p>和上次提到的解决方案一样，将中栏的最大宽度调整至浏览器整体宽度的 85% 就是。</p><h2>附注</h2><ol><li>这是一个改善 Matters 读者和作者体验的尝试。如果有任何问题，或者想到了可以改进之处，欢迎评论或 fork 此样式。</li><li>以后可能还会针对 Matters 的其它一些 UI 问题推出更多的样式，也欢迎大家为改善自己的 Matters 体验来写一些样式。Matters 的前端结构看起来不错，CSS 也并没有那么难哦。</li><li>UserStyles.org 超慢的。撰写本文的契机是 GreasyFork 推出了提交样式的功能。这里感谢 GreasyFork。</li><li>也欢迎各位试用我撰写的其它 UserScript 和 UserStyle，它们在<a href="https://greasyfork.org/en/users/240762-outloudvi" target="_blank">这里</a>。</li></ol>

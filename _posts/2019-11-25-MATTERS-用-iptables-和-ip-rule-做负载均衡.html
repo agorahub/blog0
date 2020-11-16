@@ -1,0 +1,42 @@
+---
+layout: post
+title: 用 iptables 和 ip rule 做负载均衡
+date: 2019-11-25 04:17:45.000000000 +00:00
+categories: matters
+tags: blog
+author: Out65
+---
+
+<p>对于住宅网络而言，线路的速度瓶颈通常不取决于内网策略，而是取决于运营商。因为内网设备较少，住宅网络通常不会对每个设备限速。不过对于公司网络或学校网络而言，设备的网速经常受到内网限制（例如每个 IP 10 Mbps）。这种限制很容易影响用户的体验。但是，在公司/学校网络中，用户通常可以通过多种方式（例如有线+无线）连接到网络。在这种情况下，系统通常会根据其策略选择其中一个出口承载所有的连接，而另一个出口基本只有 DHCP 等用以保持连接的必要请求，白白浪费了多出来的一半带宽。其实，我们可以用上这多出来的一条连接来部分地规避内网限速。</p><p>是不是想到了 <a href="https://www.multipath-tcp.org/" target="_blank">mptcp</a>？mptcp 是一个不错的方案，但它需要客户端和服务端同时支持（而目前其实在多数情况下两端都不支持）。另外一个方案就是，利用系统的 ip rule 和 iptables，自动将出口连接进行分流，让它们使用不同的网络出口。</p><h2> <strong>材料</strong></h2><ul><li>一台通过多个出口同时连接到互联网的 Linux 设备</li></ul><h2> <strong>操作</strong></h2><p>这里以一台通过有线 + 无线出口连接到互联网的 Arch Linux 设备为例。其中共有两个出口，分别使用网卡 eth0 和 eth1。大概的对应关系是：</p><ul><li>标记 10 (0xa) - 路由表 #110 - 使用 eth0 出口</li><li>标记 11 (0xb) - 路由表 #111 - 使用 eth1 出口</li></ul><p>我们会根据数据包上包含的标记值来判断它应该走什么出口。首先，使用 `ip rule` 为每个标记值指定一张使用的路由表。</p><p>通常默认路由表的权重是 32768。为了让我们的路由表用得上，我们需要把它们的权重调得高一些（例如 31000）。</p><pre class="ql-syntax"># 让带标记 10 (0xa) 的数据包使用 110 号路由表，权重 31000
+ip rule add fwmark 10 table 110 prio 31000
+# 让带标记 11 (0xb) 的数据包使用 111 号路由表，权重 31000
+ip rule add fwmark 11 table 111 prio 31000
+# 如果你的连接更多，可以继续添加标记 <-> 路由表的对应关系
+</pre><p>接下来，往上面指定的路由表中添加正确的路由。通过执行 `ip route`，你可以看到目前各个网络设备正在使用的路由。在多数情况下，对于每条出口有一条默认路由和一条指引到网关所在网段的路由。对于每条路由表，只填写其所使用的网络设备所有的路由即可。</p><pre class="ql-syntax"># #110 路由表的路由
+ip route add 10.20.0.0/24 dev eth0 table 110
+ip route add default via 10.20.0.254 table 110
+# #111 路由表的路由
+ip route add 10.25.0.0/24 dev eth1 table 111
+ip route add default via 10.25.0.254 table 111
+</pre><p>接下来就是用 iptable 来指定策略啦。这里我们在上行数据包上进行分流，然后下行数据包就按照上行选择的出口回来咯。</p><pre class="ql-syntax"># 如果这条连接已经被标记，那么把标记设置到数据包上
+iptables -t mangle -A OUTPUT -j CONNMARK --restore-mark
+# 如果数据包已经有标记，直接放行
+iptables -t mangle -A OUTPUT -m mark ! --mark 0 -j ACCEPT
+# 如果数据包没被标记的话
+# 把数据包包的标记设置为 11 (0xb)...
+iptables -t mangle -A OUTPUT -j MARK --set-mark 10
+# 并且每 2 个包就把一个包的标记设置为 10 (0xa)
+iptables -t mangle -A OUTPUT -m statistic --mode nth --every 2 --packet 0 -j MARK --set-mark 11
+
+# 如果你有三条出口的话，这里可以类似于
+# iptables -t mangle -A OUTPUT -j MARK --set-mark 10
+# iptables -t mangle -A OUTPUT -m statistic --mode nth --every 3 --packet 0 -j MARK --set-mark 11
+# iptables -t mangle -A OUTPUT -m statistic --mode nth --every 3 --packet 1 -j MARK --set-mark 12
+
+# 把数据包的标记存储到整条连接上，这样整个连接过程都会使用同一条出口
+iptables -t mangle -A OUTPUT -j CONNMARK --save-mark
+
+# 我们还需要让数据包上标示的出口是我们为其选择的出口
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+</pre><p>之后可以用 iptables -L OUTPUT -t mangle 看一下自己所设置的规则是否正确。然后就可以用 Wiresharks 看一看自己的连接是不是真的分流啦。</p><h2> <strong>补充</strong></h2><p>也有一些项目可以帮我们做到这些事，例如 Perl 写的 <a href="https://lstein.github.io/Net-ISP-Balance/" target="_blank">Net-ISP-Balance</a> 和 Ruby 写的 <a href="https://github.com/aruntomar/isp_unity" target="_blank">ispunity</a>。不过可能不是特别好用（也不是特别好安装...）。</p><h2><strong>参考</strong></h2><ul><li><a href="https://unix.stackexchange.com/questions/138956/implementing-load-balancing-on-any-linux-distro" target="_blank">https://unix.stackexchange.com/questions/138956/implementing-load-balancing-on-any-linux-distro</a></li></ul><p><br></p><p>原文地址<a href="https://blog.outv.im/2019/ip-tables-rule-load-balance/" target="_blank">在此</a>，以 CC 协议 BY-NC-SA 4.0 授权。此处文章可能不是最新。没法直接用 Markdown 真是好辛苦...</p>

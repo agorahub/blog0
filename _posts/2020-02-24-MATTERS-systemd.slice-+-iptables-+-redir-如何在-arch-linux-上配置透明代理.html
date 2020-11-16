@@ -1,0 +1,83 @@
+---
+layout: post
+title: systemd.slice + iptables + redir：如何在 Arch Linux 上配置透明代理
+date: 2020-02-24 07:13:59.000000000 +00:00
+categories: matters
+tags: blog
+author: Out65
+---
+
+<p>嘛，又是久违了的技术教程文。这次说的是如何使用 redir （shadowsocks 也好，clash 也好）在 Arch Linux 设备上配置透明代理，以及方便地运行绕过代理的程序。因为要动 iptables，我就假设想这么做的你拥有 root 权限啦。</p><p>以下仅针对 IPv4 环境下的 TCP。</p><h2>Cgroups 是什么？</h2><p>Arch Linux Wiki <a href="https://wiki.archlinux.org/index.php/Cgroups" target="_blank">说</a>：cgroups (Control groups) 是 Linux 内核的特性，允许用户管理/限制/审计一组进程。</p><p>…算了，<a href="https://www.google.com.hk/search?as_q=cgroups&lr=lang_zh-CN" target="_blank">LMGTFY</a> 好了。</p><p>总之，我们要做的就是，把绕过代理的进程（包括代理程序本身）放到一个 cgroup 里，让 iptables 放行它们的请求，而把其外的所有请求转送给代理的 redir 端口。Arch Linux 上管理 cgroup 的最方便方法就是用 systemd，所以我们在这里用到 systemd 的 slice 来建立/访问 cgroup。</p><h2>运行一个「绕过全局代理」的 systemd slice</h2><p>如果你的代理是一个 systemd 服务的话，在 [Service] 下面这么写。这里我们把这个临时命名为 test2 （也可以用别的名字啦）：</p><pre class="ql-syntax">[Service]
+Slice=test2.slice
+</pre><p>重载（<code>systemctl daemon-reload</code>），然后运行这个服务，你的代理服务就跑在 test2.slice 里了。</p><p>在 cgroup 的目录里应该也会出现一个相应的 test2.slice：</p><pre class="ql-syntax"># ls /sys/fs/cgroup/unified/test2.slice/
+cgroup.controllers  cgroup.max.descendants  cgroup.threads  io.pressure
+cgroup.events       cgroup.procs            cgroup.type     memory.pressure
+cgroup.freeze       cgroup.stat             cpu.pressure    run-u1925.scope/
+cgroup.max.depth    cgroup.subtree_control  cpu.stat
+</pre><p>如果不是服务的话，就用 <code>systemd-run</code>：</p><pre class="ql-syntax">sudo systemd-run --slice test2.slice --scope clash -c /etc/clash/config.yaml
+</pre><p>如果你想开启一个绕过代理的程序，也用这样的方法。例如运行一个 Firefox：</p><pre class="ql-syntax">sudo systemd-run --slice test2.slice --scope firefox
+</pre><p>如果想在 shell 里测试的话，直接用 systemd-run 开一个运行在某个 slice 里的 shell：</p><pre class="ql-syntax">sudo systemd-run --slice test2.slice --scope -S  # -S 代表启动 shell
+</pre><p>这样你就有了一个跑在 test2.slice 里的 shell。</p><h3>快速试一试</h3><p>在 test2.slice 里运行一个永不停止的 ping，然后在 iptables 里切断它的连接：</p><pre class="ql-syntax">iptables -A OUTPUT -m cgroup --path "test2.slice" -j DROP
+</pre><p>然后这个 ping 应该会无法 ping 通：</p><pre class="ql-syntax">ping: sendmsg: Operation not permitted
+</pre><p>好的，我们的 slice 和 iptables 成功地联动了。那么先把这条规则删除掉吧：</p><pre class="ql-syntax">iptables -L OUTPUT --line-numbers
+# 找到一行类似
+# 2 DROP   all  --  anywhere  anywhere  cgroup test2.slice
+# 的行，记录它开头的编号（这里是 2）
+iptables -D OUTPUT 2    # 把 2 换成你记录的编号
+</pre><p><em>好的本节课程的新知识讲完了以下是复习内容（</em></p><h2>又是 iptables</h2><p>以下大部分是抄 <a href="https://github.com/Dreamacro/clash/issues/158" target="_blank">Dreamacro/clash#158</a> 和 <a href="https://ivo-wang.github.io/2018/02/24/TP-redir/" target="_blank">这里</a> 的作业，呃…</p><pre class="ql-syntax"># 先建条链处理透明代理问题。因为后面要 REDIRECT，所以要在 nat 表。
+iptables -t nat -N TP-TCP
+
+# 这条链的配置：
+# 1. 绕过代理的 slice 的数据包，直接放行回原来的链
+iptables -t nat -A TP-TCP -m cgroup --path "test2.slice" -j RETURN
+# 2. 本地的各种地址也一律放行
+iptables -t nat -A TP-TCP -d 0.0.0.0/8 -j RETURN
+iptables -t nat -A TP-TCP -d 127.0.0.0/8 -j RETURN
+iptables -t nat -A TP-TCP -d 10.0.0.0/8 -j RETURN
+iptables -t nat -A TP-TCP -d 169.254.0.0/16 -j RETURN
+iptables -t nat -A TP-TCP -d 172.16.0.0/12 -j RETURN
+iptables -t nat -A TP-TCP -d 192.168.0.0/16 -j RETURN
+iptables -t nat -A TP-TCP -d 224.0.0.0/4 -j RETURN
+iptables -t nat -A TP-TCP -d 240.0.0.0/4 -j RETURN
+# 3. 其它的去到 redir 的端口（clash 默认 7892，你的情况可能不同(YMMV)）
+iptables -t nat -A TP-TCP -p tcp -j REDIRECT --to-ports 7892
+# 4. 所有出口包到 TP-TCP 表上
+iptables -t nat -A OUTPUT -p tcp -j TP-TCP
+</pre><p>试着访问一些网站，看看它们是不是走了代理（把浏览器的代理设置关闭）？以及运行</p><pre class="ql-syntax">iptables -L TP-TCP -t nat -v -n
+</pre><p>看看开头的 pkts 和 bytes 是不是有所变化？如果是，那么我们的透明代理大成功！</p><p>（这里应该放一张<a href="https://zh.moegirl.org/%E7%88%B1%E9%85%B1%E5%A4%A7oo" target="_blank">爱酱大胜利</a>的图）</p><p>（不是那个快凉了的爱酱…）</p><h2>后续工作</h2><h3>配置服务绕过代理</h3><p>可能有一些正在使用的服务本身需要绕过代理，我们也来修改一下配置，让它们也能绕过代理。这里以 unbound 为例：</p><pre class="ql-syntax">systemctl edit unbound
+</pre><p>加一段：</p><pre class="ql-syntax">[Service]
+Slice=test2.slice
+</pre><p>然后重载（<code>systemd daemon-reload</code>）并重新启动服务就可以啦。</p><h3>iptables 配置持久化</h3><p>我们的 iptables 配置在重新启动后会消失。为了让它长期保存，我们需要对其进行持久化：</p><pre class="ql-syntax">iptables-save -f /etc/iptables/iptables.rules
+</pre><p>以及在每次启动时自动导入：</p><pre class="ql-syntax">systemctl enable iptables.service
+</pre><h2>附录</h2><p><strong>注：以下内容我没试过，不保证有效性。</strong></p><h3>你的代理也向内网其它主机提供服务？</h3><p>（还是只有 TCP + IPv4）</p><p>首先处理路由问题。这里假设你的内网主机在 192.168.0.0/16。注意在比较大的网络中，你的内网主机可能在 10.0.0.0/8，这种情况下请在下方进行相应的更改：</p><pre class="ql-syntax">iptables -t nat -A PREROUTING -p tcp -s 192.168/16 -j TP-TCP
+iptables -t nat -A POSTROUTING -s 192.168/16 -j MASQUERADE
+</pre><p>然后你大概需要开启网卡的转发功能：</p><pre class="ql-syntax">echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf
+sysctl -p
+</pre><h3>UDP？</h3><p><code>-j REDIRECT</code> 是没法处理 UDP 了。为了处理 UDP，我们需要 <code>-j TPROXY</code>。而使用 TPROXY，我们还需要加两条 <code>ip route</code> 和 <code>ip rule</code>，所以这里就比较复杂了。</p><p>以下命令仅供参考，不保证有效（说实话我不知道为什么其它实现总想着），我也没试过：</p><pre class="ql-syntax"># 先建条链处理透明代理问题。
+iptables -t mangle -N TP-UDP
+
+# 这条链的配置：
+# 1. 绕过代理的 slice 的数据包，直接放行回原来的链
+iptables -t mangle -A TP-UDP -m cgroup --path "test2.slice" -j RETURN
+# 2. 本地的各种地址也一律放行
+iptables -t mangle -A TP-UDP -d 0.0.0.0/8 -j RETURN
+iptables -t mangle -A TP-UDP -d 127.0.0.0/8 -j RETURN
+iptables -t mangle -A TP-UDP -d 10.0.0.0/8 -j RETURN
+iptables -t mangle -A TP-UDP -d 169.254.0.0/16 -j RETURN
+iptables -t mangle -A TP-UDP -d 172.16.0.0/12 -j RETURN
+iptables -t mangle -A TP-UDP -d 192.168.0.0/16 -j RETURN
+iptables -t mangle -A TP-UDP -d 224.0.0.0/4 -j RETURN
+iptables -t mangle -A TP-UDP -d 240.0.0.0/4 -j RETURN
+# 2.5. 你很有可能会想让 DNS 不走代理
+iptables -t mangle -A TP-UDP -p udp --dport 53 -j RETURN
+# 3. 其它的去到 redir 的端口（clash 默认 7892，你的情况可能不同(YMMV)）
+iptables -t mangle -A TP-UDP -p udp -j TPROXY --tproxy-mark 0x2333/0x2333 --on-ip 127.0.0.1 --on-port 7892
+# 4. 所有出口包到 TP-UDP 表上
+iptables -t mangle -A OUTPUT -p udp -j TP-UDP
+
+# 5. 还没完，我们还需要路由配置
+# 新建路由表 100，将所有数据包发往 loopback 网卡
+ip route add local 0/0 dev lo table 100
+# 添加路由策略，让所有经 TPROXY 标记的 0x2333/0x2333 udp 数据包使用路由表 100
+ip rule add fwmark 0x2333/0x2333 lookup 100
+</pre><p>内网其它主机的连接问题，同上一节「你的代理也向内网其它主机提供服务？」。记得把命令里的 TCP 改为 UDP。</p><h3>你还有 IPv6？</h3><p>请将所有的 iptables 换成 ip6tables，同时各种本地地址段可能也需要改变。</p><blockquote>本文为 Blog 上原文在发布时版本的副本。所有修改均以 Blog 原文为准。由于 IPFS 的不可变性，Matters 的副本无法更新。欲查看原文，请参见 <a href="https://blog.outv.im/2020/cgroups-systemd-iptables-redir/" target="_blank">Re:Linked</a>。</blockquote><blockquote>本文以 CC BY-NC-SA 4.0 协议发布。</blockquote>

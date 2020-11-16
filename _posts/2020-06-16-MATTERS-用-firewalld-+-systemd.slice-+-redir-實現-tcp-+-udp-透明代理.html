@@ -1,0 +1,48 @@
+---
+layout: post
+title: 用 Firewalld + systemd.slice + redir 實現 TCP + UDP 透明代理
+date: 2020-06-16 16:16:33.000000000 +00:00
+categories: matters
+tags: blog
+author: slash
+---
+
+<p>现在网上已经有不少用 iptables 或 nftables 实现透明代理（Tproxy）的例子了。绝大多数关于透明代理的教程都是通过 iptables 实现的，也有<a href="https://a-wing.top/network/2020/03/07/bypass_gateway-3_nftables.html" target="_blank">少量</a>使用新一代的 nftables 内核防火墙前端来实现。然而，消费级电脑上通常会装有更简化的防火墙程序，例如 Fedora/CentOS/SUSE 自带的 Firewalld，或 Ubuntu 的 UFW。在用这些简化前端的同时，直接操作 nftables 和 iptables 的话可能会造成冲突，更好的解法是全部工作都由 firewalld/ufw 来做。</p><p>本文就以 firewalld 为例，用它的 direct rules 来实现透明代理（没错，firewalld 并不提供关于透明代理的抽象，所以并不比 iptables 有优势）。</p><h3><strong>想要实现的效果</strong></h3><ul><li>TCP 和 UDP 流量自动转给 Clash（或 shadowsocks 等）</li><li>Clash 本身不会把流量转发给自己</li><li>可以让某些 <strong>程序</strong> 不转发给 clash，直接联网</li></ul><h3><strong>Get started</strong></h3><p>先来设置变量，指向 clash 的 <code>redir-port</code>：</p><pre class="ql-syntax">export proxy_port=7892 # 按你 clash 的设置修改
+</pre><p>接着设置 firewalld 和 ip route。 Firewalld 的 direct rules 语法几乎等同于 iptables（因为实际上就是调用 iptables 来执行 direct rules）。所以这里直接照抄 <a href="https://matters.news/@outloudvi/systemd-slice-iptables-redir-%E5%A6%82%E4%BD%95%E5%9C%A8-arch-linux-%E4%B8%8A%E9%85%8D%E7%BD%AE%E9%80%8F%E6%98%8E%E4%BB%A3%E7%90%86-bafyreia56osrovpylifeiuzdcrxr52gmbo5rkn5zmlvlho5tr7mjejqshy" target="_blank">systemd.slice + iptables + redir：如何在 Arch Linux 上配置透明代理</a> 的规则，稍有修改：</p><pre class="ql-syntax">#tcp
+sudo firewall-cmd --direct --add-chain ipv4 nat clash
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -m cgroup --path "clash.slice" -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 0.0.0.0/8 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 10.0.0.0/8 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 127.0.0.0/8 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 169.254.0.0/16 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 172.16.0.0/12 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 192.168.0.0/16 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 224.0.0.0/4 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -d 240.0.0.0/4 -j RETURN
+
+sudo firewall-cmd --direct --add-rule ipv4 nat clash 2 -p tcp -j REDIRECT --to-port "$proxy_port"
+
+sudo firewall-cmd --direct --add-rule ipv4 nat OUTPUT 1 -p tcp -j clash
+
+#udp
+sudo ip rule add fwmark 1 table 100
+sudo ip route add local default dev lo table 100
+sudo firewall-cmd --direct --add-chain ipv4 mangle clash
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -m cgroup --path "clash.slice" -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 0.0.0.0/8 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 10.0.0.0/8 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 127.0.0.0/8 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 169.254.0.0/16 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 172.16.0.0/12 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 192.168.0.0/16 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 224.0.0.0/4 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 1 -d 240.0.0.0/4 -j RETURN
+sudo firewall-cmd --direct --add-rule ipv4 mangle clash 2 -p udp -j TPROXY --on-port "$proxy_port" --tproxy-mark 1
+sudo firewall-cmd --direct --add-rule ipv4 mangle OUTPUT 0 -p udp -j clash # 这里可能有错（`failed: iptables-restore: line 3 failed`），欢迎指正
+sudo firewall-cmd --direct --add-chain ipv4 nat CLASH_DNS
+sudo firewall-cmd --direct --remove-rules ipv4 nat CLASH_DNS 
+sudo firewall-cmd --direct --add-rule ipv4 nat CLASH_DNS 1 -p udp -j REDIRECT --to-port 1053
+sudo firewall-cmd --direct --add-rule ipv4 nat OUTPUT 0 -p udp --dport 53 -j CLASH_DNS
+</pre><p>其中，<code>sudo firewall-cmd --direct --add-rule ipv4 nat clash 1 -m cgroup --path "clash.slice" -j RETURN</code> 将放到 <code>clash.slice</code> 下的 service 给绕过 clash 了。</p><p>Clash 要以 <a href="https://aur.archlinux.org/cgit/aur.git/tree/clash@.service?h=clash" target="_blank">systemd unit 的形式</a> 来运行。为了让 clash 不把自己的流量循环转回给自己，给它的 unit 分配给 <code>clash.slice</code>。</p><pre class="ql-syntax">[Service]
+Slice=clash.slice
+</pre><p>其它不想走 clash 的程序也可以以类似方式分配给 clash.slice。</p>
