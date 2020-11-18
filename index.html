@@ -7,10 +7,13 @@ layout: default
 
 <!-- This loops through the paginated posts -->
 {% for post in paginator.posts %}
-<span class="postdate">{{ post.date | preserve_timezones }}</span> 
-• <span class="author"><a href="{{site.url}}/{{site.baseurl}}/{{post.categories.first}}_comments/?[{{post.title}}]({{site.url}}{{site.baseurl}}/{{post.url}})"><b>💬</b></a></span> 
-• <span class="author"><a href="{{ site.url }}{{ site.baseurl }}/{{ post.categories }}"><b>{{ post.categories.first | upcase }}</b></a></span>
-<h3><a href="{{ site.url }}{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h3>
+<div class="card" style="background-color:#f6f6f6; padding:4px 4px 0 6px; border-radius:6px;">
+  <span style="font-size:20px"><a href="{{site.url}}{{site.baseurl}}{{post.url}}">{{ post.title }}</a></span>
+  <p><span class="postdate">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span>
+   • <span class="category"><a href="{{site.url}}{{site.baseurl}}/{{post.categories.first}}"><b>{{ post.categories.first | upcase }}</b></a></span>
+   • <span class="comments"><a href="{{site.url}}{{site.baseurl}}/{{post.categories.first}}_comments/?[{{post.title}}]({{site.url}}{{site.baseurl}}/{{post.url}})"><b>💬</b></a></span>
+  </p>
+</div>
 {% endfor %}
 
 <!-- Pagination links -->
