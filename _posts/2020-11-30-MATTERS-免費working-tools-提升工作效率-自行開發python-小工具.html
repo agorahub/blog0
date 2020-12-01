@@ -1,0 +1,70 @@
+---
+layout: post
+title: 免費Working Tools- 提升工作效率- 自行開發Python 小工具
+date: 2020-11-30 14:40:30.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<p><br class="smart"></p><p><strong>完整</strong><a href="https://github.com/chwang12341/Working-Tools/tree/master/tool_reset_filename" target="_blank"><strong>工具下載連結 </strong></a></p><p><strong> 哈囉哈囉，今天想跟大家分享一個我在工作中常用到的一個自己開發的簡單小工具，可以從我的Github連結免費下載喔，它是用來批量改變檔案名稱的，小弟我的工作很常需要載入大量的data來分析，所以檔名一致，但有順序是最方便我進行分析的data，那我也想了幾個使用情境，如果大家看了後，有想到怎麼用在幫助自己的工作上，那就太好了。</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/864803d0-b66b-4875-aca7-cc4df59856a1.webp" onerror="this.srcset='https://assets.matters.news/embed/864803d0-b66b-4875-aca7-cc4df59856a1.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/864803d0-b66b-4875-aca7-cc4df59856a1.jpeg" onerror="this.srcset='https://assets.matters.news/embed/864803d0-b66b-4875-aca7-cc4df59856a1.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/864803d0-b66b-4875-aca7-cc4df59856a1.webp">
+
+        <img src="https://assets.matters.news/embed/864803d0-b66b-4875-aca7-cc4df59856a1.jpeg" srcset="https://assets.matters.news/processed/540w/embed/864803d0-b66b-4875-aca7-cc4df59856a1.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：Christina Morillo，連結：Pexels</span></figcaption></figure><p><br></p><p><br></p><h2>1. 使用情境</h2><p>a. <strong>角色: </strong>AI 工程師</p><p><strong> 情境: </strong>你需要大量的餵給AI train data，來訓練AI，但是為了效率這些Data可能同時由不同device 來產生，像是假設computer A 產生train data1~100.csv，而computer B產生train data1~100.csv，而這時你想要合併它們然後餵給AI，train data1~200.csv。</p><p>b.<strong>角色:</strong> Data Scientist</p><p> <strong>情境: </strong>你需要大量load進data來分析，但這些data的名稱，由於收集人的不同，名稱很不一致，導致很難一次把data load進程式中處理。</p><p>b. <strong>角色:</strong> 客服或行銷人員</p><p> <strong>情境:</strong> 被指派整理過去不同同事收集回來的客戶資料，它們都是客戶資料，但是因為每個人命名方式不同，導致數據看起來很亂，但之後不管是要分析還是查找過去客戶資料，這樣沒有排序好的data都會很難處理。</p><p><br class="smart"></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.webp" onerror="this.srcset='https://assets.matters.news/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.png" onerror="this.srcset='https://assets.matters.news/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.webp">
+
+        <img src="https://assets.matters.news/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.png" srcset="https://assets.matters.news/processed/540w/embed/30d3b151-0cf9-4c54-9d9c-bea6498078f2.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><h2>2. 使用步驟</h2><p><strong>Step1:</strong> Execute it 執行它</p><p>a. cd 到 C:\Users\user\Desktop\Working-Tools\tool_reset_filename, 然後打上python tool_reset_filename.py</p><p>b. 如果沒有Python 環境，可以直接點擊我打包好的tool_reset_filename.exe(但有個缺點，就是如果有錯會直接閃退，你會不知道哪裡有問題，像是你指定的資料夾不可以更改裡面內容(權限問題))</p><p><strong>Step 2:</strong></p><p>a. Input folder path 打入你指定的資料夾路徑，圈圈的地方複製路徑，然後貼到程式中，預設的路徑是你下載下來的那個temp(folder)，建議:可以把你欲改名的資料複製到temp(folder)進行操作</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.webp" onerror="this.srcset='https://assets.matters.news/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.png" onerror="this.srcset='https://assets.matters.news/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.webp">
+
+        <img src="https://assets.matters.news/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.png" srcset="https://assets.matters.news/processed/540w/embed/c8ec97fd-ddcd-4b5a-af00-f154c6eed4f8.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><strong>Step 3: </strong></p><p><strong>a. </strong>new file name: 為你的新資料取一個統一的資料名稱</p><p>b. new file name order you want to start: 新產生的資料編號你想要從幾開始</p><p>c. 舉例: 我這邊示範的設定</p><p>new file name: customer</p><p>new file name order you want to start: 1</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.webp" onerror="this.srcset='https://assets.matters.news/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.png" onerror="this.srcset='https://assets.matters.news/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.webp">
+
+        <img src="https://assets.matters.news/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.png" srcset="https://assets.matters.news/processed/540w/embed/6adbca4a-28bc-47d6-b4d0-9b24da6592b3.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><h2>Step 4: </h2><p>a. Automatic help? : 自動幫你搬動檔案的服務</p><p>選擇yes才會進行下一步，選擇no程式就完成了你的需求</p><p>舉例: 我這邊選擇的是yes</p><h2>Step 5:</h2><p>a. 接下來它會詢問新的目錄路徑，將你指定的資料夾路徑複製並貼上</p><p>舉例: 我這邊選擇的是放到如圖的test2資料夾</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.webp" onerror="this.srcset='https://assets.matters.news/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.png" onerror="this.srcset='https://assets.matters.news/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.webp">
+
+        <img src="https://assets.matters.news/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.png" srcset="https://assets.matters.news/processed/540w/embed/cc04c5c6-4939-41ce-85b3-29344a6cba30.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2>Step 6:</h2><p>a. you want to cut or copy the files to the new folder? 你想要用剪下貼上的方式，還是複製的方式到新的資料夾內</p><p>舉例: 我這邊選的是cut</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.webp" onerror="this.srcset='https://assets.matters.news/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.png" onerror="this.srcset='https://assets.matters.news/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.webp">
+
+        <img src="https://assets.matters.news/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.png" srcset="https://assets.matters.news/processed/540w/embed/660f5ff9-77ca-4c68-812f-9e9e0624bfe1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2>小叮嚀: 有可能會因為你指定的資料夾，你並沒有寫入的權限，導致程式失效，但是都會跳出提醒提示，所以建議還是在我預設的資料夾temp下進行操作喔!!</h2><p><br class="smart"></p><p><strong>這樣就完成囉!! 希望可以幫助減少大家的工作量!!</strong></p>
