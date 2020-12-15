@@ -31,6 +31,7 @@ github_username:  agorahub
 timezone: Asia/Hong_Kong
 theme: minima
 exclude:
+  - _posts/2020-0*VOCUS*
   - _posts/2020-0*MATTERS*
   - _posts/201*
 paginate: 50
