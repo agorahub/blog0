@@ -1,0 +1,30 @@
+---
+layout: post
+title: 將 Roam Research 類比成資料庫系統
+date: 2020-11-24 16:11:11.000000000 +00:00
+categories: matters
+tags: blog
+author: leafwind
+---
+
+<p>聲明：以下僅是我兩小時內試用所得到的心得，雖然我已經盡可能試用大部分功能，但極有可能我還是漏掉了重要的功能，但我認為已經有一些東西值得分享。</p><p>另外 Roam Research 以及 Notion 都是一直在改進的系統，隨著時間演進，這篇文章的參考價值也會降低。</p><h2>2020 年，人類的第二大腦戰爭</h2><p>我是一個資料整理狂，從當年推廣 Workflowy（靠著推薦，我的每月上限從免費 500 個單位提升到了 16000）到現在瘋狂使用 Notion，這些年用過的各種工具雖然不比網路上其他部落客多，但花在上面的時間也算是極長。</p><p>這樣講或許有點過度推論，不過 Roam Research 在 2020 會備受矚目，我認為有它的原因：時間碎片化、資訊速食化，導致太多點子曇花一現，來不及思考、整理，就被下一件事情取代注意力，因此，我們恨不得所有想到的事情都能先暫存在某個地方，需要的時候再一口氣倒出來，<strong>我們極其渴望有第二大腦的解決方案</strong>。</p><h2>反向連結的優勢：人腦需要一個極大化輸入/輸出到電子腦的介面</h2><p>「所有想到的事情都能先暫存在某個地方，需要的時候再一口氣倒出來」這句話聽起來很簡單，但傳統的資料庫或是筆記軟體完全無法做到。</p><p>原因是我們在一般的筆記軟體很難下筆成文（輸出到電腦很慢），就算擠了一篇文章出來，下次也很難快速找到，單純的全文檢索還是不敷使用（從電腦取回到人腦很慢）。</p><p>因為電腦不等於人腦，它不知道人腦需要什麼。既然沒辦法創造一個厲害的處理器跟人腦一樣聰明，那就創造一套好用的<strong>模式</strong>（或框架），讓輸出到電腦、從電腦取回資料都足夠簡單而快速。</p><p>這個方法就是雙向連結（backlink），我們寫論文的時候只有單向參考，而雙向連結的精髓則是「<strong>當你創造一個標籤，標籤本身也會成為一個文章，反向連回所有跟它關聯的文章</strong>」。</p><p>於是乎，只要我每次筆記都能下一些標籤，某一天我進入其中一個標籤的頁面，就能一次把相關的點子全部收集起來，稍作整理就能產出了。<strong>「下標籤」讓我們簡單地將想法歸類、「搜尋標籤反向連結回點子」讓我們快速取回想法，在人腦與電子腦之間高速輸入/輸出</strong>，這就是它快的原因。</p><p>雖然近期 Notion 也「致敬」作出了反向連結，但最大差異是它並沒有辦法把快速地憑空創造標籤對應的頁面，只能連結既有的頁面，反向連結的資訊也不會展開，因此對比之下顯得只是一個半殘的功能，這就是為什麼至今很多人還是認為 Roam Research 比較好的原因之一。</p><h2>反向連結的弱點：標籤的管理問題</h2><p>講完了優點，接下來講實現這套方法論的系統：Roam Research 要謹慎使用的地方。</p><p>這是我的 Notion 文章資料庫的一部分：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.webp" onerror="this.srcset='https://assets.matters.news/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.png" onerror="this.srcset='https://assets.matters.news/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.webp">
+
+        <img src="https://assets.matters.news/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.png" srcset="https://assets.matters.news/processed/540w/embed/a75efc7e-6709-4d99-9a70-14b0c3c756dd.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>在嘗試試用 Roam Research 的過程中，想了半天實在找不到好的方法把 Notion database 搬過去。因為如果要把這些資訊也放過去，那每一個欄位都會變成標籤，放在同一篇文章，試想一個 block（Roam Research 的段落）有十個標籤，那將會變得極其雜亂。</p><p>我越想越<s>不對勁</s>覺得 Notion 資料庫就像是 relational database，適合做好規劃再放進去，對我來說適合的用法應該是先放進 Roam Research，整理完再放進 Notion，而 Notion 裡面的內容早就是已經整理好的完成品，自然就不需要再倒回 Roam Research 幫我整理。</p><p>而 Roam Research 可以類比成 NoSQL，使用門檻很低且方便，如果有很多雜亂的想法，那就先放進去再說，反正想到什麼就寫什麼，只要加上 tag，一切就看似整理好了；但隨之而來的是必須要自己控管 tag 品質，不能隨性亂加，你也必須清楚知道自己有什麼 tag，否則將會帶來大量技術債。</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.webp" onerror="this.srcset='https://assets.matters.news/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.png" onerror="this.srcset='https://assets.matters.news/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.webp">
+
+        <img src="https://assets.matters.news/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.png" srcset="https://assets.matters.news/processed/540w/embed/6b191256-ca7c-4b2d-8215-825bfb072fce.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>舉例來說，官方 demo 文件自己就 demo 了一個災難：<a href="https://roamresearch.com/#/app/help/page/F7FTMUxu-" target="_blank">小寫 twitter</a> 跟<a href="https://roamresearch.com/#/app/help/page/b7iWs4o_t" target="_blank">大寫 Twitter </a>被分成兩個不同的 tag，最後還是免不了要自己手動管理，然而增加 tag 太隨性了（就像 NoSQL 增加欄位太簡單了），使得對沒經驗的人來說，管理變得更困難。</p><p>總結來說，有兩件事情必須要注意：</p><ol><li>必須控管 tag 品質，不能出現一堆似是而非、意義重複的灌水 tag（e.g. 資料科學、科學、科技、資料、資料工程、...）</li><li>同上，必須清楚掌握有哪些可用的 tag：因為核心功能「反向連結」靠的就是 tag，太隨性亂加，你的知識體系就會極度分散。以上面例子來說，最終會出現的問題就是：「<strong>我到底要搜尋哪一個 tag？</strong>」</li></ol><h2>即使使用 Roam Research 也別忘了整理你的標籤、沈澱你的文章</h2><p>降低門檻開始行動固然是好事情，Roam Research 另一個很有用的功能是自動生成每天日記，鼓勵你記錄想法；另外它可以自動生成反向連結，因此省下很多整理雜亂想法的功夫，也是方便的功能。</p><p>但它們都是雙面刃，天下沒有白吃的午餐，工程師濫用 NoSQL 不思考 schema 的結果就是要有人花更多時間清理 schema 與整理資料，在公司可能是別的工程師來收爛攤子，而 Roam Research 是一個人管理，所以只有自己能收爛攤子。</p><p>雖然只是我的猜測，不過這也體現在他們的收費哲學當中：Notion 個人方案是免費，收費重心強調團隊合作與組織方案；然而 Roam Research 並不強調企業方案，取而代之的是比市面上 SaaS 還要貴上許多的個人方案（$15美金/月）。</p><p>這並不奇怪，試想如果公司用了這套系統，每個人都有自己的標籤世界，數以萬計的標籤絕對會失控，這種性質天生就不適合協作、在組織內共用。</p><p>《<a href="https://sspai.com/post/62637" target="_blank">在网状结构笔记应用中线性记录——以 Roam Research 为例</a>》一文中，就提到他個人的標籤系統（Tag System）必須滿足「原子化」及「正交化」兩個特性。</p><p>並非每個人都需要這麼嚴謹地規劃自己的標籤系統，但我相信這是他已經看出「極度自由標籤連結系統」的壞處之後，而替自己設下的限制。</p><p>對我個人來說，資料管理還是更有潔癖一點，即使有了雙向連結，產出的東西也只能算是半成品，真正的完成品必須要自己設計欄位與標籤，才能符合我心中理想的樣子。我不會說 Roam Research 不好用，但我暫時會將它與 Notion 分開使用。</p><p>如果你已經開始使用 Roam Research，你可能會需要開始思考，該如何管理這些失控的標籤；如果不覺得標籤失控，那也很好，表示你就是這套哲學的目標對象，應該繼續用下去（順便跟大家分享一下自己如何管理自己的「標籤世界」）</p>
