@@ -1,0 +1,323 @@
+---
+layout: post
+title: 'Coding起來-自動化測試: Python + UIAutomator 搭配UIAutomatorViewer-模擬手點操作手機'
+date: 2020-12-13 13:03:32.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<p> </p><p><br></p><p>嗨嗨，今天來跟大家介紹一個我最近學習的Android手機自動化測試非常好用的工具UIAutomator，在學習它之前，我都是使用Python直接呼叫adb指令，完成自動化手機操作，但這個工具真的相當直覺好用，所以就來學習記錄一下，這篇前半段的教學內容來自於xiaocong的Github大作，真的非常厲害，加入自己的筆記跟見解後，紀錄成一篇教學文，寫完才發現UIAutomator2已經出來了, 但語法和功能上應該是大同小異, 有時間的話會在記錄一篇給大家參考</p><h2>UIAutomator是什麼呢?</h2><p><br class="smart">簡單來說，它是由Google推出的一個對Andorind UI進行測試的工具，它可以模擬手點的方式進行一系列的自動化測試，更貼近使用者的使用行為，任何的操作都能檢驗是否符合預期，是個非常強大好用的測試工具</p><h2>Python + UIAutomator?</h2><p>UIAutomator的腳本基本上是由Java寫的，而xiaocong等人製作了一個Python的橋樑，讓我們可以使用Python來使用UIAutomator</p><p><br class="smart"></p><p><strong>直接來操作，大家就會理解了</strong></p><h2>Step 1: 下載套件</h2><p> 1. 我這邊使用Anaconda Prompt 來下載uiautomator套件</p><pre class="ql-syntax">pip install uiautomator
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/60879df2-83d6-4297-8081-7cfdabc26cad.webp" onerror="this.srcset='https://assets.matters.news/embed/60879df2-83d6-4297-8081-7cfdabc26cad.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/60879df2-83d6-4297-8081-7cfdabc26cad.png" onerror="this.srcset='https://assets.matters.news/embed/60879df2-83d6-4297-8081-7cfdabc26cad.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/60879df2-83d6-4297-8081-7cfdabc26cad.webp">
+
+        <img src="https://assets.matters.news/embed/60879df2-83d6-4297-8081-7cfdabc26cad.png" srcset="https://assets.matters.news/processed/540w/embed/60879df2-83d6-4297-8081-7cfdabc26cad.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2>Step 2: 連接手機與PC</h2><p><br class="smart">1. 我使用adb來進行連接，它是下載SDK Platform Tools (<a href="https://developer.android.com/studio/releases/platform-tools.html" target="_blank">https://developer.android.com/studio/releases/platform-tools.html</a>)就會夾帶的工具喔</p><p>2. 下載好後，設定為環境變數，並在cmd裡測試，只要打上adb devices，結果有device的serial number出來就表示連接完成</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a453e806-4aff-412d-ba32-d1f635b146eb.webp" onerror="this.srcset='https://assets.matters.news/embed/a453e806-4aff-412d-ba32-d1f635b146eb.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a453e806-4aff-412d-ba32-d1f635b146eb.png" onerror="this.srcset='https://assets.matters.news/embed/a453e806-4aff-412d-ba32-d1f635b146eb.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a453e806-4aff-412d-ba32-d1f635b146eb.webp">
+
+        <img src="https://assets.matters.news/embed/a453e806-4aff-412d-ba32-d1f635b146eb.png" srcset="https://assets.matters.news/processed/540w/embed/a453e806-4aff-412d-ba32-d1f635b146eb.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><h2>Step 3: 導入套件 </h2><p><br class="smart">1. 只有一台手機連接的狀況</p><pre class="ql-syntax">from uiautomator import device as d
+</pre><p><br class="smart">2. 多台手機連接時，需要指定視哪一手機，要指定手機的Serial Number</p><pre class="ql-syntax">from uiautomator import Device
+d = Device(‘13cad2f9’) ## (Serial Number)
+</pre><p>3. 如果手機連接在另一台電腦，你需要知道手機設備Serial Number、對方ip位置與port</p><pre class="ql-syntax">from uiautomator import Device
+d = Device(‘13cad2f9’, adb_server_host=’192.168.1.68',adb_server_port=5037)
+</pre><p><strong>小筆記: 1. 我是用adb devices 指令來知道我的手機Serial Number</strong></p><p><br class="smart"></p><h2>Step 4: 操作指令介紹</h2><p><strong>1. 常用的API</strong></p><p><strong>1–1. 獲取手機的資訊</strong></p><pre class="ql-syntax">print(d.info)
+</pre><p>結果:</p><pre class="ql-syntax">{‘currentPackageName’: ‘XXX’, ‘displayHeight’: 2016, ‘displayRotation’: 0, ‘displaySizeDpX’: 360, ‘displaySizeDpY’: 720, ‘displayWidth’: 1080, ‘productName’: 'XXX’, ‘screenOn’: True, ‘sdkInt’: XX, ‘naturalOrientation’: True}
+</pre><p><strong>補充: 結果的各項值解釋</strong></p><ul><li>displayRotation: 0(代表直屏) 或 1(代表橫屏)</li><li>currentPackageName: 現在活動(Activity)的套件(Package)名稱 </li><li>productName: 現在的設備名稱 </li><li>displayHeight: 現在的螢幕寬度 </li><li>displayWidth: 現在的螢幕高度 </li><li>sdkInt: 現在的SDK版本 </li><li>naturalOrientation: 橫屏的時候是Flase, 直屏的時候是True</li></ul><p><br></p><p>1–2. 螢的操作 1:</p><p>a. 點亮與關掉螢幕</p><pre class="ql-syntax">## 點亮螢幕
+d.screen.on()
+d.wakeup()
+## 關掉螢幕
+d.screen.off()
+d.sleep()
+</pre><p><strong>小筆記: 實際使用時，可以加上time.sleep()，不然操作速度過快，可能會看不出來或啟用到別的功能(可能被判定為同時按兩個按鍵)</strong></p><p>b. 在自動化程式中加入條件，判斷螢幕狀況，非常實用</p><pre class="ql-syntax">## 如果螢幕開著，就print一個yes
+if d.screen == “on”: 
+  print(‘yes’)
+## 如果螢幕開著，就print一個no
+elif d.screen == “off”: 
+  print(‘no’)
+</pre><p><strong>1–3 按鍵操作</strong><br class="smart">a. 支援如下的按鍵</p><pre class="ql-syntax">home
+back
+menu
+search
+enter
+recent
+volume_up
+volume_down
+volume_mute
+camera
+power
+left
+right
+up
+down
+center
+</pre><p>b. 操作示範</p><pre class="ql-syntax">## 查看哪些App正在使用
+d.press.recent()
+d.press(“recent”)
+## 按下power鍵
+d.press.power()
+d.press(“power”)
+## 按下相機
+d.press.camera() 
+## 按home鍵
+d.press.home()
+d.press(“home”)
+## 按返回鍵
+d.press.back()
+d.press(“back”)
+## 按下關鍵代碼
+d.press(0x07, 0x02)
+## 按下搜尋
+d.press.search()
+</pre><p>c. 獲得更多的操作方式，參考<a href="https://developer.android.com/reference/android/view/KeyEvent" target="_blank">官網</a></p><p><br></p><p><br></p><p><strong>1–4 模擬手點操作:</strong></p><p><strong>點擊螢幕座標上的位置(x,y)</strong></p><p>a. 短按點擊 </p><pre class="ql-syntax">## d.click(x,y)
+d.click(200,400)
+</pre><p><strong>小筆記: d.click(200,400)，相當於adb指令: adb shell input tap 200 400</strong></p><p>b. 長按點擊</p><pre class="ql-syntax">## d.long_click(x, y)
+d.long_click(200,400)
+</pre><p>c. 滑動操作</p><pre class="ql-syntax">## d.swipe(sx, sy, ex, ey)
+d.swipe(800, 400, 100, 400)
+</pre><p><strong>小筆記: d.swipe(800, 400, 100, 400)，相當於adb指令: adb shell input swipe 800 400 100 400</strong></p><p>d. 搬動操作</p><pre class="ql-syntax">##steps: 幾步移動到
+## d.drag(sx, sy, ex, ey, steps=)
+## 將app 搬動到另一個位置
+d.drag(200,400, 800, 400)
+## 將app 搬動到另一個位置， 十步內移到
+d.drag(200,400, 800, 400, steps=10)
+</pre><p><br></p><p><strong>1–5: 螢幕操作 2:</strong></p><p>a. 螢幕旋轉方向設定</p><pre class="ql-syntax">## 恢復原設定方向
+orientation = d.orientation 
+## 旋轉方向設定 
+d.orientation = “left” ## 或者寫 l
+d.orientation = “right” ## 或者寫 r
+d.orientation = “natural” ## 或者寫 n
+d.orientation = “upsidedown”
+</pre><p>b. 鎖定或解鎖旋轉功能</p><pre class="ql-syntax">## 鎖定旋轉
+d.freeze_rotation()
+## 打開旋轉
+d.freeze_rotation(False)
+</pre><p>c. 螢幕截圖</p><pre class="ql-syntax">## screenshot and save to file
+d.screenshot(“test.png”) ## 前面可以加上想放在的目錄路徑，像是d.screenshot(“C:/Users/user/Desktop/test.png”)
+</pre><p>d. 取得螢幕層級資訊(XML)</p><pre class="ql-syntax">## 取得螢幕層級資訊, 儲存於local的檔案目錄路徑下d.dump(“screen_hierachy.xml”)
+## 取得螢幕層級資訊，印出取得的資訊
+xml = d.dump()
+print(xml)
+</pre><p>e. 打開便捷設定欄與通知欄</p><pre class="ql-syntax">## 打開通知欄
+d.open.notification()
+## 打開便捷設定欄
+d.open.quick_settings()
+</pre><p>f. 螢幕狀態</p><pre class="ql-syntax">## 等待窗口閒置
+d.wait.idle()
+## 等待窗口更新
+d.wait.update()
+</pre><p><br></p><p>1–6 簡單的實作: 為了讓大家有點感覺，我們來實作一個小小的demo<br class="smart"><br class="smart"></p><p><strong>流程: 檢查螢幕是否點亮->沒點亮的話就點亮它->滑到第二頁->將左上角的APP搬動到另一個位置->回到主頁</strong></p><pre class="ql-syntax">## 導入套件
+import time
+from uiautomator import device as d
+
+## 先檢查螢幕是否點亮，如果沒有就點亮它
+## 如果螢幕開著，就print一個yes
+if d.screen == “on”: 
+  pass
+## 如果螢幕開著，就print一個no
+else: 
+  d.screen.on() 
+
+## 移動到第二頁
+d.swipe(800, 400, 50, 400)
+## 等待一下time.sleep(2)
+## 把第二頁的第一個app位置搬動道別的位置
+d.drag(200,400, 800, 800, steps=10)
+## 回到首頁
+d.press.home()
+</pre><p><br class="smart"></p><p><strong>2. Watcher 用法</strong></p><p><br class="smart"><strong>簡單來說，就是讓我們加入一些條件，如果條件成立，那就會執行我們設定的指令，而它的條件使用的是tag的方法，符合有哪個tag就執行</strong></p><p><br class="smart"><strong>補充: </strong><br class="smart"> i. .when(a, b): 執行條件符合a和b的狀況<br class="smart">ii. 如何知道tag有哪些， 取得階層，就可以找到對應的了，有點像html</p><pre class="ql-syntax">xml = d.dump()
+print(xml)
+</pre><p>iii. 或是使用UIAutomatorViewer輕鬆獲取階層資訊，文章下面會介紹到如何使用</p><p><br class="smart"></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.webp" onerror="this.srcset='https://assets.matters.news/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.png" onerror="this.srcset='https://assets.matters.news/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.webp">
+
+        <img src="https://assets.matters.news/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.png" srcset="https://assets.matters.news/processed/540w/embed/2b2ff155-5c2b-4f69-a51d-8755e3369d85.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart">iii. 下面的範例: 我是將手機點開電話這個app，然後進行指令的</p><p>a. 用法 1</p><pre class="ql-syntax">## 設定一個watcher, 當tag裡面出現text=”Contacts”和text=”Recents”,就點擊Contacts
+
+d.watcher(“test_press_phone_app_contacts”).when(text=”Contacts”).when(text=”Recents”) \ .click(text =”Contacts”)
+
+## 執行所有
+watcherd.watchers.run()
+</pre><p>b. 用法 2</p><pre class="ql-syntax">## 當有符合text=”Contacts”和selected=”true”，就點擊電源鍵
+
+d.watcher(“test_press_phone_app_power”).when(text=”Contacts”,selected=”true”) \ .press.power()
+
+## 執行所有
+watcherd.watchers.run()
+</pre><p>c. 查看是否被觸發了</p><pre class="ql-syntax">## i. 指定是哪一個watcher的時候，輸入watcher的名稱print(d.watcher(“test_press_phone_app_power”).triggered)
+## ii. 只要任何一個watcher被觸發就算
+print(d.watchers.triggered)
+</pre><p>d. 移除掉Watcher</p><pre class="ql-syntax">##i. 指定移除哪個watcher
+d.watchers.remove()
+##ii. 移除掉所有watcherd.watchers.remove(“test_press_phone_app_power”)
+</pre><p><br class="smart"></p><p>e. 例出所有存在的Watcher</p><pre class="ql-syntax">print(d.watchers)
+</pre><p>f. Reset 被觸發過的Wacther: 這樣d.watchers.triggered就會reset回false</p><pre class="ql-syntax">d.watchers.reset()
+</pre><p><br class="smart"></p><p><strong>3. Handler 用法</strong></p><p>它可以使用callback function，和Watcher非常相似</p><pre class="ql-syntax">def handler_test(device): 
+  if device(text=”Contacts”).exists:   
+    device.press.power()   
+    device(text=”Contacts”).click() 
+  return True
+
+## 開啟 callback function
+d.handlers.on(handler_test) 
+## 關閉 callback function
+d.handlers.off(handler_test)
+</pre><p><strong>小筆記: 唯獨這個用法我試過，沒有報錯，但是也沒有work的感覺，如果有哪位高手發現問題，歡迎留言教導我，哈哈</strong></p><p><br class="smart"></p><h2>4. Selector 用法</h2><p><br class="smart"><strong>Selector 是用來識別螢幕的object，它利用下例的屬性來辨別</strong></p><pre class="ql-syntax">a. text, textContains, textMatches, textStartsWith
+b. className, classNameMatches
+c. description, descriptionContains, descriptionMatches, descriptionStartsWith
+d. checkable, checked, clickable, longClickablee. scrollable, enabled,focusable, focused, selected
+f. packageName, packageNameMatches
+g. resourceId, resourceIdMatches
+h. index, instance
+</pre><p><strong>舉例: 取得一個object, 條件: text = “”, 然後它的className= “”</strong></p><pre class="ql-syntax">d(text=”Phone”, className=’android.phone’)
+</pre><p><br></p><p><strong>4–1: 透過是親子(child)或是兄弟(sibling)關係</strong></p><p>a. child</p><pre class="ql-syntax">## 取得子屬性
+
+d(className=’android.phone’).child(text=”Contacts”)
+</pre><p>b. sibling</p><pre class="ql-syntax">d(text=”Contacts”).sibling(text=”Recents”)
+</pre><p>c. child_by_text</p><p><strong>利用child_by_text這個方法來取得，allow_scroll_search=True，允許自動化程式自己下拉找尋子屬性，還有child_by_description和child_by_instance用法，可以</strong><a href="https://github.com/xiaocong/uiautomator" target="_blank"><strong>參考連結</strong></a></p><pre class="ql-syntax">## 找尋一個text=text=”Phone”和className=’android.phone’的child，然後找尋它的child，符合text= “Contacts”, className=”Contacts_class_name”
+
+d(text=”Phone”, className=’android.phone’) \ .child_by_text(“Contacts”, className=”Contacts_class_name”)
+
+# 允許下拉查詢
+
+d(text=”Phone”, className=’android.phone’) \ .child_by_text( “Contacts”, allow_scroll_search=True, className=”Contacts_class_name” )
+</pre><p><br class="smart"></p><p><strong>4–2: 透過相對位置來找尋選擇， 像是up/right/dwon/left</strong><br class="smart"><br class="smart"></p><p>1. 範例中: 會把Messaging左邊的Phone(App)點擊打開來</p><pre class="ql-syntax">## 選擇在text=”Phone”左邊，且text=”Phone”的物件，然後點擊
+d(text=”Messaging”).left(text=”Phone”).click()
+</pre><p><strong>4–3: 得到手機UI相關的信息<br class="smart">小筆記: 需在有Settings這個App的畫面</strong></p><pre class="ql-syntax">## 獲得UI資訊
+print(d(text=”Settings”).info)
+## 檢查現在UI資訊是否存在
+print(d(text=”Settings”).exists)
+print(d.exists(text=”Settings”))
+</pre><p><strong>4–4: 設定與清理掉可以編輯的文本內容</strong></p><pre class="ql-syntax">## 設定
+d(text=”Settings”).set_text(“NEW TEXT FOR TESTING…”)
+## 清除掉
+d(text=”Setiings”).clear_text()
+</pre><p><strong>4–5 對UI有屬性text=”Settings”的物件上點擊不同位置</strong></p><pre class="ql-syntax">## 點擊物件右下角的位置
+d(text=”Settings”).click.bottomright()
+## 點擊物件左上角的位置
+d(text=”Settings”).click.topleft()
+## 點擊物件後等待頁面開好
+d(text=”Settings”).click.wait()
+</pre><p><strong>4–6 對UI有屬性text=”Settings”的物件上長按點擊不同位置</strong></p><pre class="ql-syntax">## 長按點擊
+d(text=”Settings”).long_click()
+## 長按點擊物件右下角的位置
+d(text=”Settings”).long_click.bottomright()
+## 長按點擊物件左上角的位置
+d(text=”Settings”).long_click.topleft()
+</pre><p><strong>4–7 搬動Object位置</strong></p><pre class="ql-syntax">## 將指定的Object搬動到指定的x軸y軸,用n個steps完成
+## d(text= “Settings”).drag.to(x, y, steps=10)
+
+d(text= “Settings”).drag.to(400, 800, steps=100)
+
+## 搬運到另一個指定的Object位置
+d(text= “Settings”).drag.to(text= “Clock”, steps=100)
+</pre><p><strong>4–8 在指定UI上的物件上進行滑動， 有up/right/down/left</strong></p><pre class="ql-syntax">d(text=”Settings”).swipe.right()
+d(text=”Settings”).swipe.left(steps=10)
+d(text=”Settings”).swipe.up(steps=20)
+d(text=”Settings”).swipe.down(steps=20)
+</pre><p><strong>4–9 同時多指操作</strong></p><p>a. 雙指操作</p><pre class="ql-syntax">## d(text=”Settings”).gesture((sx1, sy1), (sx2, sy2)) \## .to((ex1, ey1), (ex2, ey2))
+
+d(text=”Settings”).gesture((400, 400), (200, 400)) \ .to((500, 500), (300, 500))
+</pre><p>b. 雙指操作， 兩手指往裡面捏的動作 跟往外面撥的動作</p><pre class="ql-syntax">## 往裡面捏
+d(text=”Settings”).pinch.In(percent=100, steps=20)
+## 往外面撥
+d(text=”Settings”).pinch.Out(percent=100, steps=20)
+</pre><p>c. 三指操作</p><pre class="ql-syntax"># d().gestureM((sx1, sy1), (sx2, sy2),(sx3, sy3)) \# .to((ex1, ey1), (ex2, ey2),(ex3,ey3))
+
+d().gestureM((200,100),(400,600),(700,200),(100,800),(300,600),(600,1000))
+</pre><p><strong>4–10 等待UI上指定的Object消失或出現，會返回True or False, 等待時間: timeout=4000</strong></p><pre class="ql-syntax">## 等待消失
+print(d(text=”Phone”).wait.gone(timeout=4000))
+## 等待出現
+print(d(text=”Phone”).wait.exists(timeout=4000))
+</pre><p><strong>4–11 各種滑動操作，有水平、垂直、向前、向後方向滑動</strong></p><pre class="ql-syntax">## 預設滑動方向，前進跟垂直
+d(scrollable=True).fling()
+
+## 滑動水平前進
+d(scrollable=True).fling.horiz.forward()
+
+## 滑動垂直後退
+d(scrollable=True).fling.vert.backward()
+
+## 開始往水平滑動d(scrollable=True).fling.horiz.toBeginning(max_swipes=1200)
+
+## 結束往垂直滑動
+d(scrollable=True).fling.vert.toEnd()
+</pre><p><strong>4–12 滾動操作， 有水平、垂直、向前、向後方向滾動</strong></p><pre class="ql-syntax">## 預設滾動方向: 向前、垂直
+d(scrollable=True).scroll(steps=10)
+## 往前水平滾動
+d(scrollable=True).scroll.horiz.forward(steps=10)
+## 往後垂直滾動
+d(scrollable=True).scroll.vert.backward(steps=10)
+## 開始往水平方向滾動d(scrollable=True).scroll.horiz.toBeginning(steps=400, max_swipes=1200)
+## 結束往垂直方向滾動
+d(scrollable=True).scroll.vert.toEnd()
+## 往垂直方向滾動到指定的Object
+d(scrollable=True).scroll.to(text=”Phone”)
+</pre><p><br class="smart"></p><h2>UIAutomatorViewer: 幫助我們方便查看層級關係(Hierarchy)的工具</h2><p>使用UIAutomatorViewer可以清楚了解手機或模擬器上UI的階層關係)</p><ol><li>下載<a href="https://developer.android.com/studio/?gclid=EAIaIQobChMI3KKqleXd6gIVwdaWCh09dQYsEAAYASAAEgLr9_D_BwE&gclsrc=aw.ds" target="_blank">Android Studio</a>，但我們其實只需要它夾帶的uiautomatorviewer.bat</li><li>下載好後，先連接好手機，並到C:\Users\user\AppData\Local\Android\Sdk\tools\bin目錄底下( 通常是在這個目錄底下)，點擊uiautomatorviewer.bat並執行</li><li>如果找不到uiautomatorviewer.bat, 可以從Android Studio裡面找到檔案目錄路徑(如下圖)</li></ol><p><strong>Step1: </strong></p><p>a.開啟Android Studio，點擊Configure，按進SDK Manager</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.webp" onerror="this.srcset='https://assets.matters.news/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.png" onerror="this.srcset='https://assets.matters.news/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.webp">
+
+        <img src="https://assets.matters.news/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.png" srcset="https://assets.matters.news/processed/540w/embed/a4b135b9-ac8a-4b6e-a123-1053831c4596.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p>b. 或右上角也能進入到SDK Manager</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/db5aa62a-364f-441f-828e-97c1d7a68295.webp" onerror="this.srcset='https://assets.matters.news/embed/db5aa62a-364f-441f-828e-97c1d7a68295.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/db5aa62a-364f-441f-828e-97c1d7a68295.png" onerror="this.srcset='https://assets.matters.news/embed/db5aa62a-364f-441f-828e-97c1d7a68295.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/db5aa62a-364f-441f-828e-97c1d7a68295.webp">
+
+        <img src="https://assets.matters.news/embed/db5aa62a-364f-441f-828e-97c1d7a68295.png" srcset="https://assets.matters.news/processed/540w/embed/db5aa62a-364f-441f-828e-97c1d7a68295.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p><strong>Step 2:</strong> 找到指定目錄路徑</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.webp" onerror="this.srcset='https://assets.matters.news/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.png" onerror="this.srcset='https://assets.matters.news/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.webp">
+
+        <img src="https://assets.matters.news/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.png" srcset="https://assets.matters.news/processed/540w/embed/1044abf1-0f27-454c-a3ad-2a0e16ebe76f.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><strong>Step 3: </strong>進入目錄路徑，找到uiautomatorviewer</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.webp" onerror="this.srcset='https://assets.matters.news/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.png" onerror="this.srcset='https://assets.matters.news/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.webp">
+
+        <img src="https://assets.matters.news/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.png" srcset="https://assets.matters.news/processed/540w/embed/cfc058ed-f07c-4eae-a954-7c61021d3bf5.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p><strong>Step 4: </strong> 打開後點擊右上方的按鈕(如下圖)，就會顯示我們要的層級關係與細節資訊</p><p><br class="smart"></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.webp" onerror="this.srcset='https://assets.matters.news/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.png" onerror="this.srcset='https://assets.matters.news/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.webp">
+
+        <img src="https://assets.matters.news/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.png" srcset="https://assets.matters.news/processed/540w/embed/56817aaa-eb37-47b9-aab1-bb163ea10eb4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p><strong>希望這次的教學大家都有滿出來的收穫，可以開始自己寫自動化操控手機的程式了或針對開發好的App進行測試, 有問題都歡迎隨時找我討論喔!!</strong></p><p><br class="smart"></p><p><strong>Reference:</strong><br class="smart"><a href="https://github.com/xiaocong/uiautomator" target="_blank">https://github.com/xiaocong/uiautomator</a></p><p><a href="https://developer.aliyun.com/article/335068" target="_blank">https://developer.aliyun.com/article/335068</a></p><p><a href="https://blog.csdn.net/jgw2008/article/details/78286469" target="_blank">https://blog.csdn.net/jgw2008/article/details/78286469</a></p>
