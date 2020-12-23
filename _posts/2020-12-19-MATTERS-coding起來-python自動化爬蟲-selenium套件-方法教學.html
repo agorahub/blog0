@@ -1,0 +1,369 @@
+---
+layout: post
+title: Coding起來- Python自動化爬蟲- Selenium套件-方法教學
+date: 2020-12-19 01:54:58.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<p><br class="smart"></p><p><a href="https://github.com/chwang12341/Learn-Python-/tree/master/selenium" target="_blank">Github完整程式連結</a></p><p>Yo~ 今天來跟大家介紹自動化爬蟲非常好用的套件-Selenium，它可以模擬使用者操作瀏覽器的情境，自動幫助我們進到一層一層的網頁中爬取我們所需的資料</p><h2><br></h2><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.webp" onerror="this.srcset='https://assets.matters.news/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.jpeg" onerror="this.srcset='https://assets.matters.news/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.webp">
+
+        <img src="https://assets.matters.news/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.jpeg" srcset="https://assets.matters.news/processed/540w/embed/c345ec56-ffa2-4923-8c41-bf94aa501f3b.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：Kevin Ku，連結：Pexels</span></figcaption></figure><h2><br></h2><h2>Selenium是什麼?</h2><p><br class="smart">它主要的應用在對網頁程式執行自動化測試，但在資料科學的應用領域下，它被使用來解決資料科學家在爬取網頁資料時，所碰到的問題，像是網頁必須先輸入一些資訊才能獲得我們需要的資料，這些要傳入的資訊可能是使用者登入、表單填寫、需要點擊特定按鈕、需要輸入特定資訊等等。</p><h2>Python 如何自動化控制網頁流程?</h2><p><br class="smart">Python 透過Selenium這個套件連結WebDriver(網頁驅動程式)，來自動操作瀏覽器活動</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9698cc62-f441-4c02-b604-95964d1f54e5.webp" onerror="this.srcset='https://assets.matters.news/embed/9698cc62-f441-4c02-b604-95964d1f54e5.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9698cc62-f441-4c02-b604-95964d1f54e5.png" onerror="this.srcset='https://assets.matters.news/embed/9698cc62-f441-4c02-b604-95964d1f54e5.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/9698cc62-f441-4c02-b604-95964d1f54e5.webp">
+
+        <img src="https://assets.matters.news/embed/9698cc62-f441-4c02-b604-95964d1f54e5.png" srcset="https://assets.matters.news/processed/540w/embed/9698cc62-f441-4c02-b604-95964d1f54e5.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2>環境建置</h2><p><br class="smart"><strong>1. 安裝瀏覽器:</strong> 由於Selenium對Chrome與Firefox的支援最好，因為我最常使用的瀏覽器為Chrome，所以我就以Chrome來完成自動化實作喔</p><p><strong>2. 安裝WedDriver(網頁驅動程式):</strong></p><p>Step 1. 進到下載驅動程式的網頁<br class="smart">a. Chrome: <a href="http://chromedriver.chromium.org/downloads" target="_blank">http://chromedriver.chromium.org/downloads</a><br class="smart">b. Firefox: <a href="https://github.com/mozilla/geckodriver/releases" target="_blank">https://github.com/mozilla/geckodriver/releases</a></p><p>Step 2. 挑選符合自己Chrome(瀏覽器)版本的網頁驅動程式下載</p><p>Step 3. 解壓縮到: a.自行決定的目錄位置 b. Python目錄底下 c.直接放在欲執行的Python檔目錄位置 </p><blockquote>小叮嚀: 可以將下載到的目錄位置設為環境變數，這樣在Python程式檔裡就不需要特別告訴電腦驅動程式的位置</blockquote><p><strong>3. 安裝套件: </strong></p><pre class="ql-syntax">pip install selenium
+</pre><p><br class="smart"></p><p><br class="smart"></p><h2>測試: 開啟與關閉網頁</h2><p><br class="smart"></p><p><strong>這邊我們想要開啟一個指定的網站: </strong><a href="https://medium.com/@chwang12341" target="_blank"><strong>https://medium.com/@chwang12341</strong></a></p><p><br class="smart"><strong>1. 使用情況 1:</strong> 把WebDriver放在Python檔案旁邊或設為環境變數</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+## Enabled Chrome function 打開模擬瀏覽器
+chrome_browser = webdriver.Chrome()
+## go to the website
+chrome_browser.get(“https://medium.com/@chwang12341")
+## Close down the website
+chrome_browser.close()
+</pre><p><strong>2. 使用情況 2:</strong> 未把WebDriver放在Python檔案旁邊或設為環境變數<br class="smart"><br class="smart"></p><p>a. 只設定WebDrive的路徑，告知電腦去哪裡執行</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function 打開模擬瀏覽器
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## go to the website
+chrome_browser.get(“https://medium.com/@chwang12341")
+
+## Close down the website
+chrome_browser.close()
+</pre><p>b. 設定WebDrive與chrome的位置</p><p><br class="smart"><strong>除非上一個方法不可行，不然不需要多設定chrome的位置</strong></p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+## Chrome.exe location set
+options = Options()
+options.binary_location = “C:\Program Files (x86)\Google\Chrome\Application\chrome.exe”
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function 打開模擬瀏覽器
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path, options = options)
+
+## go to the website
+chrome_browser.get(“https://medium.com/@chwang12341")
+
+## Close down the website
+chrome_browser.close()
+</pre><p><strong>3. 執行結果</strong></p><p>如圖左上角的地方會顯示Chrome瀏覽器目前被自動測試軟體控制，也就是被我們的Python檔所控制</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3674965e-70cd-4b41-9833-7a969838c1cd.webp" onerror="this.srcset='https://assets.matters.news/embed/3674965e-70cd-4b41-9833-7a969838c1cd.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3674965e-70cd-4b41-9833-7a969838c1cd.png" onerror="this.srcset='https://assets.matters.news/embed/3674965e-70cd-4b41-9833-7a969838c1cd.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/3674965e-70cd-4b41-9833-7a969838c1cd.webp">
+
+        <img src="https://assets.matters.news/embed/3674965e-70cd-4b41-9833-7a969838c1cd.png" srcset="https://assets.matters.news/processed/540w/embed/3674965e-70cd-4b41-9833-7a969838c1cd.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p><br class="smart"></p><h2>目標網站的屬性</h2><p><br class="smart"></p><ol><li>獲取目標網站屬性的方法</li></ol><pre class="ql-syntax">a. 瀏覽器名稱: ex. chrome_browser.name
+b. 網頁標題: ex. chrome_browser.title
+c. URL位置: ex. chrome_browser.current_url
+d. 連線Browser Id ex. chrome_browser.session_id
+e. 目標網頁原始碼: ex. chrome_browser.page_source
+f. 瀏覽器功能設定選項 ex. chrome_browser.capabilities
+</pre><p>2. 實作</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## go to the website
+chrome_browser.get(“https://medium.com/@chwang12341")
+
+## 瀏覽器名稱
+print(chrome_browser.name) 
+## 網頁標題
+print(chrome_browser.title)
+## URL位置
+print(chrome_browser.current_url)
+## 連線Browser Id
+print(chrome_browser.session_id)
+## 目標網頁原始碼
+print(chrome_browser.page_source)
+## 瀏覽器功能設定選項
+print(chrome_browser.capabilities)
+</pre><p>3. 執行結果</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6cad3d83-544d-4274-8974-da3248c2ad38.webp" onerror="this.srcset='https://assets.matters.news/embed/6cad3d83-544d-4274-8974-da3248c2ad38.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6cad3d83-544d-4274-8974-da3248c2ad38.png" onerror="this.srcset='https://assets.matters.news/embed/6cad3d83-544d-4274-8974-da3248c2ad38.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6cad3d83-544d-4274-8974-da3248c2ad38.webp">
+
+        <img src="https://assets.matters.news/embed/6cad3d83-544d-4274-8974-da3248c2ad38.png" srcset="https://assets.matters.news/processed/540w/embed/6cad3d83-544d-4274-8974-da3248c2ad38.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p><br class="smart"></p><h2>瀏覽器的大小與位置設定</h2><p>1. 方法</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.webp" onerror="this.srcset='https://assets.matters.news/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.png" onerror="this.srcset='https://assets.matters.news/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.webp">
+
+        <img src="https://assets.matters.news/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.png" srcset="https://assets.matters.news/processed/540w/embed/6c50796f-5b90-4c22-b320-6228565cc9eb.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p>2. 實作</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## go to the website
+chrome_browser.get(“https://medium.com/@chwang12341")
+
+## 獲得初始化位置(左上角位置)
+print(chrome_browser.get_window_position()) ## {‘x’: 939, ‘y’: 69}
+
+## 設定初始化位置
+print(chrome_browser.set_window_position(100,100)) ## Noneprint(chrome_browser.get_window_position()) ## {‘x’: 100, ‘y’: 100}
+
+## 獲得視窗大小
+print(chrome_browser.get_window_size()) ## {‘width’: 945, ‘height’: 1020}
+
+## 設定視窗大小
+print(chrome_browser.set_window_size(1000,1000)) ## Noneprint(chrome_browser.get_window_size()) ## {‘width’: 1000, ‘height’: 1000}
+
+## 視窗最大化
+chrome_browser.maximize_window()
+
+## 視窗最小化
+chrome_browser.minimize_window()
+
+## 模擬視窗最小化
+chrome_browser.set_window_position(-3000,0)
+
+## 復原視窗大小
+chrome_browser.set_window_position(0,0)
+</pre><p>3. 測試結果</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.webp" onerror="this.srcset='https://assets.matters.news/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.png" onerror="this.srcset='https://assets.matters.news/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.webp">
+
+        <img src="https://assets.matters.news/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.png" srcset="https://assets.matters.news/processed/540w/embed/5ed1e6e0-bdb6-43c3-b5a2-9394b87e697a.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><h2>瀏覽器上的按鈕</h2><p>1. 方法</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.webp" onerror="this.srcset='https://assets.matters.news/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.png" onerror="this.srcset='https://assets.matters.news/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.webp">
+
+        <img src="https://assets.matters.news/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.png" srcset="https://assets.matters.news/processed/540w/embed/b6ba1926-3535-4c11-889c-bb78ba51e314.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>2. 實作<br class="smart">a. 這邊我們先設定瀏覽器進入到goole網頁，然後進入到youtube的網頁，最後再進到我的Medium主頁，這樣就能看出按鈕的功能</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+import time
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## website you want to visit
+website_urls = ["https://www.google.com/","https://www.youtube.com/","https://medium.com/@chwang12341"]
+
+## visit the website in order
+
+for url in website_urls: 
+  time.sleep(2) 
+  
+  ## go to the website 
+  chrome_browser.get(url)
+  ## 現在的網頁位置，會是網頁list中最後一個網頁位置
+  print(chrome_browser.current_url) # https://medium.com/@chwang12341
+  ## 上一頁
+  chrome_browser.back()
+  print(chrome_browser.current_url) # https://www.youtube.com/
+  ## 再上一頁chrome_browser.back()
+  print(chrome_browser.current_url) # https://www.google.com/
+  ## 下一頁chrome_browser.forward()
+  print(chrome_browser.current_url) # https://www.youtube.com/
+   ## 重新整理頁面
+  chrome_browser.refresh()
+  print(chrome_browser.current_url) # https://www.youtube.com/
+  ## 關掉頁面
+  # chrome_browser.close()
+  ## 關掉頁面 和 驅動程式 
+  WebDriverchrome_browser.quit()
+</pre><p><br class="smart"></p><p><br class="smart"></p><h2>瀏覽器截圖</h2><p><br class="smart">a. 用法: save_screenshot(檔案名稱與路徑)<br class="smart">b. 回傳值: False(代表儲存失敗), True(代表儲存成功)</p><p>c. 實作</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+import time
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## website you want to visit
+website_urls = ["https://www.google.com/","https://www.youtube.com/","https://medium.com/@chwang12341"]
+
+## visit the website in order
+for url in website_urls: 
+    time.sleep(2) 
+      
+    ## go to the website 
+    chrome_browser.get(url) 
+      
+chrome_browser.save_screenshot("C:/Users/test.png")
+</pre><p><br class="smart"></p><h2>網頁元素的操控</h2><p><br class="smart"></p><p>a. Selenium利用find_element_xxxxxx的方法來找尋我們需要的元素，也就是根據html的tag資訊找尋對應的元素，這樣就可以進一步對指定的元素進行操作，像是輸入文字或點擊等</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.webp" onerror="this.srcset='https://assets.matters.news/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.png" onerror="this.srcset='https://assets.matters.news/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.webp">
+
+        <img src="https://assets.matters.news/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.png" srcset="https://assets.matters.news/processed/540w/embed/3ad2e4bc-74e0-41ea-95a8-f765eff48c78.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p>b. 找到指定元素後，可以進行的操作指令</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/859af638-cc40-468e-972f-c36df14ea06b.webp" onerror="this.srcset='https://assets.matters.news/embed/859af638-cc40-468e-972f-c36df14ea06b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/859af638-cc40-468e-972f-c36df14ea06b.png" onerror="this.srcset='https://assets.matters.news/embed/859af638-cc40-468e-972f-c36df14ea06b.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/859af638-cc40-468e-972f-c36df14ea06b.webp">
+
+        <img src="https://assets.matters.news/embed/859af638-cc40-468e-972f-c36df14ea06b.png" srcset="https://assets.matters.news/processed/540w/embed/859af638-cc40-468e-972f-c36df14ea06b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><h2>Class名稱裡面有空格的解決辦法</h2><p>a. 有時我們在獲得元素時，所指定的Class名稱可能會市多個class名稱組合起來的，而中間都會用空格來隔起來，如果我們直接執行，系統會報錯，我們該如何解決呢?</p><ul><li>i. class有唯一性，取空格兩側有唯一性的class名稱</li><li>ii. 若空格兩側都沒有唯一性，利用索引的方式來查找 ex. chrome_browser.find_elements_by_class_name(“q”)[0]</li><li>iii. 改用css選擇器進行定位，空格的地方用.取代</li></ul><p><br class="smart"></p><p><br class="smart"></p><h2>實作一個小程式</h2><p><br class="smart">a. 剛剛介紹了許多的Selenium方法，現在就讓我們來play一個小小的程式試試<br class="smart">b. 程式說明: 我們來實作一個在google搜尋上，打上我們想搜尋的文字，並按下搜尋按鈕</p><p><strong>Step 1: 打開網頁到google主頁</strong></p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## go to the website
+chrome_browser.get("https://www.google.com/")
+</pre><p><br class="smart"></p><p><strong>Step 2: 查詢搜尋欄的tag，這樣我們才能知道對誰傳送文字</strong><br class="smart">i. 利用右鍵檢查的方式來查詢</p><p>ii. 紅框框內的tag就是我們要使用的搜尋欄</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.webp" onerror="this.srcset='https://assets.matters.news/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.png" onerror="this.srcset='https://assets.matters.news/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.webp">
+
+        <img src="https://assets.matters.news/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.png" srcset="https://assets.matters.news/processed/540w/embed/5f0e9568-cbc6-4441-a53e-0467885745a9.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>iii. 我把tag複製下來比較清楚</p><pre class="ql-syntax"><input class=”gLFyf gsfi” maxlength=”2048" name=”q” type=”text” jsaction=”paste:puy29d” aria-autocomplete=”both” aria-haspopup=”false” autocapitalize=”off” autocomplete=”off” autocorrect=”off” autofocus=”” role=”combobox” spellcheck=”false” title=”Google 搜尋” value=”” aria-label=”搜尋” data-ved=”0ahUKEwjC65WMg4HrAhUQPXAKHU76AzcQ39UDCAY”>
+</pre><p>iiii. 這邊我們就可以使用<strong>name=”q”</strong>來幫助我們的自動化程式獲取搜尋欄位的元素，那搜尋按鈕也使用一樣的手法來查詢喔</p><p><strong>Step 3: 獲取搜尋欄的元素，並傳入指定文字</strong></p><pre class="ql-syntax">## 獲得搜尋欄的元素
+search = chrome_browser.find_element_by_name(“q”)
+## 傳入文字
+search.send_keys(“coding起來”)
+</pre><p><br class="smart"></p><p><strong>Step 4: 獲取搜尋按鈕的元素，並觸發點擊事件</strong></p><pre class="ql-syntax">## 獲得按鈕元素
+btn = chrome_browser.find_element_by_name(“btnK”)
+## 觸發點擊事件
+btn.click()
+</pre><p><br class="smart"></p><blockquote>c. 小叮嚀: 由於有時候我們的自動化程式會在網頁還沒完全loading好就執行下面的指令，導致一些錯誤，所以建議使用time.sleep()來等待一下，讓程式能正確執行</blockquote><p><strong>d. 完整程式</strong></p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## go to the website
+chrome_browser.get("https://www.google.com/")
+
+## 獲得搜尋欄的元素
+search = chrome_browser.find_element_by_name("q")
+
+## 傳入文字
+search.send_keys("coding起來")
+
+## 獲得按鈕元素
+btn = chrome_browser.find_element_by_name("btnK")
+
+## 延遲時間
+time.sleep(2)
+
+## 觸發點擊事件
+btn.click()
+</pre><p><br class="smart"></p><h2>補充: 如何關掉瀏覽器跳出的通知視窗</h2><p><br class="smart">a. 為了避免隨時可能跳出的通知視窗，阻擾了我們自動化程式的執行，我們需要關掉它，這邊引用chrome module底下的Options方法，來設定通知視窗<br class="smart"> b. 舉例:</p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+## 啟用Options方法
+options = Options()
+
+## 關掉通知
+options.add_argument(" - disable-notifications")
+
+## WebDriver Path 
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+
+## go to the website
+chrome_browser.get("https://www.google.com/")
+</pre><p><br class="smart"></p><p><br class="smart"></p><h2>補充: 利用xpath來查找元素</h2><p>a. 如何獲取指定元素之xpath<br class="smart">i. 一樣點擊滑鼠右鍵按檢查<br class="smart">ii. 找到指定的元素標籤<br class="smart">iii. 對標籤按右鍵，按copy裡面的copy x_path</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.webp" onerror="this.srcset='https://assets.matters.news/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.png" onerror="this.srcset='https://assets.matters.news/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.webp">
+
+        <img src="https://assets.matters.news/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.png" srcset="https://assets.matters.news/processed/540w/embed/c0148c44-b62a-45d5-957f-76d0f9aa1cdd.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br class="smart"></p><p> b. 完整程式: 跟上面的程式過程一樣，但改用xpath的方式，由於最後按下搜尋鍵的type=’submit’，所以我們可以改用.submit()來觸發搜尋</p><p><br class="smart"></p><pre class="ql-syntax">## Import Package
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+## 啟用Options方法
+options = Options()
+## 關掉通知
+options.add_argument(" - disable-notifications")
+## WebDriver Path
+webdriver_path = "C:/Users/user/Desktop/Learn-Python-/selenium/driver/chromedriver.exe"
+## Enabled Chrome function
+chrome_browser = webdriver.Chrome(executable_path = webdriver_path)
+## go to the website
+chrome_browser.get("https://www.google.com/")
+## 獲得搜尋欄的元素
+search = chrome_browser.find_element_by_xpath('//*[@id="tsf"]/div[2]/div[1]/div[1]/div/div[2]/input')
+## 傳入文字
+search.send_keys("coding起來")
+## 延遲時間
+time.sleep(2)
+## 獲得按鈕元素並觸發點擊事件
+btn = chrome_browser.find_element_by_xpath('//*[@id="tsf"]/div[2]/div[1]/div[3]/center/input[1]').submit()
+</pre><p><br class="smart"></p><blockquote><strong>結語</strong></blockquote><blockquote>相信大家會了Selenium方法後，可以實現非常多樣的網頁自動化程式，可以自動登入許多網頁(ex. Gmail、Facebook、Medium等等)，也可以自動查詢許多需要的內容，也就可以實現自動化爬蟲的能力囉，希望有幫助到大家~~</blockquote><p><br></p><p><strong>因為程式複製過來，有時候會跑版，所以大家如果遇到沒辦法執行的話，可以到我的Github中複製我跑過的完整程式喔!!</strong></p><p><br class="smart"></p><h2><strong>Reference:</strong><br class="smart"><a href="http://yhhuang1966.blogspot.com/2018/05/python-selenium_27.html" target="_blank">http://yhhuang1966.blogspot.com/2018/05/python-selenium_27.html</a></h2><p><a href="https://kknews.cc/zh-tw/code/azgby3g.html" target="_blank">https://kknews.cc/zh-tw/code/azgby3g.html</a></p><p><br class="smart"></p>

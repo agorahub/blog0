@@ -1,0 +1,247 @@
+---
+layout: post
+title: "[程式觀念] 大家都會使用plt畫圖，但是你真的知道plt / ax / fig是什麼嗎?怎麼用?"
+date: 2020-12-22 14:07:21.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><p><a href="https://github.com/chwang12341/Learn-Python-/blob/master/matplotlib/concept/matplotlib_concept.ipynb" target="_blank">Github完整程式碼連結</a></p><p><br></p><p>嗨嗨，今天一如往常，上班遇到困難馬上google，但在無意間查詢別的資訊時，看到一篇非常非常有趣的文章(我會在下面的參考文章附上喔)，過去我在畫視覺化圖時，也都是使用plt.xxx，然後要什麼功能就馬上google，接著就是貼上，每次寫的視覺化程式都不太一樣xd，心裡只是想反正可以work就好，這篇文章完全打中了我xd，作者一開始也是這樣，但他決定好好搞明白並分享給大家，而我也決定在跪著看完這篇文章後，分享給大家，我所學習到觀念</p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.webp" onerror="this.srcset='https://assets.matters.news/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.jpeg" onerror="this.srcset='https://assets.matters.news/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.webp">
+
+        <img src="https://assets.matters.news/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.jpeg" srcset="https://assets.matters.news/processed/540w/embed/dec6aff3-24fe-46a5-bf95-bd08356916ca.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>圖片來源: https://www.pexels.com/zh-tw/@negativespace</span></figcaption></figure><p><br></p><h2><strong>1. 動機</strong></h2><p>每次我在要畫視覺畫圖時，總是去google上找尋別人的code，然後就來個複製，修改成我要的後就貼上了，要什麼功能再繼續google，但是我也遇到一樣的疑惑，就是很常會發現有些看似不同的方法卻達到了一樣的效果，而隨著每次查詢資料的不同，都來個很不一樣的code，但明明可能根本就是一樣的功能，像是作者提到如果要設定標題名稱有以下兩種寫法，那我到底應該要用哪種方法?</p><pre class="ql-syntax">plt.title()
+ax.set_title()
+</pre><p>舉例:</p><pre class="ql-syntax">import matplotlib.pyplot as plt
+​
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y = [66, 28, 32, 58, 18, 2, 99, 77, 66, 58]
+​
+fig, ax = plt.subplots()
+​
+plt.plot(x, y)
+plt.title('Title Method 1')
+​
+plt.show()
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6825882e-ac45-4950-b303-79bb515af138.webp" onerror="this.srcset='https://assets.matters.news/embed/6825882e-ac45-4950-b303-79bb515af138.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6825882e-ac45-4950-b303-79bb515af138.png" onerror="this.srcset='https://assets.matters.news/embed/6825882e-ac45-4950-b303-79bb515af138.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6825882e-ac45-4950-b303-79bb515af138.webp">
+
+        <img src="https://assets.matters.news/embed/6825882e-ac45-4950-b303-79bb515af138.png" srcset="https://assets.matters.news/processed/540w/embed/6825882e-ac45-4950-b303-79bb515af138.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><pre class="ql-syntax">import matplotlib.pyplot as plt
+​
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y = [66, 28, 32, 58, 18, 2, 99, 77, 66, 58]
+​
+fig, ax = plt.subplots()
+​
+plt.plot(x, y)
+ax.set_title('Title Method 2')
+​
+plt.show()
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.webp" onerror="this.srcset='https://assets.matters.news/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.png" onerror="this.srcset='https://assets.matters.news/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.webp">
+
+        <img src="https://assets.matters.news/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.png" srcset="https://assets.matters.news/processed/540w/embed/a086c9e2-04d5-4176-b269-2584134b1ed4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h2><strong>2. matplotlib圖片構造</strong></h2><h3><strong>matplotlib圖片構造</strong></h3><p>在開始講解任何用法前(plt/ax/fig)，我想先帶大家瞭解matplotlib圖片構造</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.webp" onerror="this.srcset='https://assets.matters.news/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.png" onerror="this.srcset='https://assets.matters.news/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.webp">
+
+        <img src="https://assets.matters.news/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.png" srcset="https://assets.matters.news/processed/540w/embed/6dd9406d-fb7f-4cc0-bd1a-3e4dec06475a.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>圖片來源: 官網(<a href="https://matplotlib.org/1.5.1/faq/usage_faq.html#parts-of-a-figure" target="_blank">https://matplotlib.org/1.5.1/faq/usage_faq.html#parts-of-a-figure</a>)</p><ul><li>圖片講解</li><li>Figure: 指的是畫布，也就是當我們要畫圖時，要先創建一個畫布，才能在上面加上各種圖片(元素)</li></ul><pre class="ql-syntax">fig = plt.figure()
+</pre><ul><li> Axes: </li><li>axis是指x或y軸，而axes指的是複數形式(二維就有兩個座標軸、三維就有三個)，也就是figure中一個元素(圖片)的整套座標軸</li><li>比喻: Figure為畫布，axes就是你要放到畫布上的任何物體，像是我們要畫小河、學校、公園，學校就是一個axes，公園與小河也個別是一個axes</li><li>每次我們在figure中增加一個subplot，其實就是增加一套座標軸</li><li>所以如果今天figure中只有一張圖，那ax...和plt....控制的圖片就是一樣的，效果也會是一樣的(解惑了我們一開始的問題)</li><li>Axis: <code>ax.axis / ax.yaxis</code></li><li>x,y坐標軸</li><li>每個坐標軸由豎線和數字構成(就是我們的刻度和值)，而每個豎線也為一個axis的subplot，所以ax.xaxis也有axes這個對象，對每個axes進行編輯就會影響xaxis圖片上的樣子</li></ul><h3><strong>關鍵字: matplotlib圖片中的各個部位名稱</strong></h3><p>有了這張圖我們可以根據要進行修改的部分，依照圖片上的名稱進行查詢如何編輯</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.webp" onerror="this.srcset='https://assets.matters.news/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.png" onerror="this.srcset='https://assets.matters.news/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.webp">
+
+        <img src="https://assets.matters.news/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.png" srcset="https://assets.matters.news/processed/540w/embed/5af909f1-d01d-4a4b-b594-d1e752f19ecd.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>圖片來源: 官網(<a href="https://matplotlib.org/tutorials/introductory/usage.html" target="_blank">https://matplotlib.org/tutorials/introductory/usage.html</a>)</p><h2><strong>3. plt 與 ax 的差別</strong></h2><p>Matplotlib中，兩種畫圖的方式</p><ul><li>plt.figure(): 這是matplotlib所提供的一個api，可以快速地透過plt.來畫圖，但如果想要更細緻，也就是控制到更細的部分來畫圖，就要使用第二種方法</li></ul><pre class="ql-syntax">import matplotlib.pyplot as plt
+​
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y = [66, 28, 32, 58, 18, 2, 99, 77, 66, 58]
+​
+plt.figure(figsize = (10, 10))
+plt.subplot(221)
+​
+​
+plt.plot(x, y)
+plt.title('Method 1')
+​
+plt.show()
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a712643d-4978-4517-944d-c63b6159df3c.webp" onerror="this.srcset='https://assets.matters.news/embed/a712643d-4978-4517-944d-c63b6159df3c.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a712643d-4978-4517-944d-c63b6159df3c.png" onerror="this.srcset='https://assets.matters.news/embed/a712643d-4978-4517-944d-c63b6159df3c.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a712643d-4978-4517-944d-c63b6159df3c.webp">
+
+        <img src="https://assets.matters.news/embed/a712643d-4978-4517-944d-c63b6159df3c.png" srcset="https://assets.matters.news/processed/540w/embed/a712643d-4978-4517-944d-c63b6159df3c.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>fig, ax = plt.subplots(): 透過指定figure和axes來進行畫圖，對axes進行單獨更細緻的操作</li></ul><pre class="ql-syntax">import matplotlib.pyplot as plt
+​
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y = [66, 28, 32, 58, 18, 2, 99, 77, 66, 58]
+​
+fig, ax = plt.subplots(figsize = (10, 10))
+​
+ax.plot(x, y)
+ax.set_title('Method 2')
+​
+plt.show()
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.webp" onerror="this.srcset='https://assets.matters.news/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.png" onerror="this.srcset='https://assets.matters.news/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.webp">
+
+        <img src="https://assets.matters.news/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.png" srcset="https://assets.matters.news/processed/540w/embed/c6575ede-7268-46c9-ab8a-95b7407a17d3.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h2><strong>4. 簡單實作一下</strong></h2><h3><strong>Step1: 導入套件和創建數據</strong></h3><pre class="ql-syntax">import matplotlib.pyplot as plt
+​
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y1 = [66, 28, 32, 58, 18, 2, 99, 77, 66, 58]
+y2 = [58,2,8,10,66,32,28,58,66,66]
+​
+</pre><h3><strong>Step2: 創建畫布</strong></h3><pre class="ql-syntax">fig, ax = plt.subplots(figsize = (10, 10))
+</pre><h3><strong>Step3: 畫圖</strong></h3><pre class="ql-syntax">ax.plot(x, y1)
+ax.plot(x, y2)
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.webp" onerror="this.srcset='https://assets.matters.news/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.png" onerror="this.srcset='https://assets.matters.news/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.webp">
+
+        <img src="https://assets.matters.news/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.png" srcset="https://assets.matters.news/processed/540w/embed/8164ee42-9cee-454f-9f8d-4a21aa79e76d.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h3><strong>Step4: 設定標題</strong></h3><pre class="ql-syntax">## 標題
+ax.set_title('Method 2')
+ax.set_xlabel('Label X', fontsize = 'x-large', fontfamily = 'sans-serif', color = 'white', fontstyle = 'italic')
+ax.set_ylabel('Label Y', fontsize = 10, fontfamily = 'sans-serif', color = 'blue', fontstyle = 'oblique')
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.webp" onerror="this.srcset='https://assets.matters.news/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.png" onerror="this.srcset='https://assets.matters.news/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.webp">
+
+        <img src="https://assets.matters.news/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.png" srcset="https://assets.matters.news/processed/540w/embed/808780d5-b874-4d99-8058-b9b1fbd0b102.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h3><strong>Step5: 設定x軸和y軸屬性</strong></h3><pre class="ql-syntax">## x y軸的屬性設定
+## aspect : {'auto', 'equal'} or num
+ax.set_aspect('auto')
+## 於軸上顯示較小的刻度
+ax.minorticks_on()
+## 設定x軸的範圍
+ax.set_xlim(0, 8)
+## 設定網格
+## which : {'major', 'minor', 'both'}
+ax.grid(which = 'major', axis = 'both')
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.webp" onerror="this.srcset='https://assets.matters.news/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.png" onerror="this.srcset='https://assets.matters.news/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.webp">
+
+        <img src="https://assets.matters.news/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.png" srcset="https://assets.matters.news/processed/540w/embed/41c95bf7-b668-4cf1-8d66-b4dfb1dbf99d.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h3><strong>Step6: 設定坐標軸tick和更多細節</strong></h3><pre class="ql-syntax">## 設定座標軸tick和更多細節
+​
+## 設定x軸字體(旋轉、大小、顏色)
+ax.xaxis.set_tick_params(rotation = 50, labelsize = 20, colors = 'w')
+## 取得x軸範圍
+start, end = ax.get_xlim()
+## 設定x軸刻度以0.5為單位
+ax.xaxis.set_ticks(np.arange(start, end, 0.5))
+## 將y軸刻度顯示在右邊
+ax.yaxis.tick_right()
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.webp" onerror="this.srcset='https://assets.matters.news/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.png" onerror="this.srcset='https://assets.matters.news/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.webp">
+
+        <img src="https://assets.matters.news/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.png" srcset="https://assets.matters.news/processed/540w/embed/64a3e453-96ec-4640-b9ce-b9c730f1edf1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h3><strong>完整程式碼</strong></h3><pre class="ql-syntax">import matplotlib.pyplot as plt
+import numpy as np
+​
+​
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y1 = [66, 28, 32, 58, 18, 2, 99, 77, 66, 58]
+y2 = [58,2,8,10,66,32,28,58,66,66]
+​
+​
+fig, ax = plt.subplots(figsize = (10, 10))
+​
+ax.plot(x, y1)
+ax.plot(x, y2)
+​
+## 標題
+ax.set_title('Method 2')
+ax.set_xlabel('Label X', fontsize = 'x-large', fontfamily = 'sans-serif', color = 'white', fontstyle = 'italic')
+ax.set_ylabel('Label Y', fontsize = 10, fontfamily = 'sans-serif', color = 'blue', fontstyle = 'oblique')
+​
+​
+## x y軸的屬性設定
+## aspect : {'auto', 'equal'} or num
+ax.set_aspect('auto')
+## 於軸上顯示較小的刻度
+ax.minorticks_on()
+## 設定x軸的範圍
+ax.set_xlim(0, 8)
+## 設定網格
+## which : {'major', 'minor', 'both'}
+ax.grid(which = 'major', axis = 'both')
+​
+​
+## 設定座標軸tick和更多細節
+​
+## 設定x軸字體(旋轉、大小、顏色)
+ax.xaxis.set_tick_params(rotation = 50, labelsize = 20, colors = 'w')
+## 取得x軸範圍
+start, end = ax.get_xlim()
+## 設定x軸刻度以0.5為單位
+ax.xaxis.set_ticks(np.arange(start, end, 0.5))
+## 將y軸刻度顯示在右邊
+ax.yaxis.tick_right()
+​
+## 顯示圖片
+plt.show()
+</pre><p><br></p><p><br></p><p>這個觀念真的讓我受用許多，我只能說太牛了xd，瞭解了這個觀念後，以後再畫圖就能很快知道現在再控制的元件是什麼，也能快速查詢其功能，當然因為觀念是不變的道理，所以很多地方會與原文相似，如果作者看到了很介意的話，隨時與我聯絡，我會馬上撤掉喔</p><h2><br></h2><h2><br></h2><p><strong>Reference</strong></p><p><a href="https://zhuanlan.zhihu.com/p/93423829?fbclid=IwAR3T5a_BSi0bjZasVbTaRVmtVuBDL2T5IeBCixPXqzegwx6d2DNnkJwQ-jM" target="_blank">https://zhuanlan.zhihu.com/p/93423829?fbclid=IwAR3T5a_BSi0bjZasVbTaRVmtVuBDL2T5IeBCixPXqzegwx6d2DNnkJwQ-jM</a></p><p><a href="https://matplotlib.org/1.5.1/faq/usage_faq.html#parts-of-a-figure" target="_blank">https://matplotlib.org/1.5.1/faq/usage_faq.html#parts-of-a-figure</a></p><p><a href="https://matplotlib.org/tutorials/introductory/usage.html" target="_blank">https://matplotlib.org/tutorials/introductory/usage.html</a></p>
