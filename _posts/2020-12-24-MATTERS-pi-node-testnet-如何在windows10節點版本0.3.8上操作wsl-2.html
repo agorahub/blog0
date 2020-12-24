@@ -1,0 +1,203 @@
+---
+layout: post
+title: Pi Node Testnet 如何在Windows10節點版本0.3.8上操作WSL 2
+date: 2020-12-24 17:37:01.000000000 +00:00
+categories: matters
+tags: blog
+author: kyle2051
+---
+
+<figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.webp" onerror="this.srcset='https://assets.matters.news/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.png" onerror="this.srcset='https://assets.matters.news/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.webp">
+
+        <img src="https://assets.matters.news/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.png" srcset="https://assets.matters.news/processed/540w/embed/64518cfc-b807-45ca-8dc5-d205c8df15a1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>Pi Node現時最新版本為0.3.8，打開Pi Node軟件，如果系統尚未自動升級到最新版本，則<a href="https://node.minepi.com/node/" target="_blank">可以在此處下載最新版本</a>，如下所示：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.webp" onerror="this.srcset='https://assets.matters.news/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.png" onerror="this.srcset='https://assets.matters.news/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.webp">
+
+        <img src="https://assets.matters.news/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.png" srcset="https://assets.matters.news/processed/540w/embed/11c57c1c-1b3d-4555-b878-b935d29fca84.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>在測試最新版本0.3.8中，使用了WSL2，它很流行而且很簡單：</p><p><a href="https://www.docker.com/products/docker-desktop" target="_blank"><strong>下載DOCKER桌面最新版本</strong></a></p><p>WSL2基於Hyper-V的內置Linux內核，實現了虛擬機的效果，因此Docker可以更好地運行，便於開發和測試。那麼Win 10用戶如何更好地參與測試？</p><pre class="ql-syntax">文章重點
+說明如下
+首先，打開以下站點以供參考
+具體步驟
+更新到WSL 2
+啟用可選組件“ VirtualMachinePlatform”
+將WSL 2設為默認版本
+以正常方式打開Docker並按照系統提示進行操作
+當您被邀請加入測試節點時
+測試Node Testnet的一些基本代碼行
+</pre><h2><strong>說明如下</strong></h2><p>首先，通過按Windows徽標+ R來檢查Windows版本，然後輸入“ <strong>winver</strong> ”並選擇“ <strong>OK</strong> ”。如果您的Win版本低於2004，則可以下載<a href="https://www.microsoft.com/en-us/software-download/windows10" target="_blank">官方Windows工具來升級Windows。 </a>在安裝過程中，請注意個人數據文件。</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.webp" onerror="this.srcset='https://assets.matters.news/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.png" onerror="this.srcset='https://assets.matters.news/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.webp">
+
+        <img src="https://assets.matters.news/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.png" srcset="https://assets.matters.news/processed/540w/embed/88696486-9309-4d7b-a595-c04b78d9cbc4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>單擊確定，然後您應該會看到正在運行的Win版本。</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.webp" onerror="this.srcset='https://assets.matters.news/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.png" onerror="this.srcset='https://assets.matters.news/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.webp">
+
+        <img src="https://assets.matters.news/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.png" srcset="https://assets.matters.news/processed/540w/embed/5cc97f55-e9ef-4c75-a0e2-13189f57fa9b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>以上過程可能需要大約30分鐘才能完成更新。在安裝WSL 2之前，必須啟用“ VirtualMachinePlatform”功能。</p><p><br></p><h2><strong>首先，打開以下站點以供參考</strong></h2><blockquote><a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10#update-to-wsl-2" target="_blank">安裝適用於Linux的Windows子系統</a></blockquote><h2><strong>具體步驟</strong></h2><p>以管理員身份打開PowerShell並運行：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.webp" onerror="this.srcset='https://assets.matters.news/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.png" onerror="this.srcset='https://assets.matters.news/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.webp">
+
+        <img src="https://assets.matters.news/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.png" srcset="https://assets.matters.news/processed/540w/embed/9a100efb-b9cc-4e0a-9982-86e7152318f4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>以管理員身份打開Power Shell</span></figcaption></figure><p>通過複製-粘貼運行此命令行：</p><p><code>dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart</code></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/53dd4e77-e736-4897-b824-cced638f653b.webp" onerror="this.srcset='https://assets.matters.news/embed/53dd4e77-e736-4897-b824-cced638f653b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/53dd4e77-e736-4897-b824-cced638f653b.png" onerror="this.srcset='https://assets.matters.news/embed/53dd4e77-e736-4897-b824-cced638f653b.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/53dd4e77-e736-4897-b824-cced638f653b.webp">
+
+        <img src="https://assets.matters.news/embed/53dd4e77-e736-4897-b824-cced638f653b.png" srcset="https://assets.matters.news/processed/540w/embed/53dd4e77-e736-4897-b824-cced638f653b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>如下所示是成功的：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.webp" onerror="this.srcset='https://assets.matters.news/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.png" onerror="this.srcset='https://assets.matters.news/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.webp">
+
+        <img src="https://assets.matters.news/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.png" srcset="https://assets.matters.news/processed/540w/embed/08725427-e0c3-4d2e-a910-2ebbe7658fc4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h3><strong>更新到WSL 2</strong></h3><p>要更新到WSL 2，您必須滿足以下條件：</p><ul><li>運行Windows 10， 對於x64系統， 已更新為版本1903或更高版本，版本<strong>18362</strong>或更高版本 。</li><li>運行Windows 10，更新到2004年或以後，版本版本<strong> 19041</strong>，為ARM64系統。</li><li>請注意，如果您使用的是Windows 10版本1903或1909，則需要確保您具有正確的後台端口，您可以在<a href="https://devblogs.microsoft.com/commandline/wsl-2-support-is-coming-to-windows-10-versions-1903-and-1909/#how-do-i-get-it" target="_blank">此處</a>找到說明 。</li><li>通過選擇<strong>Windows徽標鍵+ R</strong>  ，鍵入 <strong>winver</strong>  ，然後選擇“ <strong>確定”</strong>來檢查Windows版本  。或<code>ver</code>在Windows命令提示符下輸入 命令。 如果您的Windows低於18361， 請 更新到Windows的最新版本。<a href="https://www.microsoft.com/software-download/windows10" target="_blank">下載Windows Update Assistant</a>  。</li></ul><h2><strong>啟用可選組件“ VirtualMachinePlatform”</strong></h2><p>在安裝WSL 2之前，必須啟用可選功能“ VirtualMachinePlatform”。以管理員身份打開PowerShell並運行以下命令：</p><p><code>dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</code></p><p><strong>重新啟動</strong> 計算機以完成WSL安裝並更新到WSL2。</p><p><br></p><h3><strong>將WSL 2設為默認版本</strong></h3><p>在安裝新的Linux版本時，以管理員身份打開PowerShell並運行以下命令以將WSL 2設置為默認版本：</p><p><code>wsl --set-default-version 2</code></p><p>運行命令：後，您可以看到此消息 <code>WSL 2 requires an update to its kernel component. For information please visit <a href="https://aka.ms/wsl2kernel" target="_blank">https://aka.ms/wsl2kernel</a></code>。請點擊鏈接（  <a href="https://aka.ms/wsl2kernel" target="_blank">https://aka.ms/wsl2kernel</a>  ）並從該站點下載並安裝MSI文件，以在您的計算機上安裝Linux內核以使用WSL2。成功安裝後，請再次運行該命令，它應成功完成而不顯示此消息。</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.webp" onerror="this.srcset='https://assets.matters.news/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.png" onerror="this.srcset='https://assets.matters.news/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.webp">
+
+        <img src="https://assets.matters.news/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.png" srcset="https://assets.matters.news/processed/540w/embed/44013b87-5c8c-44a1-96ab-2b0950c002b1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><strong> </strong>下載 Linux 核心更新套件_了解清楚自己屬於什麼電腦，下載適合的核心套件</p><p>1.下載最新套件： WSL2 Linux 核心更新套件 (適用於 x64 電腦)</p><p>複製 <a href="https://matters.news/me/drafts/wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank">wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi</a></p><blockquote><strong>注意 </strong>如果您使用的是 ARM64 電腦，請改為下載 ARM64 套件</blockquote><p>複製 <a href="https://matters.news/me/drafts/wslstorestorage.blob.core.windows.net/wslblob/wsl_update_arm64.msi" target="_blank">wslstorestorage.blob.core.windows.net/wslblob/wsl_update_arm64.msi</a></p><p>如果您不確定您有何種類型的電腦，請開啟命令提示字元 CMD或 PowerShell，</p><p>然後輸入： systeminfo | find "System Type"</p><p>2.請執行在上一個步驟中下載的更新套件。 (按兩下以執行 - 系統會提示您提供更高的權限，請選取 [是] 以核准此安裝作業。)</p><p><strong>注意：</strong> 從WSL 1到WSL 2的更新過程可能需要幾分鐘，具體取決於您的計算機。如果您正在從Windows 10週年更新或創建者更新中運行WSL 1的較舊安裝，則可能會遇到錯誤。請按照以下說明 <a href="https://docs.microsoft.com/en-us/windows/wsl/install-legacy#uninstallingremoving-the-legacy-distro" target="_blank">卸載和刪除所有舊副本</a> 。</p><p>如果 <code>wsl --set-default-version</code>結果是無效命令，請輸入 <code>wsl --help</code>。如果 <code>--set-default-version</code>未列出，則表明您的操作系統不支持它，您需要更新到1903，內部版本18362或更高版本。</p><p>如果WSL2內核更新程序包在安裝WSL2 Linux內核更新程序包時未提示任何權限或錯誤，請打開<code>Control Panel - Program and Futures - Turn Windows features on or off</code>並檢查Windows子系統以獲取Linux。</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6583c330-2dea-4d95-8357-4757ea8ca819.webp" onerror="this.srcset='https://assets.matters.news/embed/6583c330-2dea-4d95-8357-4757ea8ca819.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6583c330-2dea-4d95-8357-4757ea8ca819.png" onerror="this.srcset='https://assets.matters.news/embed/6583c330-2dea-4d95-8357-4757ea8ca819.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6583c330-2dea-4d95-8357-4757ea8ca819.webp">
+
+        <img src="https://assets.matters.news/embed/6583c330-2dea-4d95-8357-4757ea8ca819.png" srcset="https://assets.matters.news/processed/540w/embed/6583c330-2dea-4d95-8357-4757ea8ca819.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>打開Linux的Windows子系統</span></figcaption></figure><p>然後重新安裝<code>wsl_update_x64 </code>下載的更新程序包。操作上述國家/地區，大約需要5分鐘才能完成。</p><p><br></p><h2><strong>打開Docker並啟用WSL 2，如下所示：</strong></h2><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.webp" onerror="this.srcset='https://assets.matters.news/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.png" onerror="this.srcset='https://assets.matters.news/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.webp">
+
+        <img src="https://assets.matters.news/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.png" srcset="https://assets.matters.news/processed/540w/embed/ce9a26a4-62a2-421e-8351-c313cda8f451.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>從Docker啟用WSL 2</span></figcaption></figure><p>繼續以管理員身份在Power Shell中運行以下命令行：</p><p><code>wsl --list --verbose</code></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f834995a-b755-4a01-8544-8435506eaf93.webp" onerror="this.srcset='https://assets.matters.news/embed/f834995a-b755-4a01-8544-8435506eaf93.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f834995a-b755-4a01-8544-8435506eaf93.png" onerror="this.srcset='https://assets.matters.news/embed/f834995a-b755-4a01-8544-8435506eaf93.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/f834995a-b755-4a01-8544-8435506eaf93.webp">
+
+        <img src="https://assets.matters.news/embed/f834995a-b755-4a01-8544-8435506eaf93.png" srcset="https://assets.matters.news/processed/540w/embed/f834995a-b755-4a01-8544-8435506eaf93.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Power Shell運行2條線，2條運行線即可</span></figcaption></figure><p>Docker Desktop重新啟動時，轉到設置>資源> WSL集成。</p><p>WSL集成將在您的默認WSL發行版上啟用。要更改默認的WSL發行版，請運行wsl --set-default <distro name>。</p><p>例如，要將docker-desktop-data設置為默認的WSL發行版，</p><p><strong>請運行</strong> wsl --set-default docker-desktop-data</p><blockquote>(這裡現時不安裝任何Microsoft Store上的Linux 發行版本, 會跟Pi容器有衝突)</blockquote><p><br></p><h2><strong>以正常方式打開Docker並按照系統提示進行操作</strong></h2><p>單擊啟用WSL 2！</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a754657e-c903-4d8e-9213-f290547c2779.webp" onerror="this.srcset='https://assets.matters.news/embed/a754657e-c903-4d8e-9213-f290547c2779.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a754657e-c903-4d8e-9213-f290547c2779.png" onerror="this.srcset='https://assets.matters.news/embed/a754657e-c903-4d8e-9213-f290547c2779.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a754657e-c903-4d8e-9213-f290547c2779.webp">
+
+        <img src="https://assets.matters.news/embed/a754657e-c903-4d8e-9213-f290547c2779.png" srcset="https://assets.matters.news/processed/540w/embed/a754657e-c903-4d8e-9213-f290547c2779.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><blockquote><strong>尚未邀請Node  Node測試Testnet</strong></blockquote><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.webp" onerror="this.srcset='https://assets.matters.news/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.png" onerror="this.srcset='https://assets.matters.news/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.webp">
+
+        <img src="https://assets.matters.news/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.png" srcset="https://assets.matters.news/processed/540w/embed/09b1b761-d0d5-49d8-9bbe-352bca4e4cc5.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>尚未邀請Node Node測試Testnet</span></figcaption></figure><p><strong>上面的安裝和測試環境目前是針對全球測試人員的通用測試環境，最終結果如下：</strong></p><blockquote><strong>當您被邀請加入測試節點時</strong></blockquote><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.webp" onerror="this.srcset='https://assets.matters.news/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.png" onerror="this.srcset='https://assets.matters.news/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.webp">
+
+        <img src="https://assets.matters.news/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.png" srcset="https://assets.matters.news/processed/540w/embed/8c9606a8-7ea0-484e-871c-b7dddd7245f4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>邀請Node Node測試Testnet</span></figcaption></figure><p>當您打開Pi Node時，<code>Consensus container enabled: Yes</code>恭喜您，配置好並開始測試。</p><blockquote>必須要求您進行KYC，通過KYC，被邀請測試Pi Node Testnet，然後它會顯示Yes<code>Consensus container enable</code>並運行<code>Consensus container</code>  ！請耐心等待核心團隊的實施。</blockquote><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.webp" onerror="this.srcset='https://assets.matters.news/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.png" onerror="this.srcset='https://assets.matters.news/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.webp">
+
+        <img src="https://assets.matters.news/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.png" srcset="https://assets.matters.news/processed/540w/embed/9c2ee04c-0c3a-4d69-88d7-f46575221ff1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><blockquote><strong>運行Pi Node Testnet的過程已同步到塊<em>2955490</em>。</strong></blockquote><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.webp" onerror="this.srcset='https://assets.matters.news/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.png" onerror="this.srcset='https://assets.matters.news/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.webp">
+
+        <img src="https://assets.matters.news/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.png" srcset="https://assets.matters.news/processed/540w/embed/d5610b28-df08-414b-8300-cb3cd05f9f05.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p>祝好運！</p><h2><strong>測試Pi Node Testnet的一些基本代碼行</strong></h2><pre class="ql-syntax">docker exec -it pi-consensus bash -c "stellar-core http-command info"
+docker exec -it pi-consensus bash -c "stellar-core http-command info | grep state"
+docker exec -it pi-consensus stellar-core http-command quorum
+docker exec -it pi-consensus stellar-core http-command scp
+顯示所有容器
+docker ps -a
+查找Pi共識容器的日誌
+docker logs pi-consensus
+計算您的節點與網絡上節點的連接
+docker exec -it pi-consensus bash -c "stellar-core http-command info | grep authenticated_count"
+檢查您的節點與網絡上任何其他IP節點的連接
+docker exec -it pi-consensus stellar-core http-command peers
+</pre><blockquote><strong>如果你剛巧路過希望參與Pi Node測試，而還沒有註冊Pi帳戶，現在請立即下載手機端 Pi Network app立即註冊使用並加入測試，如有問題可以直接留言</strong></blockquote><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.webp" onerror="this.srcset='https://assets.matters.news/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.jpeg" onerror="this.srcset='https://assets.matters.news/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.webp">
+
+        <img src="https://assets.matters.news/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.jpeg" srcset="https://assets.matters.news/processed/540w/embed/2ec3fe8a-ca03-49c9-8e33-48ea1a217a92.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>Invitation code: kyle2051</span></figcaption></figure><p>Pi app 可以在Android的PlayStore或 Apple的App Store 中搜索：<strong>PI NETWORK</strong> 下載，或通過以下連結下載 <strong>Invitation code: kyle2051</strong></p><p><strong>iOS：</strong><a href="https://apps.apple.com/us/app/pi-network/id1445472541?fbclid=IwAR2w5WkUp4S60L4HoIhqxCvsx5RfEZibnLLrh-FgPbe1SnEoqjvp5pk7SNM" target="_blank">https : //apps.apple.com/us/app/pi-network/id1445472541</a></p><p><strong>Android</strong>：<a href="https://play.google.com/store/apps/details?id=com.blockchainvault&fbclid=IwAR1pp7uCe3242ULGhRwDuhztwXayAKQw1IKZayrUplERWk3XGiy-zTYl78g" target="_blank">https : //play.google.com/store/apps/details?id=com.blockchainvault</a></p><p>如果需要代碼，請輸入<strong>kyle2051 (用此代碼在第4天後,加速25%)</strong></p><pre class="ql-syntax">提示：您無需將應用Pi app保持打開狀態，Pi不會影響手機性能或消耗電池電量或使用網絡數據。 按下閃電按鈕後，您甚至可以關閉該應用程序，您將繼續挖掘Pi。 Pi的開採每24小時將停止，再次按下⚡️閃電按鈕一次，每天重複一次，直到分發結束為止
+</pre><h2><strong>>>></strong><a href="https://matters.news/@kyle/pi-network%E7%9A%84%E6%9C%80%E6%96%B0%E5%85%AC%E5%91%8A-%E8%BA%AB%E5%83%B9%E8%B6%851%E5%84%84%E7%BE%8E%E5%85%83%E5%8A%A0%E5%AF%86%E5%B0%88%E5%AE%B6wes-spencer%E8%AB%87pi%E9%8C%A2%E5%8C%85-bafyreig7ba2vbard7ihcqsa52pgybo4nlkcthet3ptmvp5m6rus2xnun6m" target="_blank">Pi Network的最新公告：身價超1億美元加密專家Wes Spencer談Pi錢包</a></h2><h2><strong>>>> </strong><a href="https://matters.news/@kyle/pi-network-fever-iq%E7%82%BA%E7%BE%8E%E5%9C%8B%E7%9A%84%E5%85%AC%E7%AB%8B%E5%B0%8F%E5%AD%B8%E6%8F%90%E4%BE%9B%E5%85%8D%E8%B2%BB%E7%9A%84%E5%AE%89%E5%85%A8%E7%9A%84covid%E9%A0%90%E9%98%B2%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88-bafyreib4gvlsolplbyuvjowuc777xvnjlvexiaip5birsoliqrdzrf6igi" target="_blank">Pi Network - FeverIQ為美國的公立小學提供免費的安全的Covid預防解決方案</a></h2><h2><strong>>>>  </strong><a href="https://matters.news/@kyle/pi-day%E7%B4%80%E5%BF%B5%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%94%B1martijn-koomen%E5%92%8Ctadas-maksimovas%E8%A8%AD%E8%A8%88-bafyreigdrpxpmtfh3vmshyo4ozooy6342hcx7bvdyl25h7rjhai3h3tovq" target="_blank"><strong>Pi注定有改變世界的力量</strong></a></h2><h2><strong>>>> </strong><a href="https://matters.news/@kyle/pi-network-pi-app-%E8%BB%9F%E9%AB%94%E8%A8%BB%E5%86%8A%E6%95%99%E5%AD%B8%E4%B8%8B%E8%BC%89-bafyreib772763264dfjcetqvk3atvcq4vexrkw76pkgxyizaz5x3lit2ne" target="_blank"><strong>Pi Network就如一隻沒有年齡限制的金錢遊戲</strong></a></h2><h2><strong>>>> </strong><a href="https://matters.news/@kyle/%E6%96%AF%E5%9D%A6%E7%A6%8F%E5%A4%A7%E5%AD%B8%E7%95%A2%E6%A5%AD%E7%94%9F%E7%82%BA%E6%99%BA%E6%85%A7%E6%89%8B%E6%A9%9F%E7%94%A8%E6%88%B6%E9%96%8B%E7%99%BC%E5%8A%A0%E5%AF%86%E8%B2%A8%E5%B9%A3-%E4%BB%A5%E6%8F%90%E9%AB%98%E5%85%B6%E5%8F%AF%E8%A8%AA%E5%95%8F%E6%80%A7-bafyreibnqobkmj3beycbwhnixgkyd7o7opegnprmz55si2v7rvq7s6w6oi" target="_blank"><strong>重溫：時間回到16/09/2019，The Stanford Daily 《斯坦福日報》為Pi Network寫了篇專訪文章！</strong></a></h2>
