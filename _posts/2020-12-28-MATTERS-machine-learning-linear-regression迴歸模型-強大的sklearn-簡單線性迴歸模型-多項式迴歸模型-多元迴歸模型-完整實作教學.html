@@ -1,0 +1,898 @@
+---
+layout: post
+title: Machine Learning - Linear Regression迴歸模型 - 強大的Sklearn - 簡單線性迴歸模型 、 多項式迴歸模型、多元迴歸模型
+  - 完整實作教學
+date: 2020-12-28 12:51:19.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><h2><a href="https://github.com/chwang12341/Machine-Learning/blob/master/Linear_Regression/sklearn_learning/Linear_Regression.ipynb" target="_blank"><strong>Github完整程式碼連結</strong></a></h2><p><br></p><p>嗨嗨大家，不知道大家有閱讀過我的上一篇[Machine Lesrning - 給自己的機器學習筆記 - Linear Regression - 迴歸模型介紹與原理]嗎，上一篇介紹了迴歸模型的原理與公式算法，這一篇主要是要教大家使用強大的Sklearn來實作迴歸模型喔，那我們開始吧！！</p><h2><br></h2><h2><br></h2><h2><strong>實作 </strong></h2><h2><strong>1. 數據集介紹 </strong></h2><p>這邊我捏造了一個非常有趣的數據集，這個數據集收集了不同人的學習時數與薪水，我想探討他們每個月願意花在學習上的時數與他們的月薪間的關聯，並訓練迴歸模型，就能用學習時數，來預測可能的薪水，簡單來說，就是只要有人告訴我，他每個月花在學習上的時數，我就能用這個訓練好的模型去預測他的薪水 提醒：這個數據集是我捏造的XD，大家千萬不要用這個數據集訓練出來的模型，來預測真實的狀況喔</p><p><strong>數據集： linear_regression_dataset_sample</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.webp" onerror="this.srcset='https://assets.matters.news/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.png" onerror="this.srcset='https://assets.matters.news/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.webp">
+
+        <img src="https://assets.matters.news/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.png" srcset="https://assets.matters.news/processed/540w/embed/3377c44d-6cca-4001-b0d8-70ee958f54e8.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.webp" onerror="this.srcset='https://assets.matters.news/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.png" onerror="this.srcset='https://assets.matters.news/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.webp">
+
+        <img src="https://assets.matters.news/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.png" srcset="https://assets.matters.news/processed/540w/embed/e5d51915-3962-4c4b-9254-0b87ba2e9c4e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h2><br></h2><h2><strong>2. Linear Regression 參數介紹</strong></h2><p>這是接下來要使用來建構迴歸模型的函數，所以我們一起來瞭解一下這個函數中可用的參數吧</p><pre class="ql-syntax">LinearRegression(fit_intercept = True. normalize = False, copy_X = True, n_jobs = 1) 
+</pre><ul><li>fit_intercept: 預設為True，表示有將y軸的截距加入 ，並自動計算出最佳的截距值 ，如果為False，迴歸模型線會直接通過原點</li><li>normalize : 是否將數據做歸一化（Normalize），預設為False</li><li>copy_X : 預設為True，表示X會被Copied，如果為False，X會被覆蓋掉</li><li>n_jobs : 計算模型所使使用的CPU數量，預設為1，如果傳入-1，就會使用全部的CPU</li></ul><h2><br></h2><h2><strong>3. LinearRegression使用的方法</strong></h2><ul><li>coef_ : 訓練完後，模型的係數，如果有多個目標值，也就是多個y值，就會回傳一個2Darray，裝載所有的係數值</li><li>intercept_ : 與y軸的截距值</li><li>predict : 預測數據</li><li>score : 評估或準確度（Accuracy），它會利用R平方來判斷我們訓練出來模型的預測精準度，也就是預測的準確度</li></ul><p><br></p><p><br></p><p><br></p><h2><strong>4. 簡單線性迴歸 Simple Linear Regression</strong></h2><p><br></p><p><strong>公式:</strong></p><pre class="ql-syntax">y(x) = W0 + W1x
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.webp" onerror="this.srcset='https://assets.matters.news/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.png" onerror="this.srcset='https://assets.matters.news/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.webp">
+
+        <img src="https://assets.matters.news/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.png" srcset="https://assets.matters.news/processed/540w/embed/4d4a6ea6-5fa3-4207-9dc5-5dab72d58dd2.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>Step1 : 導入所需的套件 </strong></h4><pre class="ql-syntax">## 導入所需的套件
+## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入視覺化套件
+import matplotlib.pyplot as plt
+## 導入Sklearn套件
+## 導入將數據集拆成訓練集與測試集的套件
+from sklearn.model_selection import train_test_split
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+</pre><h4><strong>Step2 : 導入數據集，並取出自變數與應變數 </strong></h4><ul><li>X : 將數據集中的"Learning_Hours"當特徵值（自變數）</li><li>y : 將數據集中的"Salary"當成目標值（依變數）</li></ul><pre class="ql-syntax">## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+</pre><h4><strong>Step3 : 將數據集拆成訓練集與測試集</strong></h4><pre class="ql-syntax">## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+</pre><p><strong>小提醒 ：如果大家想跟我拆成的訓練集與測試集一樣，那random_state（隨機種子）就要設為一樣的值喔</strong></p><h4><strong>Step4 : 訓練迴歸模型 </strong></h4><pre class="ql-syntax">## 訓練與建構迴歸模型
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+</pre><p><br></p><p><strong>這樣就完成訓練與建構模型囉，接下來我們來看看訓練好的模型有哪些用法</strong></p><p><br></p><h4><strong>Step5 : 找尋截距Interception與係數Coeficient值 執行結果 </strong></h4><pre class="ql-syntax">## 計算出截距值與係數值
+w_0 = regressor.intercept_
+w_1 = regressor.coef_
+​
+print('Interception : ', w_0)
+print('Coeficient : ', w_1)
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Interception : 5968.556965420779
+Coeficient : [26828.07518663]
+</pre><h4><br></h4><h4><strong>Step6 : 瞭解迴歸模型對測試集資料的預測準確度 </strong></h4><ul><li>score() : 它會利用R平方來判斷我們模型的精準程度，也就是預測的準確度 執行結果</li></ul><pre class="ql-syntax">## 迴歸模型的準確度
+score = regressor.score(X_test, y_test)
+print('Score: ', score)
+print('Accuracy: ' + str(score*100) + '%')
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Score: 0.8301578721256048
+Accuracy: 83.01578721256048%
+</pre><h4><br></h4><h4><strong>Step7 : 拿訓練好的迴歸模型來預測測試集資料的值 </strong></h4><ul><li>拿測試集中的X（自變數）來預測它的y值（依變數） 執行結果</li></ul><pre class="ql-syntax">## 拿訓練好的迴歸模型預測測試集資料的目標值(依變數)
+y_pred = regressor.predict(X_test)
+print('Predict : ', y_pred)
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Predict : [242055.6186078 239372.81108914 279614.92386909 199130.69830919
+ 107915.24267463 46210.66974537 234007.19605181 306442.99905573
+ 164254.20056656 333271.07424236 62307.51485735 105232.43515597
+ 215227.54342117 268883.69379444 228641.58101449 271566.5013131
+ 252786.84868246 86452.78252532]
+</pre><h4><br></h4><h4><strong>Step8 : 視覺化 </strong></h4><pre class="ql-syntax">## 視覺化迴歸模型與訓練集的關聯
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 視覺化迴歸模型與測試集的關聯
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><p><strong>執行結果</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.webp" onerror="this.srcset='https://assets.matters.news/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.png" onerror="this.srcset='https://assets.matters.news/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.webp">
+
+        <img src="https://assets.matters.news/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.png" srcset="https://assets.matters.news/processed/540w/embed/a00aebf1-4d4e-4fd2-bd78-61421b3a3dee.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><strong>小回顧: 在第一篇教大家迴歸模型原理與公式詳解的時候，第一張圖跟這邊的一樣，那時候我有說要解釋為什麼數據點比較少，其實就是因為它是被總數據集拆出去的訓練集，數據量當然也會比較少一點</strong></p><p><br></p><p><br></p><p><strong>完整程式碼</strong></p><pre class="ql-syntax">## 導入所需的套件
+## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入視覺化套件
+import matplotlib.pyplot as plt
+## 導入Sklearn套件
+## 導入將數據集拆成訓練集與測試集的套件
+from sklearn.model_selection import train_test_split
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+​
+## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+​
+## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+​
+## 訓練與建構迴歸模型
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+​
+## 計算出截距值與係數值
+w_0 = regressor.intercept_
+w_1 = regressor.coef_
+​
+print('Interception : ', w_0)
+print('Coeficient : ', w_1)
+​
+## 迴歸模型的準確度
+score = regressor.score(X_test, y_test)
+print('Score: ', score)
+print('Accuracy: ' + str(score*100) + '%')
+​
+​
+​
+## 拿訓練好的迴歸模型預測測試集資料的目標值(依變數)
+y_pred = regressor.predict(X_test)
+​
+print('Predict : ', y_pred)
+​
+## 視覺化迴歸模型與訓練集的關聯
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 視覺化迴歸模型與測試集的關聯
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><h2><br></h2><h2><br></h2><h2>5. 多項式迴歸 Polynomial Regression - Part 1</h2><p><br></p><p><strong>前言</strong></p><p>從上面的結果可以看出，使用簡單線性迴歸（Simple linear Regression）模型來預測我們的數據集，並沒有預測的很好（Score不高），也就是它的迴歸模型線並沒有將數據集描述的很好，那接下來，我們就要使用多項式迴歸（Polynomial Regression）模型來針對我們的數據集進行預測 重點： 我們可以從視覺化結果看出簡單線性迴歸與多項式迴歸的差別，簡單線性迴歸只能訓練出一條直線，而多項式迴歸則可以是折線來貼和數據集 公式： y(x) = w0 + w1x + w2x2 + ... + wnxn</p><p><strong>公式:</strong></p><pre class="ql-syntax">y(x) = W0 + W1x+ W1x^2 + … + Wnx^n
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/24c5b220-e806-49c6-9e78-988416f716a5.webp" onerror="this.srcset='https://assets.matters.news/embed/24c5b220-e806-49c6-9e78-988416f716a5.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/24c5b220-e806-49c6-9e78-988416f716a5.png" onerror="this.srcset='https://assets.matters.news/embed/24c5b220-e806-49c6-9e78-988416f716a5.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/24c5b220-e806-49c6-9e78-988416f716a5.webp">
+
+        <img src="https://assets.matters.news/embed/24c5b220-e806-49c6-9e78-988416f716a5.png" srcset="https://assets.matters.news/processed/540w/embed/24c5b220-e806-49c6-9e78-988416f716a5.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>Step1 : 導入所需的套件 </strong></h4><ul><li>這次多了PolynomialFeatures 與 make_pipeline套件來幫助我們實作出多項式迴歸（Polynomial Regression）模型</li></ul><pre class="ql-syntax">## 導入所需的套件
+## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入視覺化套件
+import matplotlib.pyplot as plt
+## 導入Sklearn套件
+## 導入將數據集拆成訓練集與測試集的套件
+from sklearn.model_selection import train_test_split
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+## 導入多項式套件，建構多項式迴歸模型所需的套件
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+</pre><h4><strong>Step2 : 導入數據集，並取出自變數與應變數</strong></h4><pre class="ql-syntax">## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+## 視覺化 數據集
+plt.scatter(X, y)
+plt.show()
+</pre><p><strong>執行結果</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.webp" onerror="this.srcset='https://assets.matters.news/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.png" onerror="this.srcset='https://assets.matters.news/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.webp">
+
+        <img src="https://assets.matters.news/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.png" srcset="https://assets.matters.news/processed/540w/embed/7e651108-ee7c-4daa-bf0a-32650dce0de0.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><br></h4><h4><strong>Step3 : 將數據集拆成訓練集與測試集</strong></h4><pre class="ql-syntax">## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+</pre><h4><br></h4><h4><strong>Step4 : 利用訓練集資料訓練多項式迴歸（Polynomial Regression)模型 </strong></h4><ul><li>利用make_pipeline()來結多項式與迴歸方法，make_pipeline()的第一個參數放入PolynomialFeatures()，而PolynomialFeatures()裡面則放入所需的維度，也就是公式中的次方要到幾次方，像是我們放入4，PolynomialFeatures(4)就代表指定為四次多項式，第二參數放入迴歸模型，也可以放入像是Lasso()與Ridge()等等的</li></ul><pre class="ql-syntax">## 使用訓練集資料來訓練(擬和)迴歸模型
+regressor = make_pipeline(PolynomialFeatures(6), LinearRegression())
+regressor.fit(X_train, y_train)
+</pre><p><br></p><p><strong>這樣就訓練好迴歸模型囉，接下來我們來看看訓練好的模型有哪些用法</strong></p><h4><br></h4><h4><strong>Step5 : 瞭解迴歸模型對測試集資料的預測準確度 </strong></h4><ul><li>score() : 它會利用R平方來判斷我們模型的精準程度，也就是預測的準確度 執行結果</li></ul><pre class="ql-syntax">## 迴歸模型的準確度
+score = regressor.score(X_test, y_test)
+print('Score: ', score)
+print('Accuracy: ' + str(score*100) + '%')
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Score: 0.9694916994802747
+Accuracy: 96.94916994802747%
+</pre><h4><br></h4><h4><strong>Step6 : 拿訓練好的迴歸模型來預測測試集資料的值 </strong></h4><ul><li>拿測試集中的X（自變數）來預測它的y值（依變數） 執行結果</li></ul><pre class="ql-syntax">## 拿訓練好的迴歸模型預測測試集資料的目標值(依變數)
+y_pred = regressor.predict(X_test)
+print('Predict : ', y_pred)
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Predict : [306927.65361694 303950.67378419 327806.58075872 234670.42529062
+ 70119.30917105 73169.12938504 297337.45449394 328025.61899288
+ 153428.19417922 330311.16772202 79820.57460623 69253.27960456
+ 267467.89772396 325312.37232658 289849.60698869 326146.30697963
+ 316674.05566826 70597.71334969]
+</pre><h4><br></h4><h4><strong>Step7 : 視覺化 </strong></h4><pre class="ql-syntax">## 視覺化迴歸模型與訓練集的關聯
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 視覺化迴歸模型與測試集的關聯
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><p><strong>執行結果</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.webp" onerror="this.srcset='https://assets.matters.news/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.png" onerror="this.srcset='https://assets.matters.news/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.webp">
+
+        <img src="https://assets.matters.news/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.png" srcset="https://assets.matters.news/processed/540w/embed/2fd8340f-6a40-43bf-8a07-d9853fd5b040.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><p><strong>完整程式碼</strong></p><pre class="ql-syntax">## 導入所需的套件
+## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入視覺化套件
+import matplotlib.pyplot as plt
+## 導入Sklearn套件
+## 導入將數據集拆成訓練集與測試集的套件
+from sklearn.model_selection import train_test_split
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+## 導入多項式套件，建構多項式迴歸模型所需的套件
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+​
+​
+## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+## 視覺化 數據集
+plt.scatter(X, y)
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+​
+## 使用訓練集資料來訓練(擬和)迴歸模型
+regressor = make_pipeline(PolynomialFeatures(6), LinearRegression())
+regressor.fit(X_train, y_train)
+​
+​
+## 迴歸模型的準確度
+score = regressor.score(X_test, y_test)
+print('Score: ', score)
+print('Accuracy: ' + str(score*100) + '%')
+​
+​
+​
+## 拿訓練好的迴歸模型預測測試集資料的目標值(依變數)
+y_pred = regressor.predict(X_test)
+​
+print('Predict : ', y_pred)
+​
+## 視覺化迴歸模型與訓練集的關聯
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 視覺化迴歸模型與測試集的關聯
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><p><br></p><p><strong>結論：大家可以很明顯發現使用多項式迴歸來預測我們數據集的準確度（Accuracy）明顯的提升了！！！！</strong></p><h2><br></h2><h2><strong>6. 多項式迴歸 Polynomial Regression - Part2 </strong></h2><p><br></p><p><strong>前言</strong></p><p>由於前面使用我的數據集訓練出來的多項式迴歸（Polynomial Regression）模型，所視覺化出來的圖有點難看懂XD，線沒有折的很清楚的感覺，所以我又另外的寫了一個程式範例來讓大家瞭解多項式迴歸模型的線，是怎麼擬和數據資料的</p><p><br></p><p><strong>程式碼範例</strong></p><pre class="ql-syntax">## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入繪圖套件
+import matplotlib.pyplot as plt
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+## 導入多項式套件，建構多項式迴歸模型所需的套件
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+## 導入區分訓練集與測試集套件
+from sklearn.model_selection import train_test_split
+​
+## 創建數據集
+learning_hours = [1,2,7,8,18,26,28,32,35,37,39,41,44,50,58]
+salary = [28000, 46000, 56000, 68000, 62000, 74000, 60000, 85000, 98000, 80000, 86000, 93000, 170000,200000, 280000]
+plt.scatter(learning_hours, salary)
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+## 組合成DataFrame格式
+data_dict = {'Hours': learning_hours, 'Salary': salary}
+df = pd.DataFrame(data_dict)
+## X = pd.DataFrame(df.iloc[:,0])
+## y = pd.DataFrame(df.iloc[:,1])
+X = df[['Hours']]
+y = df[['Salary']]
+​
+## 訓練多項式迴歸模型
+regressor = make_pipeline(PolynomialFeatures(4), LinearRegression())
+regressor.fit(X,y)
+​
+## 視覺化
+plt.scatter(X,y)
+plt.plot(X, regressor.predict(X), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+</pre><p><strong>執行結果</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.webp" onerror="this.srcset='https://assets.matters.news/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.png" onerror="this.srcset='https://assets.matters.news/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.webp">
+
+        <img src="https://assets.matters.news/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.png" srcset="https://assets.matters.news/processed/540w/embed/5cad1f71-f919-4d2a-8281-9fd7d75301ff.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h2><strong>補充：7. 如何設定多項式迴歸模型要幾次方比較好？</strong></h2><h2><strong> </strong></h2><ul><li>我只要加上一個迴圈去不斷訓練多項式迴歸模型，就能知道在不同次方的多項式迴歸模型中，誰的預測效果最好</li></ul><p><br></p><p><strong>程式碼範例</strong></p><pre class="ql-syntax">## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入繪圖套件
+import matplotlib.pyplot as plt
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+## 導入多項式套件，建構多項式迴歸模型所需的套件
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+## 導入區分訓練集與測試集套件
+from sklearn.model_selection import train_test_split
+​
+## 創建數據集
+learning_hours = [1,2,7,8,18,26,28,32,35,37,39,41,44,50,58]
+salary = [28000, 46000, 56000, 68000, 62000, 74000, 60000, 85000, 98000, 80000, 86000, 93000, 170000,200000, 280000]
+plt.scatter(learning_hours, salary)
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+## 組合成DataFrame格式
+data_dict = {'Hours': learning_hours, 'Salary': salary}
+df = pd.DataFrame(data_dict)
+## X = pd.DataFrame(df.iloc[:,0])
+## y = pd.DataFrame(df.iloc[:,1])
+X = df[['Hours']]
+y = df[['Salary']]
+​
+​
+​
+## 訓練不同次方多項式的迴歸模型
+​
+## 裝不同次方多項式的分數
+scores = []
+## 設定欲實驗的次方項與指定不同顏色
+colors = ['gold', 'yellow', 'red', 'blue', 'purple', 'pink', 'black', 'orange']
+polynomial_degree = [1,2,3,4,5,6,7,8]
+​
+for index, num in enumerate(polynomial_degree):
+  
+  ## 訓練多項式迴歸模型
+  regressor = make_pipeline(PolynomialFeatures(num), LinearRegression())
+  regressor.fit(X,y)
+  ## 裝進精準度
+  scores.append(regressor.score(X,y))
+  ## 視覺化多項式迴歸模型線
+  plt.plot(X, regressor.predict(X), color = colors[index], label = 'Polynomial Degree ' + str(polynomial_degree[index]))
+  
+## 繪製數據集資料點
+plt.scatter(X,y)
+plt.legend()
+plt.show()
+  
+## 印出分數
+for i in range(len(scores)):
+  print('Polynomial Degree ' + str(i+1) + ' Score: ' + str(scores[i]))
+</pre><p><strong>執行結果</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.webp" onerror="this.srcset='https://assets.matters.news/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.png" onerror="this.srcset='https://assets.matters.news/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.webp">
+
+        <img src="https://assets.matters.news/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.png" srcset="https://assets.matters.news/processed/540w/embed/64a0824c-28c0-4ad7-8144-e98c2dcf52b0.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h2><strong>8. 多元迴歸 Multivariable Regression</strong></h2><h2><strong> </strong></h2><ul><li>多元迴歸模型用來處理當特徵值超過一個的時候，也就是當多個自變數（特徵）同時影響應變數（預測目標）的時候，所以下面的數據集中，除了原本的"learning_hours"與"salary"，我新增加了一個年資的特徵資料進入到數據集中</li></ul><p><br></p><p><strong>公式:</strong></p><pre class="ql-syntax">y(x) = W_1 x_1 + W_2 x_2 + … + W_n x_n
+</pre><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.webp" onerror="this.srcset='https://assets.matters.news/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.png" onerror="this.srcset='https://assets.matters.news/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.webp">
+
+        <img src="https://assets.matters.news/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.png" srcset="https://assets.matters.news/processed/540w/embed/b33397e1-c1c0-426c-8d89-79f7260d04af.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><ul><li>程式碼範例</li></ul><pre class="ql-syntax">## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入繪圖套件
+import matplotlib.pyplot as plt
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+## 導入多項式套件，建構多項式迴歸模型所需的套件
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+## 導入區分訓練集與測試集套件
+from sklearn.model_selection import train_test_split
+​
+## 創建數據集，多增加一個年資的特徵進入到數據集中
+learning_hours = [1,2,7,8,18,26,28,32,35,37,39,41,44,50,58]
+salary = [28000, 46000, 56000, 68000, 62000, 74000, 60000, 85000, 98000, 80000, 86000, 93000, 170000,200000, 280000]
+years = [1,3,4,5,2,4,5,6,10,5,7,6,2,18,10]
+​
+​
+## 組合成DataFrame格式
+data_dict = {'Hours': learning_hours, 'Years': years, 'Salary': salary}
+df = pd.DataFrame(data_dict)
+## X = pd.DataFrame(df.iloc[:,0])
+## y = pd.DataFrame(df.iloc[:,1])
+X = df[['Hours','Years']]
+y = df[['Salary']]
+​
+​
+## 訓練多元迴歸模型
+regressor = LinearRegression()
+regressor.fit(X,y)
+​
+## 瞭解迴歸模型的精準度(準確度)
+accuracy = regressor.score(X,y)
+print('Score: ', accuracy)
+print('Accuracy: ' + str(accuracy * 100) + '%')
+​
+## 拿訓練好的多元迴歸模型來預測數據集
+y_pred = regressor.predict(X)
+print('Predict: ')
+print(y)
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Score: 0.6842196374201702
+Accuracy: 68.42196374201703%
+Predict: 
+ Salary
+0 28000
+1 46000
+2 56000
+3 68000
+4 62000
+5 74000
+6 60000
+7 85000
+8 98000
+9 80000
+10 86000
+11 93000
+12 170000
+13 200000
+14 280000
+</pre><h2><br></h2><h2><br></h2><p><strong>9. Lasso Regression(L1) & Ridge Regression(L2) </strong></p><p>避免過度擬和的方法 在上一篇對迴歸模型的原理介紹時，有講到兩個能夠降低過度擬和的方法 - Lasso Regression(L1) & Ridge Regression(L2)，在Sklearn的實作上非常方便，就是把我們前面用來建構迴歸模型的函數LinearRegression()改成Lasso()與Ridge()就好囉</p><p><strong>解決的方法其實就是提供一個懲罰機制，來降低特徵數的使用量，以降低過度擬和的問題，這樣的方法稱為正規化</strong>，如下兩個方法：</p><h4><strong>Lasso() 與 Ridge() 參數介紹： </strong></h4><ul><li>alpha : 懲罰係數，預設為1，傳入的值越大，表示懲罰項越大，越能避免過度擬和，但太大的值會偏離真實的數據資料狀況</li></ul><p><br></p><h4><strong>1. Lasso Regression(L1) </strong></h4><ul><li>LinearRegression()改成Lasso()</li></ul><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.webp" onerror="this.srcset='https://assets.matters.news/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.png" onerror="this.srcset='https://assets.matters.news/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.webp">
+
+        <img src="https://assets.matters.news/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.png" srcset="https://assets.matters.news/processed/540w/embed/ec768ec9-cab1-4250-bca2-c9565e24412e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><pre class="ql-syntax">## 訓練與建構迴歸模型
+from sklearn.linear_model import Lasso
+regressor = Lasso()
+regressor.fit(X_train, y_train)
+</pre><ul><li>完整程式碼</li></ul><pre class="ql-syntax">## 導入所需的套件
+## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入視覺化套件
+import matplotlib.pyplot as plt
+## 導入Sklearn套件
+## 導入將數據集拆成訓練集與測試集的套件
+from sklearn.model_selection import train_test_split
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+​
+## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+​
+## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+​
+## 訓練與建構迴歸模型
+from sklearn.linear_model import Lasso
+regressor = Lasso()
+regressor.fit(X_train, y_train)
+​
+​
+## 計算出截距值與係數值
+w_0 = regressor.intercept_
+w_1 = regressor.coef_
+​
+print('Interception : ', w_0)
+print('Coeficient : ', w_1)
+​
+## 迴歸模型的準確度
+score = regressor.score(X_test, y_test)
+print('Score: ', score)
+print('Accuracy: ' + str(score*100) + '%')
+​
+​
+​
+## 拿訓練好的迴歸模型預測測試集資料的目標值(依變數)
+y_pred = regressor.predict(X_test)
+​
+print('Predict : ', y_pred)
+​
+## 視覺化迴歸模型與訓練集的關聯
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 視覺化迴歸模型與測試集的關聯
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Interception : 5969.014421464875
+Coeficient : [26828.01718904]
+Score: 0.8301573368137914
+Accuracy: 83.01573368137915%
+Predict : [242055.565685 239372.76396609 279614.78974965 199130.73818254
+ 107915.47973981 46211.04020502 234007.16052829 306442.80693869
+ 164254.31583679 333270.82412773 62307.85051844 105232.6780209
+ 215227.54849596 268883.58287403 228641.55709048 271566.38459294
+ 252786.77256061 86453.06598858]
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/fbb8d2c1-aa13-428b-b084-898e11044390.webp" onerror="this.srcset='https://assets.matters.news/embed/fbb8d2c1-aa13-428b-b084-898e11044390.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/fbb8d2c1-aa13-428b-b084-898e11044390.png" onerror="this.srcset='https://assets.matters.news/embed/fbb8d2c1-aa13-428b-b084-898e11044390.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/fbb8d2c1-aa13-428b-b084-898e11044390.webp">
+
+        <img src="https://assets.matters.news/embed/fbb8d2c1-aa13-428b-b084-898e11044390.png" srcset="https://assets.matters.news/processed/540w/embed/fbb8d2c1-aa13-428b-b084-898e11044390.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h4><strong>2. Ridge Regression(L2)</strong></h4><h4><strong> </strong></h4><ul><li>LinearRegression()改成Ridge()</li></ul><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.webp" onerror="this.srcset='https://assets.matters.news/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.png" onerror="this.srcset='https://assets.matters.news/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.webp">
+
+        <img src="https://assets.matters.news/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.png" srcset="https://assets.matters.news/processed/540w/embed/f6b83ca5-3806-45f0-b816-c5b76f14c7c4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><pre class="ql-syntax">## 訓練與建構迴歸模型
+from sklearn.linear_model import Ridge
+regressor = Ridge()
+regressor.fit(X_train, y_train)
+</pre><ul><li>完整程式碼</li></ul><pre class="ql-syntax">## 導入所需的套件
+## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入視覺化套件
+import matplotlib.pyplot as plt
+## 導入Sklearn套件
+## 導入將數據集拆成訓練集與測試集的套件
+from sklearn.model_selection import train_test_split
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+​
+## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+​
+## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+​
+## 訓練與建構迴歸模型
+from sklearn.linear_model import Ridge
+regressor = Ridge()
+regressor.fit(X_train, y_train)
+​
+​
+## 計算出截距值與係數值
+w_0 = regressor.intercept_
+w_1 = regressor.coef_
+​
+print('Interception : ', w_0)
+print('Coeficient : ', w_1)
+​
+## 迴歸模型的準確度
+score = regressor.score(X_test, y_test)
+print('Score: ', score)
+print('Accuracy: ' + str(score*100) + '%')
+​
+​
+​
+## 拿訓練好的迴歸模型預測測試集資料的目標值(依變數)
+y_pred = regressor.predict(X_test)
+​
+print('Predict : ', y_pred)
+​
+## 視覺化迴歸模型與訓練集的關聯
+plt.scatter(X_train, y_train, color = 'red')
+plt.plot(X_train, regressor.predict(X_train), color = 'blue')
+plt.title('Salary vs Learning Hours (trainning set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+​
+## 視覺化迴歸模型與測試集的關聯
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, regressor.predict(X_test), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Interception : 6274.9293725239695
+Coeficient : [26789.23240919]
+Score: 0.8297980873601309
+Accuracy: 82.9798087360131%
+Predict : [242020.17457338 239341.25133247 279525.09994625 199157.40271868
+ 108074.01252744 46458.77798631 233983.40485063 306314.33235544
+ 164331.40058674 333103.56476463 62532.31743182 105395.08928652
+ 215230.9421642 268809.40698257 228625.55836879 271488.33022349
+ 252735.86753706 86642.62660009]
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.webp" onerror="this.srcset='https://assets.matters.news/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.png" onerror="this.srcset='https://assets.matters.news/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.webp">
+
+        <img src="https://assets.matters.news/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.png" srcset="https://assets.matters.news/processed/540w/embed/584d6117-8ec7-4eaa-b6b2-d012a839d68e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h4><strong>3. 應用於多項式的迴歸模型 </strong></h4><ul><li>以Lasso為例：LinearRegression()改成Lasso()</li></ul><pre class="ql-syntax">## 訓練多項式迴歸模型
+regressor = make_pipeline(PolynomialFeatures(4), Lasso())
+regressor.fit(X,y)
+</pre><ul><li>完整程式碼</li></ul><pre class="ql-syntax">## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+## 導入繪圖套件
+import matplotlib.pyplot as plt
+## 導入迴歸模型套件
+from sklearn.linear_model import LinearRegression
+## 導入多項式套件，建構多項式迴歸模型所需的套件
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+## 導入區分訓練集與測試集套件
+from sklearn.model_selection import train_test_split
+​
+## 創建數據集
+learning_hours = [1,2,7,8,18,26,28,32,35,37,39,41,44,50,58]
+salary = [28000, 46000, 56000, 68000, 62000, 74000, 60000, 85000, 98000, 80000, 86000, 93000, 170000,200000, 280000]
+plt.scatter(learning_hours, salary)
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+​
+## 組合成DataFrame格式
+data_dict = {'Hours': learning_hours, 'Salary': salary}
+df = pd.DataFrame(data_dict)
+## X = pd.DataFrame(df.iloc[:,0])
+## y = pd.DataFrame(df.iloc[:,1])
+X = df[['Hours']]
+y = df[['Salary']]
+​
+## 訓練多項式迴歸模型
+regressor = make_pipeline(PolynomialFeatures(4), Lasso())
+regressor.fit(X,y)
+​
+## 視覺化
+plt.scatter(X,y)
+plt.plot(X, regressor.predict(X), color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><p><strong>執行結果</strong></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b59fab81-8960-4c5c-a782-4743da228b56.webp" onerror="this.srcset='https://assets.matters.news/embed/b59fab81-8960-4c5c-a782-4743da228b56.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b59fab81-8960-4c5c-a782-4743da228b56.png" onerror="this.srcset='https://assets.matters.news/embed/b59fab81-8960-4c5c-a782-4743da228b56.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b59fab81-8960-4c5c-a782-4743da228b56.webp">
+
+        <img src="https://assets.matters.news/embed/b59fab81-8960-4c5c-a782-4743da228b56.png" srcset="https://assets.matters.news/processed/540w/embed/b59fab81-8960-4c5c-a782-4743da228b56.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><h2><strong>10. 自行寫一個梯度下降（Gradient Decent）來實現迴歸模型預測 </strong></h2><p><br></p><p><strong>前言</strong></p><p>前面的例子中都是直接使用強大的Sklearn裡的套件來實作迴歸模型，這邊我要分享大家一個不使用Sklearn套件，而是自行用程式來撰寫公式計算過程的方法</p><p><br></p><p><strong>程式碼範例：實作迴歸模型</strong></p><pre class="ql-syntax">## 參數
+##學習率(Learning Rate): alpha值
+alpha = 0.0001
+## 訓練迴歸模型的迭代次數
+trainning_repeats = 2000
+​
+## 初始化變數
+## 截距與係數值 (Interception & Coeficient)
+w0 = 0
+w1 = 0
+## 誤差 (實際值與預測值的誤差)
+errors = []
+​
+## 訓練模型
+for j in range(trainning_repeats):
+  
+  ## 最小平方值(誤差平方相加)
+  squared_error_sum = 0
+  
+  ## 微分過後的成本函數(Cost Function)
+  error_sum_x = 0
+  error_sum = 0
+  
+  for i in range(len(X_train)):
+    ## 預測公式: 簡單線性迴歸公式 y = w0 + w1x
+    predict = w0 + (X_train[i] * w1)
+    
+    ## 最小平方法 計算成本函數(Cost Function), 或稱損失函數(Loss Function)
+    squared_error_sum = squared_error_sum + (y_train - predict)**2
+    
+    ## 計算微分過後的成本函數(Cost Function)
+    error_sum = error_sum + y_train[i] - predict
+    error_sum_x = error_sum_x + (y_train[i] - predict) * X_train[i]
+    
+  ## 實現梯度下降(Gradient Descent)的方法
+  ## 更新權重值 將原本的權重值 + 學習率 * 微分過後的成本函數(Cost Function)
+  w0 = w0 + (alpha * error_sum)
+  w1 = w1 + (alpha * error_sum_x)
+  errors.append(squared_error_sum / len(X_train))
+  
+  
+## 印出權重值
+print('Interception: ', w0)
+print('Coeficient: ', w1)
+# print('每個數據點的誤差值: ', errors)
+​
+## 拿訓練好的模型來進行預測
+predicts_y = []
+mean_error = 0
+for i in range(len(X_test)):
+  
+  ## 預測公式: 簡單線性迴歸公式 y = w0 + w1x
+  predict = w0 + (X_test[i] * w1)
+  predicts_y.append(predict)
+</pre><p><strong>完整程式碼</strong></p><pre class="ql-syntax">## 導入Python數據處理套件
+import numpy as np
+import pandas as pd
+​
+​
+## 導入數據集
+dataset = pd.read_csv("data/linear_regression_dataset_sample.csv")
+X = dataset.iloc[:, 1].values.reshape(-1,1)
+y = dataset.iloc[:,2].values
+​
+## 將數據集拆成訓練集與測試集
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 0)
+​
+​
+## 參數
+##學習率(Learning Rate): alpha值
+alpha = 0.0001
+## 訓練迴歸模型的迭代次數
+trainning_repeats = 2000
+​
+## 初始化變數
+## 截距與係數值 (Interception & Coeficient)
+w0 = 0
+w1 = 0
+## 誤差 (實際值與預測值的誤差)
+errors = []
+​
+## 訓練模型
+for j in range(trainning_repeats):
+  
+  ## 最小平方值(誤差平方相加)
+  squared_error_sum = 0
+  
+  ## 微分過後的成本函數(Cost Function)
+  error_sum_x = 0
+  error_sum = 0
+  
+  for i in range(len(X_train)):
+    ## 預測公式: 簡單線性迴歸公式 y = w0 + w1x
+    predict = w0 + (X_train[i] * w1)
+    
+    ## 最小平方法 計算成本函數(Cost Function), 或稱損失函數(Loss Function)
+    squared_error_sum = squared_error_sum + (y_train - predict)**2
+    
+    ## 計算微分過後的成本函數(Cost Function)
+    error_sum = error_sum + y_train[i] - predict
+    error_sum_x = error_sum_x + (y_train[i] - predict) * X_train[i]
+    
+  ## 實現梯度下降(Gradient Descent)的方法
+  ## 更新權重值 將原本的權重值 + 學習率 * 微分過後的成本函數(Cost Function)
+  w0 = w0 + (alpha * error_sum)
+  w1 = w1 + (alpha * error_sum_x)
+  errors.append(squared_error_sum / len(X_train))
+  
+  
+## 印出權重值
+print('Interception: ', w0)
+print('Coeficient: ', w1)
+# print('每個數據點的誤差值: ', errors)
+​
+## 拿訓練好的模型來進行預測
+predicts_y = []
+mean_error = 0
+for i in range(len(X_test)):
+  
+  ## 預測公式: 簡單線性迴歸公式 y = w0 + w1x
+  predict = w0 + (X_test[i] * w1)
+  predicts_y.append(predict)
+​
+  
+## 視覺化
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, predicts_y, color = 'blue')
+plt.title('Salary vs Learning Hours (test set)')
+plt.xlabel("Hours of Learning per Month")
+plt.ylabel("Salary")
+plt.show()
+</pre><p><strong>執行結果</strong></p><pre class="ql-syntax">Interception: [5383.65220318]
+Coeficient: [26886.29633745]
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.webp" onerror="this.srcset='https://assets.matters.news/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.png" onerror="this.srcset='https://assets.matters.news/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.webp">
+
+        <img src="https://assets.matters.news/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.png" srcset="https://assets.matters.news/processed/540w/embed/2fcfe75c-76ef-4bd0-8a40-5d0d2b983c48.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><p><strong>大家可以調整學習率(Learning Rate)，也就是alpha值，與訓練迴歸模型的次數，也就是repeat值，來調整訓練出來的迴歸模型，傳入不同的值，預測效果也會跟著不同喔！！</strong></p><p><br></p><p><br></p><p><strong>Yeah~~有了第一篇文章對迴歸模型的觀念與原理理解，再來加上這篇學的實作能力，現在大家就可以拿拿手邊的數據集來訓練迴歸模型了，也能夠預測一些真實的情況了，機器學習超酷對吧，希望這篇有幫助到您～～</strong></p><h2><br></h2><h2><br></h2><p><strong>Reference</strong></p><p><a href="https://pyecontech.com/2019/12/28/python-%E5%AF%A6%E4%BD%9C-%E8%BF%B4%E6%AD%B8%E6%A8%A1%E5%9E%8B/" target="_blank">https://pyecontech.com/2019/12/28/python-實作-迴歸模型/</a></p><p><a href="https://sckit-learn.org/stable/modules/linear_model.html#" target="_blank">https://sckit-learn.org/stable/modules/linear_model.html#</a></p><p><a href="https://yltang.net/tutorial/dsml/13/" target="_blank">https://yltang.net/tutorial/dsml/13/</a></p><p><a href="https://kknews.cc/zh-tw/tech/4kkoqog.html" target="_blank">https://kknews.cc/zh-tw/tech/4kkoqog.html</a></p><p><a href="https://www.itread01.com/content/1546306589.html" target="_blank">https://www.itread01.com/content/1546306589.html</a></p><p><a href="https://ithelp.ithome.com.tw/articles/10187739" target="_blank">https://ithelp.ithome.com.tw/articles/10187739</a></p>
