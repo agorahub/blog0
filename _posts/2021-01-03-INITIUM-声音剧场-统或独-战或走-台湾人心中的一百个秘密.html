@@ -1,0 +1,172 @@
+---
+layout: post
+title: "【声音剧场】统或独？战或走？台湾人心中的一百个秘密"
+date: 2021-01-03 19:10:00.000000000 +00:00
+categories: initium
+tags: blog
+author: 
+---
+
+<p>「这是一场直球对决的真心话大冒险，八成的参与者都选择先隐去姓名才愿意回答。」</p>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="《端傳媒》採訪 35 位台灣人，提出三個政治提問——統獨、戰爭和中華民國——因為容易引發爭議，平時許多台灣人不願輕易向外人暢談的話題。這次我們以聲音媒材的方式，讓你聽見台灣人藏在心中，關於國家、認同與戰爭的回憶與秘密。">
+    <meta property="fb:app_id" content>
+    <meta property="og:title" content="【聲音劇場】統或獨？戰或走？台灣人心中的一百個祕密｜端傳媒 Initium Media">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://theinitium.com/project/20210104-taiwan-my-hometown-my-secrets">
+    <meta property="og:image" content="https://theinitium.com/project/20210104-taiwan-my-hometown-my-secrets/img/thumb.jpg">
+    <meta property="og:image:alt" content="【聲音劇場】統或獨？戰或走？台灣人心中的一百個祕密｜端傳媒 Initium Media">
+    <meta property="og:site_name" content="【聲音劇場】統或獨？戰或走？台灣人心中的一百個祕密｜端傳媒 Initium Media">
+    <meta property="og:description" content="《端傳媒》採訪 35 位台灣人，提出三個政治提問——統獨、戰爭和中華民國——因為容易引發爭議，平時許多台灣人不願輕易向外人暢談的話題。這次我們以聲音媒材的方式，讓你聽見台灣人藏在心中，關於國家、認同與戰爭的回憶與秘密。">
+    <title>【聲音劇場】統或獨？戰或走？台灣人心中的一百個祕密｜端傳媒 Initium Media</title>
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="stylesheet" href="css/app.min.css">
+  
+  
+    <div id="wrapper">
+      <nav id="nav">
+        <div class="container"></div>
+      </nav>
+      <main class="index" id="main">
+        <section class="loading">
+          <div class="logo"><a href="https://theinitium.com/"></a></div>
+          <div class="share"><a class="facebook" href="https://www.facebook.com/sharer.php?u=https%3A%2F%2Ftheinitium.com%2Fproject%2F20210104-taiwan-my-hometown-my-secrets/" target="_blank"></a><a class="twitter" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftheinitium.com%2Fproject%2F20210104-taiwan-my-hometown-my-secrets/" target="_blank"></a></div>
+          <div class="container">
+            <h1>統一或獨立？戰爭或逃兵？台灣人心底的100個秘密</h1>
+            <p>本頁面以聲音體驗為主<br>將自動播放採訪聲音檔案</p>
+          </div>
+          <div class="tips"><span>scroll down</span></div>
+        </section>
+        <div class="stage">
+          <div class="scene z-0">
+            <section class="puppets" @mousemove="hozMove" ref="puppets">
+              <div class="container">
+                <div class="group" v-for="(group, key) in puppetsGroup" :key="key" :class="`group-${question}-${key}`">
+                  <div class="title">
+                    <h4>{{key | filterName}}</h4>
+                  </div>
+                  <div class="puppet" v-for="(puppet, key) in group" :key="key" :id="`puppet-${puppet.gsx$uuid.$t}`">
+                    <figure v-on:click="kickPuppet(puppet.gsx$uuid.$t)"></figure>
+                    <div class="info">{{puppet.gsx$name.$t}}</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <div class="egg">
+              <div class="container">
+                <div class="text">
+                  <div class="content" v-html="player.egg" ref="eggContent"></div>
+                  <div class="buttons">
+                    <button class="btn close" v-on:click="audioStop"><span class="icon"></span></button>
+                  </div>
+                </div>
+                <div class="puppet" :id="`puppet-${player.id}`">
+                  <figure></figure>
+                </div>
+              </div>
+            </div>
+            <div class="player">
+              <div class="puppet" :id="`puppet-${player.id}`">
+                <figure></figure>
+              </div>
+              <div class="lyrics">
+                <div class="text">
+                  <p>{{player.lyrics}}</p>
+                </div>
+              </div>
+              <div class="tool">
+                <button class="btn play" v-show="player.state === 'pause'" v-on:click="audioPlay"><span class="icon"></span></button>
+                <button class="btn pause" v-show="player.state === 'play'" v-on:click="audioPause"><span class="icon"></span></button>
+                <button class="btn stop" v-on:click="audioStop"><span class="icon"></span></button>
+              </div>
+            </div>
+          </div>
+          <div class="scene z-6">
+            <section class="intro">
+              <div class="container intro-1">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-md-10 col-lg-8">
+                    <p>2020年，全球被疫情籠罩，台灣因防疫成功、台美關係升溫，集體認同快速凝聚，形成以「台灣」為名的政治共同體。同時，幾份民調也顯示，「我是台灣人」認同度創史上新高，以及若遭遇武力攻擊，願意上戰場的民眾也高達八成。</p>
+                    <p>然而，「台灣」代表的意義為何？一百個台灣人，或許有一百種答案。為了解讀民調後的台灣心聲，《端傳媒》採訪 35 位台灣人，提出三個政治提問——統獨、戰爭和中華民國——因為容易引發爭議，平時許多台灣人不願輕易向外人暢談的話題。這次我們以聲音媒材的方式，讓你聽見台灣人藏在心中，關於國家、認同與戰爭的回憶與秘密。</p>
+                  </div>
+                </div>
+              </div>
+              <div class="container intro-2">
+                <h3>操作說明</h3>
+                <div class="row d-none d-lg-flex align-items-end">
+                  <div class="col-4">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-1.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                  <div class="col-4">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-2.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                  <div class="col-4">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-3.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                </div>
+                <div class="row d-lg-none align-items-end">
+                  <div class="col-6">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-1-m.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                  <div class="col-6">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-2-m.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                  <div class="col-6">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-3-m.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                  <div class="col-6">
+                    <figure><img class="img-fluid" src="https://theinitium.com/article/20210104-taiwan-my-hometown-my-secrets/img/exp-4-m.svg" referrerpolicy="no-referrer"></figure>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="scene z-5 pointer-events-none">
+            <section class="question independent">
+              <div class="title">
+                <h3>你支持統一還是獨立？</h3>
+              </div>
+            </section>
+          </div>
+          <div class="scene z-4 pointer-events-none">
+            <section class="question wars">
+              <div class="title">
+                <h3>如果發生戰爭，你願意上戰場嗎？</h3>
+              </div>
+            </section>
+          </div>
+          <div class="scene z-3 pointer-events-none">
+            <section class="question flag">
+              <div class="title">
+                <h3>你願意拿中華民國國旗嗎？</h3>
+              </div>
+            </section>
+          </div>
+          <div class="scene z-2 pointer-events-none"></div>
+        </div>
+        <section class="credit">
+          <div class="container">
+            <div class="puppet">
+              <figure></figure>
+              <div class="info">網站工程｜Elk Liang<br>設計｜Tseng Lee、郭瑾燁<br>記者｜何欣潔、陳莉雅、李易安<br>監製｜陳莉雅</div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer id="footer">
+        <div class="member">
+          <div class="container">
+            <div class="title">
+              <h3>加入端傳媒，支持好新聞</h3>
+              <p>用你選擇的媒體，決定你看見的世界</p>
+            </div>
+            <div class="button"><a href="https://theinitium.com/subscription/offers/?&utm_source=initium&utm_medium=initium&utm_campaign=initium_project" target="_blank">付費支持</a></div>
+          </div>
+        </div>
+        <div class="copyright">
+          <div class="container"><span>©2020 Initium Media. All Rights Reserved.</span></div>
+        </div>
+      </footer>
+    </div>
