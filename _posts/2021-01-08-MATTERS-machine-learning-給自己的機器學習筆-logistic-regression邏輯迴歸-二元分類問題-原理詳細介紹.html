@@ -1,0 +1,90 @@
+---
+layout: post
+title: Machine Learning - 給自己的機器學習筆 - Logistic Regression邏輯迴歸 - 二元分類問題 - 原理詳細介紹
+date: 2021-01-08 12:01:49.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><p><a href="https://github.com/chwang12341/Machine-Learning/blob/master/Logistic_Regression/Logistic_Theory.md" target="_blank">Github連結</a></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.webp" onerror="this.srcset='https://assets.matters.news/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.jpeg" onerror="this.srcset='https://assets.matters.news/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.webp">
+
+        <img src="https://assets.matters.news/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.jpeg" srcset="https://assets.matters.news/processed/540w/embed/3d7f0f47-48ea-48cd-bf96-8a8149acda33.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：Josh Sorenson，連結：Pexels</span></figcaption></figure><p><br></p><h2><strong>1. 邏輯迴歸 Logistic Regression 是什麼?</strong></h2><p><br></p><ul><li>目的: 處理二元分類問題的方式子，也就是Yes or No的二元問題少年，它屬於線性分類器的一種</li><li>舉例:</li><li>我會不會錄取</li><li>公司會不會上市</li><li>他會不會參加</li><li>股票會不會漲</li><li>優缺點:</li><li>優點: 容易理解與實作，計算成本不高</li><li>缺點: 分類的準確度不高興，容易產生低度擬和的問題</li></ul><h2><br></h2><h2><strong>2. Logistic Regression 與 Linear Regression 的區別? 迴歸可以用在分類問題?</strong></h2><p>一般的狀況來說快，迴歸與分類是兩種不同的分類預測方式子，迴歸屬於連續型的模型，也就是說迴歸一般不會用在分類問題上，但如果硬要使用它來處理分類問題少年，就會使用邏輯迴歸 - Logistic Regression</p><p><strong>處理問題上的區別:</strong></p><ul><li>Linear Regression 線性迴歸屬於連續型的模型值，也就是預測一個連續的應變數</li><li>Logistic Regression 邏輯迴歸使迴歸可以用來處理二元分類問題</li></ul><p><strong>建立迴歸方程式的區別</strong></p><ul><li>Linear Regression 線性迴歸使用特徵對目標直接建立迴歸方程式</li><li>Logistic Regression邏輯迴歸對勝算比(Odds Ratio)，也就是對與不對的比率，取對數log來建立迴歸方程式</li></ul><h2><br></h2><h2><strong>3. Logistic Regression原理</strong></h2><h3><strong>計算步驟</strong></h3><p>STEP1: 計算Logit(Odds)，勝算比取對數log，產生y值</p><p>STEP2: 經過函數轉換器，像是Sigmoid函數、Arctan(X)等等</p><p>STEP3: 將y值帶入函數轉換公式化，並產生最終結果(介於0~1的數值，> 0.5 表示有勝算比，< 0.5 表示沒勝算)比，大於50%機率的會被預測為1，小於50%會被預測為0</p><h3><strong>如何計算Logit(Odds)?</strong></h3><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.webp" onerror="this.srcset='https://assets.matters.news/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.png" onerror="this.srcset='https://assets.matters.news/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.webp">
+
+        <img src="https://assets.matters.news/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.png" srcset="https://assets.matters.news/processed/540w/embed/f4b8f199-385a-4890-b0de-25b5bfea9b5e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p>Odds : 勝算比</p><p>logit : 取對數</p><p>p : 發生的機率</p><p><strong>重要提醒</strong></p><p>公式的右邊是我另一篇介紹關於Linear Regression裡面的Simple Linear Regression簡單線性迴歸公式化，當然還有Polynomial Regression多項式迴歸、Multivariable Regression多元迴歸等等的公式可以使用，大家可以根據需求調整右邊的迴歸公式喔</p><h3><br></h3><h3><strong>函數轉換與產生最終的結果</strong></h3><h4><strong>1. 函數轉換的目的</strong></h4><p>Logit(Odds)計算出來的結果不一定會介於0~1之間，但是機率不可能小於0，也一定不會大於100%，所以我們要透過函數轉換來將Logit(Odds)計算出來的值轉換成0~1之間的值</p><h4><strong>2. Sigmoid Function</strong></h4><p>公式計算</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.webp" onerror="this.srcset='https://assets.matters.news/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.png" onerror="this.srcset='https://assets.matters.news/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.webp">
+
+        <img src="https://assets.matters.news/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.png" srcset="https://assets.matters.news/processed/540w/embed/a5e5d339-dd84-42d9-9e23-6e351fb63a92.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>產生的結果</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.webp" onerror="this.srcset='https://assets.matters.news/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.png" onerror="this.srcset='https://assets.matters.news/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.webp">
+
+        <img src="https://assets.matters.news/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.png" srcset="https://assets.matters.news/processed/540w/embed/b1fc5da3-dfed-4c4e-8685-297fc2582465.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>3. Arctan(X)</strong></h4><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.webp" onerror="this.srcset='https://assets.matters.news/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.png" onerror="this.srcset='https://assets.matters.news/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.webp">
+
+        <img src="https://assets.matters.news/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.png" srcset="https://assets.matters.news/processed/540w/embed/e0d239da-a943-46f0-8787-4f7ad412ef50.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>4. 轉換函數的選擇</strong></h4><p>符合條件</p><ul><li>遞增</li><li>計算出來的值介於0~1之間</li><li>中間遞增的斜率要盡量大(目的是讓機率趨近於0%或100%)</li></ul><p>只要滿足上面的條件，就能當成轉換函數使用，當然預測效果的好壞就要透過實驗才知道囉</p><h3><br></h3><h3><strong>4. 實際舉例</strong></h3><ul><li>數據集介紹</li></ul><p>這邊有一組我自行捏造的數據集，說明了學生花在小考上的讀書時間與最終是否通過考試的數據</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.webp" onerror="this.srcset='https://assets.matters.news/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.png" onerror="this.srcset='https://assets.matters.news/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.webp">
+
+        <img src="https://assets.matters.news/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.png" srcset="https://assets.matters.news/processed/540w/embed/d047034d-4f3b-4dc0-8450-2b6d4faa0022.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>計算Logit(Odds)</li></ul><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.webp" onerror="this.srcset='https://assets.matters.news/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.png" onerror="this.srcset='https://assets.matters.news/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.webp">
+
+        <img src="https://assets.matters.news/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.png" srcset="https://assets.matters.news/processed/540w/embed/6ac5e9ee-e6ae-45a0-9781-f708abf971b1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>經過Sigmoid轉換</li></ul><p>將logit(Odds)結果帶入Sigmoid函數</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.webp" onerror="this.srcset='https://assets.matters.news/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.png" onerror="this.srcset='https://assets.matters.news/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.webp">
+
+        <img src="https://assets.matters.news/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.png" srcset="https://assets.matters.news/processed/540w/embed/44cf088d-f797-4fad-9b18-2264f0a15db7.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>結果</li></ul><p>計算出介於0~1之間的機率值，大於50%的機率會被預測為1，也就是有通過小考上，小於50%的預測為0，也就是沒有通過小考</p><h2><br></h2><h2><br></h2><h2><strong>5. 邏輯迴歸 Logistic Regression 可以實現多元分類嗎?</strong></h2><ul><li>邏輯迴歸 Logistic Regression 主要處理二元分類問題，但如果真的想處理多元分類問題，可以結合多個二元分類的邏輯迴歸模型達成</li><li>其實簡單來說就是，假設我們數據集有N個類別，我們先將A類當成一類，其餘所有類別當成一類，以此類推薦，綜合這些倆倆分類問題，就能實現多元分類</li></ul><h2><br></h2><h2><br></h2><h2><strong>結論</strong></h2><p>邏輯迴歸 Logistic Regression 屬於分類器，就是計算數據的Odds並取對數後，做線性迴歸一，再經由Sigmoid函數將Logit(Odds)計算出來的值轉換成機率(介於0~1之間的值)，由於這種轉換函數中間是嚴格要求遞增的，所以計算出來的值會趨近於0(0%)或1(100%)，來預測二元分類問題(是與不是)</p><p>學會了邏輯迴歸 Logistic Regression 原理後，我會在下一篇與大家一起學習如何使用Scikit-Learn來實現邏輯迴歸 Logistic Regression</p>
