@@ -1,0 +1,406 @@
+---
+layout: post
+title: 寫給自己的技術筆記 - 作為程式開發者我們絕對不能忽略的JSON - 教學和用法 - 以JavaScript為例 (一)
+date: 2021-01-18 12:34:46.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><p><a href="https://github.com/chwang12341/Other-Tools/blob/master/JSON/part1/JSON1.md" target="_blank">Github連結</a></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.webp" onerror="this.srcset='https://assets.matters.news/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.jpeg" onerror="this.srcset='https://assets.matters.news/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.webp">
+
+        <img src="https://assets.matters.news/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.jpeg" srcset="https://assets.matters.news/processed/540w/embed/6d08d8c1-7dac-4731-9032-2af57b553e3e.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：Sam Kolder，連結：Pexels</span></figcaption></figure><p><br></p><p><br></p><h2><strong>1. JSON 是什麼?</strong></h2><ul><li>JSON 全名為 JavaScript Object Notation，即 JavaScript 對象標記法</li><li>2001年提出</li></ul><p>特性:</p><ul><li>輕量型(Light-Weight): 表示產出的檔案非常小</li><li>基於文本的(Text-Based): 可以使用文本編譯器(ex. 記事本)開啟</li><li>可讀的(Human-Readable)格式: 可以輕鬆被人閱讀</li><li>穩定性(Stability): JSON創始人說 JSON 格式永遠不會改變，也就是說很久以前寫的 JSON 文件，很久以後也能使用，就不會有兼容性的問題</li></ul><p>和 JavaScript 的關聯</p><ul><li>JSON名稱中具有 JavaScript，代表它的語法是參考 JavaScript 對象(Object)的，而不是指它只能用於 JavaScript 語言</li><li>JavaScript 成為網頁上的標準語言，而 JavaScript 的流行，也和 JSON 的流行有著密切相關</li><li>JSON 是參考JavaScript的語法，所以它的語法與JavaScript定義對象的語法幾乎是完全一樣的</li></ul><p>比較XML</p><ul><li>JSON 對於人與機器來說都是非常方便閱讀和寫入的，相比於 XML (可延伸標記式語言，Extensible Markup Language)(屬於另一種常見到的數據交換格式)，JSON的文件更小，也讓它快速成為網路上的交換格式</li></ul><h2><br></h2><h2><br></h2><h2><strong>2. JSON 的語法規則</strong></h2><p><br></p><ul><li>格式範例:</li></ul><pre class="ql-syntax">{
+  "id": 6,
+  "name": "Jack",
+  "score": [98, 60, 76, 80, 99]
+  
+  
+}
+</pre><ul><li>講解</li><li>{}: 對象(object)用大括號表示</li><li>變量: name / value 名稱與其對應的值，名稱用雙引號("")包圍，而值可以是字符串、數值、布林值、null、對象(object)和數組(用[]表示)</li><li>同層數據之間用逗號(,)隔開</li></ul><p><br></p><p><strong>補充: 可以將寫好的 JSON 放到這個網頁中進行轉換(</strong><a href="https://jsoneditoronline.org/#right=local.wepeku" target="_blank"><strong>https://jsoneditoronline.org/#right=local.wepeku</strong></a><strong>)</strong>，它會轉換成更整齊易讀的格式</p><h2><br></h2><h2><strong>3. JSON VS XML (可延伸標記式語言，Extensible Markup Language)</strong></h2><p><br></p><p>同樣都是數據交換格式，相較於XML，JSON 所擁有的優勢:</p><ul><li>較方便就能使用數組(Array)</li><li>並沒有結束標籤(ex. </d>)，整體長度更簡短，讀取與寫入速度更快</li><li>可以直接被 JavaScript解析器解析</li></ul><p>範例:</p><ul><li>JSON</li></ul><pre class="ql-syntax">{
+  "id": 6,
+  "name": "Jack",
+  "score": [98, 60, 76, 80, 99]
+  
+  
+}
+​
+</pre><ul><li>XML</li></ul><pre class="ql-syntax"><root>
+  <id>6</id>
+  <name>Jack</name>
+  <score>98</score>
+  <score>60</score>
+  <score>76</score>
+  <score>80</score>
+  <score>99</score>
+</root>
+</pre><p><br></p><p>這邊就可以很清楚看到XML都需要多加結尾標籤，以及在定義數組上比較麻煩</p><h2><br></h2><h2><br></h2><p><strong>4. JSON 如何解析和生成 (以 JavaScript 為例)</strong></p><ul><li>JSON.parse(): 將 JSON 格式的字符串，解析為 JavaScript 對象(object)</li><li>JSON.stringify() 將 JavaScript 對象(object)，轉換成符合 JSON 格式的字符串</li></ul><pre class="ql-syntax">​
+<script>
+​
+// 符合 JSON 格式的字符串
+var json_str = '{"id": 6, "name": "Jack", "score": [98, 60, 99]}';
+​
+// 轉換成 JavaScript 對象
+var js_obj = JSON.parse(json_str);
+​
+// 輸出JavaScript對象
+console.log("JavaScript Object: ", js_obj)
+​
+// 拿 JavaScript 對象轉換成 JSON格式的字符串
+var str = JSON.stringify(js_obj)
+​
+// 輸出 JSON 格式的字符串
+console.log("JSON Format String: ", str)
+​
+</script>
+​
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.webp" onerror="this.srcset='https://assets.matters.news/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.png" onerror="this.srcset='https://assets.matters.news/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.webp">
+
+        <img src="https://assets.matters.news/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.png" srcset="https://assets.matters.news/processed/540w/embed/51937309-2114-4ce2-a3b2-149a60cbc4bd.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h2><strong>5. JSON 格式規定</strong></h2><p><br></p><p><strong>重要 :</strong> 大家可以使用線上工具(<a href="http://json.cn/" target="_blank">http://json.cn/</a>)來將自己撰寫的 JSON 文件貼上，它會幫助我們檢查是否有格式錯誤</p><p><br></p><h3><strong>1. 對象 Object:</strong></h3><ul><li>整個對象用大括號({})包圍起來，裡面由一系列的"名稱: 值"構成</li><li>每兩筆並列(同層)的數據之間用逗號(,)分隔，最後一個"名稱: 值"後面不需要加逗號</li></ul><h3><br></h3><h3><strong>2. 名稱: 值 Name / Vlaue</strong></h3><ul><li>名稱 name: 為字符串，要用雙引號包起來，切記絕對不能使用單引號或沒有使用任何引號，這方面就和 JavaScript 不同了</li><li>值 value: 能選的類型只有七種 - 字符串(string)、數值(number)、對象(object)、數組(array)、布林值(Boolean: True or False)、空值(null)，除了上述其它類型都不符合規定，像是函數(function)、undefined、八進制數(ex. 066)、十六進制數(ex. 0x66)等等</li></ul><h3><br></h3><h3><strong>3. 字符串 String</strong></h3><ul><li>一定要用英文的雙括號包起來，不能用單引號或沒有引號</li><li>字符串中不能單獨使用一個雙引號("")或是一個右斜槓()</li><li>如果一定要使用單一雙引號或右斜槓，前面就要多加一個右斜槓，像是"和\，當然還有其它的轉義字符也需要這樣</li></ul><h2><br></h2><h2><strong>6. 解析實作 - 以 JavaScript 為例</strong></h2><p><br></p><ul><li>解析: 將符合 JSON 語法格式的字符串轉換成指定對象的過程，指定的對象可以是 JavaScript 對象、Python對象、C對象、Java對象等等</li></ul><h3><br></h3><h3><strong>1. JavaScript 的解析方法</strong></h3><ul><li>JavaScript 的解析方法</li><li>第一種: JSON.parse()</li><li>第二種: eval()</li><li>第三種: 第三方庫，像是JQuery等等</li></ul><h3><br></h3><h3><strong>2. eval() 方法</strong></h3><ul><li>eval()</li><li>函數中的參數為一個字符串，它的作用是直接執行裡面的 JavaScript 程式碼</li><li>可以解析 JSON 字符串</li><li>很少被使用，除非瀏覽器版本很舊</li><li>為一個相對危險的函數，因為直接執行字符串中的程式碼，但字符串中可能含有未知因素導致影響結果</li><li><strong>注意: </strong>使用eval()解析符合 JSON 格式的字符串時，要多加一個括號()把字符串包住，不然會報錯，因為eval()會把它當成程式碼區塊(語句)來執行，所以要在兩旁加上括號，讓它成為表達式</li></ul><p><br></p><p>範例一: 使用eval()解析JavaScript字符串</p><pre class="ql-syntax"><script>
+​
+// 將 JavaScript 程式碼包成字符串
+var js_str = "console.log('Hi Hi')";
+​
+// 使用eval()來解析這個字符串
+eval(js_str)
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.webp" onerror="this.srcset='https://assets.matters.news/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.png" onerror="this.srcset='https://assets.matters.news/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.webp">
+
+        <img src="https://assets.matters.news/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.png" srcset="https://assets.matters.news/processed/540w/embed/ef9cee33-8471-4858-bf7d-3830789d1ff4.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p>範例二: 使用eval()解析符合JSON格式字符串，並轉換成JavaScript對象</p><p><br></p><ul><li><strong>注意: </strong>使用eval解析符合JSON格式字符串時，要多加一個括號()把字符串包住，不然會報錯，因為eval()會把它當成程式碼區塊(語句)來執行，所以要在兩旁加上括號，讓它成為表達式</li></ul><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 符合JSON格式的字符串
+var str = '{"name": "Jack", "score": 99}';
+​
+// 轉成JavaScript對象
+var js_object = eval("(" + str + ")");
+​
+// 印出
+console.log(js_object)
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.webp" onerror="this.srcset='https://assets.matters.news/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.png" onerror="this.srcset='https://assets.matters.news/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.webp">
+
+        <img src="https://assets.matters.news/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.png" srcset="https://assets.matters.news/processed/540w/embed/47b3f55c-4b10-4077-87eb-595da91f3e24.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h3><strong>3. JSON.parse() 方法</strong></h3><p><br></p><p>最常使用的方法</p><p><br></p><p>範例一:</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 符合JSON格式的字符串
+var str = '{"name": "Jack", "score": 99}';
+​
+// 轉成JavaScript對象
+var js_object = JSON.parse(str);
+​
+// 印出
+console.log(js_object);
+​
+</script>
+​
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.webp" onerror="this.srcset='https://assets.matters.news/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.png" onerror="this.srcset='https://assets.matters.news/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.webp">
+
+        <img src="https://assets.matters.news/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.png" srcset="https://assets.matters.news/processed/540w/embed/d0e3c5ba-80af-4405-b09e-ded445c44151.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><strong>進階應用</strong></p><ul><li>JSON.parse() 擁有兩個參數，第一個為我們欲轉換的JSON格式字符串，第二個為一個函數，此函數中有兩個參數: name 和 value</li><li>當於 JSON.parse()中傳入符合 JSON 格式的字符串後，JSON 中的每一組名稱:值(name:value)都會執行(調用)該函數</li><li>該函數會有返回值，返回值會直接賦值給對應的名稱(name)</li><li>使用這個方法，可以在解析符合 JSON 格式字符串的同時，進行一些我們自定義的數據處理</li></ul><p><br></p><p>範例二:</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 符合JSON格式的字符串
+var str = '{"name": "Jack", "score": 99, "class": "A"}';
+​
+// 自定義的函數
+function process(name, value) {
+  console.log(name + "=" + value);
+  return value
+};
+​
+​
+// 轉成JavaScript對象
+var js_object = JSON.parse(str, process);
+​
+// 印出
+console.log(js_object);
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.webp" onerror="this.srcset='https://assets.matters.news/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.png" onerror="this.srcset='https://assets.matters.news/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.webp">
+
+        <img src="https://assets.matters.news/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.png" srcset="https://assets.matters.news/processed/540w/embed/64b1ddb0-03aa-4650-a7f8-aa28ae482f3e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><strong>結果講解:</strong></p><p>= [object Object]: 表示的是整個{"name": "Jack", "score": 99, "class": "A"}'對象，然後它的值(value)為對象本身，而因為它沒有名稱，所以=前面為空</p><p><br></p><p><br></p><p>範例三: 當我想要把名稱為score的都加1</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 符合JSON格式的字符串
+var str = '{"name": "Jack", "score": 99, "class": "A"}';
+​
+// 自定義的函數
+function process(name, value) {
+​
+​
+  if(name == 'score'){
+    value += 1;
+ }
+  return value;
+};
+​
+​
+// 轉成JavaScript對象
+var js_object = JSON.parse(str, process);
+​
+// 印出
+console.log(js_object);
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.webp" onerror="this.srcset='https://assets.matters.news/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.png" onerror="this.srcset='https://assets.matters.news/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.webp">
+
+        <img src="https://assets.matters.news/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.png" srcset="https://assets.matters.news/processed/540w/embed/5b2223b9-e6d3-4155-8c82-d621b95bf5d1.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2><br></h2><p><br></p><p><strong>7. 序列化和反序列化處理過程</strong></p><ul><li>Marshalling / Encoder 序列化: 代表將 JavaScript 的值轉換為 JSON 字符串，使用方法 - JSON.stringify()</li><li>Unmarshalling / Decoder 反序列化: 代表將 JSON 字符串轉換為 JavaScript 值，使用方法 - JSON.parse</li></ul><h2><br></h2><h2><br></h2><p><strong>8. 序列化方法 - JSON.stringify</strong></p><p><br></p><h3><strong>1. JSON.stringify() 參數介紹</strong></h3><pre class="ql-syntax">JSON.stringify(value [, replacer[, space]])
+</pre><ul><li>value: 一定要有的參數，要轉換的 JavaScript 值，一般狀況下為對象(Object)或數組(Array)</li><li>replacer: 可以忽略不用的參數，它有兩種帶入方式: 函數或是數組</li></ul><blockquote>函數: 每一組名稱: 值(name:value)都會執行(調用)這個函數，會返回一個值，作為名稱(name)的對應值(value)，並轉換進結果的字符串裡面</blockquote><blockquote>數組: 規定只有數組中有的名稱(name)才能夠轉換，而且轉換後的順序與數組中的順序會是一樣的</blockquote><ul><li>space: 可以忽略不寫，是為了更好閱讀而存在，能夠在 JSON 字符串中添加空白或制表符等等</li></ul><h3><br></h3><h3><strong>2. value 參數用法</strong></h3><p>範例一:</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 定義 JavaScript 對象
+​
+var js_obj = {
+  name: "Jack",
+  score: "99"
+​
+​
+};
+​
+console.log("JavaScript Object: ", js_obj);
+​
+// 轉換為 JSON 字串
+var json_str = JSON.stringify(js_obj);
+​
+console.log("JSON Format: ", json_str)
+​
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/11fac41b-2520-4122-9863-4b7cc858cf87.webp" onerror="this.srcset='https://assets.matters.news/embed/11fac41b-2520-4122-9863-4b7cc858cf87.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/11fac41b-2520-4122-9863-4b7cc858cf87.png" onerror="this.srcset='https://assets.matters.news/embed/11fac41b-2520-4122-9863-4b7cc858cf87.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/11fac41b-2520-4122-9863-4b7cc858cf87.webp">
+
+        <img src="https://assets.matters.news/embed/11fac41b-2520-4122-9863-4b7cc858cf87.png" srcset="https://assets.matters.news/processed/540w/embed/11fac41b-2520-4122-9863-4b7cc858cf87.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p>範例二: 不符合規則的情況，基本上會被省略</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 定義 JavaScript 對象
+​
+var js_obj = {
+​
+  // 符合語法規則
+  name: "Jack",
+  score: "99",
+​
+  // 不符合語法規則，轉換過程中會被省略
+  class: undefined,
+  run: function r(){
+ },
+​
+  // 不符合語法規則，轉換過程中數組內部會被返回null空值
+  jump: [function() {}]
+​
+};
+​
+console.log("JavaScript Object: ", js_obj);
+​
+// 轉換為 JSON 字串
+var json_str = JSON.stringify(js_obj);
+​
+console.log("JSON Format: ", json_str)
+​
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.webp" onerror="this.srcset='https://assets.matters.news/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.png" onerror="this.srcset='https://assets.matters.news/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.webp">
+
+        <img src="https://assets.matters.news/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.png" srcset="https://assets.matters.news/processed/540w/embed/48573d7c-8c17-433c-adf1-612f9b7fa2b2.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h3><br></h3><h3><strong>3. replacer 參數用法</strong></h3><ul><li>為函數的狀況:</li></ul><p><br></p><p>範例一: 將名稱為"score"的值增加1</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 定義 JavaScript 對象
+​
+var js_obj = {
+  name: "Jack",
+  score: "99"
+​
+​
+};
+​
+console.log("JavaScript Object: ", js_obj);
+​
+​
+// 自行定義函數，將名稱為"score"的值加1
+​
+function add_score(name, value){
+  if (name == 'score'){
+    value += 1
+​
+    
+   };
+  return value
+​
+};
+​
+​
+​
+​
+// 轉換為 JSON 字串
+var json_str = JSON.stringify(js_obj);
+​
+console.log("JSON Format: ", json_str)
+​
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.webp" onerror="this.srcset='https://assets.matters.news/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.png" onerror="this.srcset='https://assets.matters.news/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.webp">
+
+        <img src="https://assets.matters.news/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.png" srcset="https://assets.matters.news/processed/540w/embed/c6bf49a1-4381-4565-b48c-5a9e6c53b8dc.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><ul><li>為數組的情況</li></ul><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 定義 JavaScript 對象
+​
+var js_obj = {
+  'Jack': 99,
+  'Ann': 90,
+  'Ken': 86,
+  'Jen': 75
+};
+​
+console.log("JavaScript Object: ", js_obj);
+​
+// 轉換為 JSON 字串
+var json_str = JSON.stringify(js_obj, ["Jack", "Jen", "Ann"]);
+​
+console.log("JSON Format: ", json_str)
+​
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.webp" onerror="this.srcset='https://assets.matters.news/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.png" onerror="this.srcset='https://assets.matters.news/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.webp">
+
+        <img src="https://assets.matters.news/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.png" srcset="https://assets.matters.news/processed/540w/embed/b2c1c743-f3f7-40a5-ac30-7efc07e38d5f.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h3><strong>4. space 參數用法</strong></h3><p>範例一: 多加一個space參數，寫入"Student"</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 定義 JavaScript 對象
+​
+var js_obj = {
+  'Jack': 99,
+  'Ann': 90,
+  'Ken': 86,
+  'Jen': 75
+};
+​
+console.log("JavaScript Object: ", js_obj);
+​
+// 轉換為 JSON 字串
+var json_str = JSON.stringify(js_obj, ["Jack", "Jen", "Ann"], "Student");
+​
+console.log("JSON Format: ", json_str)
+​
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/01b0a998-22f4-4079-840e-f27d1c163b99.webp" onerror="this.srcset='https://assets.matters.news/embed/01b0a998-22f4-4079-840e-f27d1c163b99.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/01b0a998-22f4-4079-840e-f27d1c163b99.png" onerror="this.srcset='https://assets.matters.news/embed/01b0a998-22f4-4079-840e-f27d1c163b99.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/01b0a998-22f4-4079-840e-f27d1c163b99.webp">
+
+        <img src="https://assets.matters.news/embed/01b0a998-22f4-4079-840e-f27d1c163b99.png" srcset="https://assets.matters.news/processed/540w/embed/01b0a998-22f4-4079-840e-f27d1c163b99.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p>範例二: 添加制表符(ex. \t、\n、\r等等)</p><pre class="ql-syntax"><script type = "text/javascript">
+​
+// 定義 JavaScript 對象
+​
+var js_obj = {
+  'Jack': 99,
+  'Ann': 90,
+  'Ken': 86,
+  'Jen': 75
+};
+​
+console.log("JavaScript Object: ", js_obj);
+​
+// 轉換為 JSON 字串
+var json_str = JSON.stringify(js_obj, ["Jack", "Jen", "Ann"], "\n");
+​
+console.log("JSON Format: ", json_str)
+​
+​
+</script>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.webp" onerror="this.srcset='https://assets.matters.news/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.png" onerror="this.srcset='https://assets.matters.news/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.webp">
+
+        <img src="https://assets.matters.news/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.png" srcset="https://assets.matters.news/processed/540w/embed/7e375eb2-2db1-46ae-9309-39ee9972f06b.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p>
