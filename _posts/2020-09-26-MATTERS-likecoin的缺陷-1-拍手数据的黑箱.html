@@ -1,0 +1,32 @@
+---
+layout: post
+title: LikeCoin的缺陷（1）：拍手数据的黑箱
+date: 2020-09-26 13:29:00.000000000 +00:00
+categories: matters
+tags: blog
+author: Andy
+---
+
+<p>LikeCoin分配新币的核心机制是拍手，很遗憾，LikeCoin拍手数据验证高度中心化，外人无法参与，无法监察，全靠信任。</p><p>首先，Like Button的拍手数据只会发给LikeCoin运营方，具体来说是<a href="http://like.co/" target="_blank">like.co</a>（技术分析见本文附件1），其他人是拿不到的。</p><p>其次，接收拍手，必须有Liker ID，这个Liker ID，又必须向LikeCoin运营方申请，之后使用，也时时依赖LikeCoin站方。</p><p>（点LikeButton的时候，如果没登录，会强制要求注册，注册必须向第三方请求身份验证，或者用邮箱向LikeCoin注册。并没有提供去中心化的账户机制。）</p><p>再次，LikeCoin运营方接收了拍手数据之后，也没有公开过（见附件2）。</p><p>可是，拍手数据是LIKE币分配的基础，如果拍手数据不公平不公开，LIKE币之公平公开从何谈起？</p><p>结论是：<strong>LikeCoin官方垄断拍手数据接口，垄断接受拍手的Liker ID，也没有公开拍手数据，外人无法监察。</strong></p><p>LIKE币分配有没有根据白皮书中的算法？</p><p>每天用户的拍手数究竟是多少，所得的LIKE币与拍手数是否对应？</p><p>每天拍手数有多少由官方人员接收？</p><p>LikeCoin记录了多少拍手人的IP地址、身份识别信息？</p><p>不知道。</p><h2>【问答环节】</h2><p><strong>问：LikeCoin是开源的，可以信任官方吧？</strong></p><p>答：我们无法确定LikeCoin在使用开源的那个版本。如果愿意信任官方，何必去中心？</p><p><strong>问：不是有Big Dipper吗？</strong></p><p>答：Big dipper是看交易用的，不是看拍手用的。拍手不是交易。</p><p><strong>问：你只会批评，没有建设，你行你上啊！</strong></p><p>答：无中心的拍手验证，是可以做的。</p><p>第一步，去掉中心化的Liker ID，用非对称私钥来做身份认证信息，谁都可以生成账户，无需官方认证，不受官方封禁。</p><p>第二步，开放验证拍手。现在验证人验证区块，基本是浪费电力，多数区块都是空的，一个交易都没有，没什么好验证的。不如让验证人做点有用的事情，帮大家验证拍手，比如过滤掉一篇文章超过五次拍手，封禁机器人拍手刷赞。</p><p>用户拍手，操作数据不要直接发给<a href="http://like.co/" target="_blank">like.co</a>，而是发给验证人，拍手究竟发给哪些验证人验证，由内容作者自行选择。</p><p>第三步，废除验证人资金门槛，任何人都可以担任验证人，由作者谁来验证自己文章的拍手。现在额度最少的验证人也有5亿LIKE，这个门槛其实非常高，要不是有巨额现金，要不是与社区早期玩家有关系，否则拿不到这么大量的LIKE。</p><p>创作社区的验证人，还是应该让创作者来选吧。</p><p>第四步，摸索拍手验证机制的规则与惯例。</p><p>谁都可以做验证人，不代表每个人的验证权都应该相等。</p><p>比如，可以拟定规则，有的验证人验证得松，那这个验证人发钱的额度就少；验证得严的验证人，那发钱的额度就多。</p><p>甚至版权问题都可以进入验证体系，比如验证人可以拒绝抄袭作品的拍手，屡犯者直接拒绝。如果作者不服验证，可以换验证人。这样双方有制衡，问题也能够处理。</p><p><strong>问：你是不是LikeCoin空方？你批评LikeCoin有什么目的？</strong></p><p>答：上周抛了一些，现在手里还有几万LIKE。</p><p>我希望LikeCoin兑现承诺：「讚賞公民共和國<em> </em>政府去中心化的數據記錄，專為內容創作和資料產權而設計，提供高效、便宜，及尤其重要的獨立性」「讚賞公民共和國<em> </em>是一個分散式自治機構」。</p><p>能不能先把「Like」先独立了、分散了？</p><h2><strong>【附件1】LikeButton的拍手数据发给了谁？</strong></h2><p>上代码：</p><p><a href="https://github.com/likecoin/likecoin-button/blob/master/src/constant/index.js#L11" target="_blank">https://github.com/likecoin/likecoin-button/blob/master/src/constant/index.js#L11</a></p><pre class="ql-syntax">11 | export const LIKE_CO_HOSTNAME = IS_TESTNET ? 'rinkeby.like.co' : 'like.co';
+17 | export const LIKECOIN_MISC_API_BASE = `https://${LIKE_CO_HOSTNAME}`;
+</pre><p>API终端地址写死了是<a href="http://like.co/" target="_blank">like.co</a>。</p><p>（拍手操作在src/util/api/api.js的apiPostLikeButton函数，引用LIKECOIN_MISC_API_BASE）。</p><p>试验也支持这一结论：</p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.webp" onerror="this.srcset='https://assets.matters.news/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.png" onerror="this.srcset='https://assets.matters.news/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.webp">
+
+        <img src="https://assets.matters.news/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.png" srcset="https://assets.matters.news/processed/540w/embed/1171f50f-c81f-4d3e-8562-cede8fff017a.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2>【附件二】LikeCoin的拍手数据有公开吗？</h2><p><strong>我尝试了以下关键字搜索LikeCoin官网：</strong></p><p>clapping record siet:<a href="http://like.co/" target="_blank">like.co</a></p><p>like button history site:<a href="http://like.co/" target="_blank">like.co</a></p><p>button record site:<a href="http://like.co/" target="_blank">like.co</a></p><p>歷史 site:<a href="http://like.co/" target="_blank">like.co</a></p><p>拍手數據 site:<a href="http://like.co/" target="_blank">like.co</a></p><p><strong>又阅读了LikeCoin的API文档：</strong></p><p>https://docs.like.co/developer/likecoin-chain-api/rpc-api</p><p>https://docs.like.co/developer/likecoin-api/calling-api</p><p><strong>LikeCoin Telegram群组关键字搜索：</strong></p><p>record</p><p>history</p><p><br></p><p>一无所获。</p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.webp" onerror="this.srcset='https://assets.matters.news/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.png" onerror="this.srcset='https://assets.matters.news/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.webp">
+
+        <img src="https://assets.matters.news/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.png" srcset="https://assets.matters.news/processed/540w/embed/e335a7e2-0b3f-4ed7-a13e-e738b4e49921.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>据说有个图比较好。我放弃本图著作权，以CC0释放，取用自便。</span></figcaption></figure><p><br></p>
