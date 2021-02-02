@@ -1,0 +1,322 @@
+---
+layout: post
+title: 寫給自己的技術筆記 - 作為程式開發者我們絕對不能忽略的JSON - Python 如何處理JSON文件
+date: 2021-02-01 12:22:06.000000000 +00:00
+categories: matters
+tags: blog
+author: 為自己Coding
+---
+
+<h1><br></h1><p>如果覺得我的圖不清楚都可以直接在我的Github上看喔，<a href="https://github.com/chwang12341/Other-Tools/blob/master/JSON/part3/JSON3.md" target="_blank">Github連結</a></p><p><br></p><p>哈囉，由於JSON系列的第一篇(寫給自己的技術筆記 - 作為程式開發者我們絕對不能忽略的JSON - 教學和用法 - 以JavaScript為例(一))已經針對JSON做過介紹了，所以這篇就不會再詳細介紹JSON囉，這篇會把重點放在如何使用Python來處理JSON檔案</p><h2><br></h2><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.webp" onerror="this.srcset='https://assets.matters.news/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.jpeg'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.jpeg" onerror="this.srcset='https://assets.matters.news/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.jpeg'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.webp">
+
+        <img src="https://assets.matters.news/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.jpeg" srcset="https://assets.matters.news/processed/540w/embed/b63a4b8f-788d-4ca4-8339-ef6389bfd51e.jpeg" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span>攝影師：Mateusz Sałaciak，連結：Pexels</span></figcaption></figure><p><br></p><p><br></p><h2><strong>1. JSON 介紹</strong></h2><ul><li>JSON 全名為 JavaScript Object Notation，即 JavaScript 對象標記法</li><li>2001年提出</li><li>特性:</li><li>輕量型(Light-Weight): 表示產出的檔案非常小</li><li>基於文本的(Text-Based): 可以使用文本編譯器(ex. 記事本)開啟</li><li>可讀的(Human-Readable)格式: 可以輕鬆被人閱讀</li><li>穩定性(Stability): JSON創始人說 JSON 格式永遠不會改變，也就是說很久以前寫的 JSON 文件，很久以後也能使用，就不會有兼容性的問題</li><li>目前 REST API 的主流形式，可見它在數據交換格式的重要性</li></ul><h2><br></h2><h2><br></h2><h2><strong>2. Python中的JSON套件</strong></h2><ul><li>json套件: Python中用來編碼和解碼JSON文件的套件</li><li>json套件為Python中自帶的套件，所以不用額外安裝，只需要直接載入即可</li></ul><h3><br></h3><h3><strong>JSON 和 Python 資料型態轉換表</strong></h3><h4><strong>Python 轉 JSON</strong></h4><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.webp" onerror="this.srcset='https://assets.matters.news/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.png" onerror="this.srcset='https://assets.matters.news/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.webp">
+
+        <img src="https://assets.matters.news/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.png" srcset="https://assets.matters.news/processed/540w/embed/b2f1df52-33da-4c6e-b713-e0f51b0dd27e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><h4><strong>JSON 轉 Python</strong></h4><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.webp" onerror="this.srcset='https://assets.matters.news/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.png" onerror="this.srcset='https://assets.matters.news/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.webp">
+
+        <img src="https://assets.matters.news/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.png" srcset="https://assets.matters.news/processed/540w/embed/4c9ea316-5a0c-4301-8046-c3d03aceb0fd.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><h2><strong>3. Python 如何處理 JSON 套件</strong></h2><p><strong>處理過程分成:</strong></p><ul><li>Marshalling / Encoder 序列化: 代表將 Python 的物件資料轉換成為 JSON 物件，使用方法 - json.dumps 或 json.dump</li><li>Unmarshalling / Decoder 反序列化: 代表將 JSON 物件轉換成為 Python 的資料物件，使用方法 - json.loads 或 json.load</li></ul><p><strong>使用方法</strong></p><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.webp" onerror="this.srcset='https://assets.matters.news/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.png" onerror="this.srcset='https://assets.matters.news/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.webp">
+
+        <img src="https://assets.matters.news/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.png" srcset="https://assets.matters.news/processed/540w/embed/45ef69b4-88b0-492e-8c65-3a3579c4ff56.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><strong>完整參數</strong></p><ul><li>json.dumps</li></ul><pre class="ql-syntax">dumps(obj, *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, default=None, sort_keys=False, **kw)
+</pre><ul><li>json.dump</li></ul><pre class="ql-syntax">dump(obj, fp, *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, default=None, sort_keys=False, **kw)
+</pre><ul><li>json.loads</li></ul><pre class="ql-syntax">loads(s, *, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw)
+</pre><ul><li>json.load</li></ul><pre class="ql-syntax">load(fp, *, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw)
+</pre><h2><br></h2><h2><br></h2><h2><strong>4. 實作</strong></h2><p><br></p><h3><strong>JSON 檔案或字符串 轉 Python字典</strong></h3><p><br></p><h4><strong>1. 從JSON檔中導入</strong></h4><ul><li>我們有一份JSON擋 - test.json</li></ul><pre class="ql-syntax">{
+  "Student 1": {
+    "Student_id": 126,
+    "Name": "Jack",
+    "Score": 99,
+    "Friends": ["Tim", "Jen", "Ken"]
+ },
+​
+  "Student 2": {
+    "Student_id": 128,
+    "Name": "Ken",
+    "Score": 99,
+    "Friends": ["Jack", "Jessy", "Cathy"]
+ }
+}
+​
+</pre><ul><li>方法一: json.load</li></ul><pre class="ql-syntax">import json
+​
+## 讀取JSON檔
+with open('test.json', 'r') as f:
+  ## 轉成Python Dict
+  python_dict = json.load(fp = f)
+print("Python Dict: ", python_dict)
+print("Type: ", type(python_dict))
+</pre><p><br></p><p><strong>執行結果</strong></p><pre class="ql-syntax">Python Dict: {'Student 1': {'Student_id': 126, 'Name': 'Jack', 'Score': 99, 'Friends': ['Tim', 'Jen', 'Ken']}, 'Student 2': {'Student_id': 128, 'Name': 'Ken', 'Score': 99, 'Friends': ['Jack', 'Jessy', 'Cathy']}}
+Type: <class 'dict'>
+</pre><p><br></p><p><br></p><ul><li>方法二: json.loads</li></ul><pre class="ql-syntax">​
+import json
+​
+## 讀取JSON檔
+with open('test.json', 'r') as f:
+  ## 將內容裝進text
+  text = f.read()
+  
+print("JSON Format: ", text)
+print("Type: ", type(text))
+print("From JSON String Transform To Python Dict")
+print("Python Dict: ", json.loads(text))
+print("Type: ", type(json.loads(text)))
+​
+
+</pre><h4><br></h4><h4>執行結果</h4><pre class="ql-syntax">​JSON Format: {
+ "Student 1": {
+   "Student_id": 126,
+   "Name": "Jack",
+   "Score": 99,
+   "Friends": ["Tim", "Jen", "Ken"]
+ },
+​
+ "Student 2": {
+   "Student_id": 128,
+   "Name": "Ken",
+   "Score": 99,
+   "Friends": ["Jack", "Jessy", "Cathy"]
+ }
+}
+​
+Type: <class 'str'>
+From JSON String Transform To Python Dict
+Python Dict: {'Student 1': {'Student_id': 126, 'Name': 'Jack', 'Score': 99, 'Friends': ['Tim', 'Jen', 'Ken']}, 'Student 2': {'Student_id': 128, 'Name': 'Ken', 'Score': 99, 'Friends': ['Jack', 'Jessy', 'Cathy']}}
+Type: <class 'dict'>
+</pre><p><br></p><p><br></p><p><br></p><p><br></p><p><strong>2. 有一筆JSON Format的字符串 轉 Python Dict</strong></p><ul><li>只能使用json.loads</li></ul><pre class="ql-syntax">import json
+​
+## JSON Format的字符串
+text = '{"Name":"Jack", "Score": 99}'
+​
+print("JSON Format: ", text)
+print("Type:, "type(text))
+print("From JSON String Transform To Python Dict")
+print("Python Dict: ", json.loads(text))
+print("Type: ", type(json.loads(text)))
+​
+
+</pre><p><br></p><p><strong>執行結果</strong></p><pre class="ql-syntax">JSON Format: {"Name":"Jack", "Score": 99}
+Type: <class 'str'>
+From JSON String Transform To Python Dict
+Python Dict: {'Name': 'Jack', 'Score': 99}
+Type: <class 'dict'>
+</pre><h3><br></h3><p><strong>Python 字典(Dict) 轉 JSON字符串</strong></p><p><br></p><h4><strong>1. 寫入到JSON檔 - 會自動保存成JSON檔</strong></h4><ul><li>方法一: json.dump</li></ul><pre class="ql-syntax">import json
+​
+## Python 字典
+python_dict = {
+  'Name': "Jack",
+  'Score': 99
+}
+​
+## 存成JSON File
+with open("python2json.json", 'w') as f:
+  json.dump(python_dict, f) 
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.webp" onerror="this.srcset='https://assets.matters.news/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.png" onerror="this.srcset='https://assets.matters.news/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.webp">
+
+        <img src="https://assets.matters.news/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.png" srcset="https://assets.matters.news/processed/540w/embed/2e38ca92-81c7-4033-90d7-d611a0d22918.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><ul><li>方法二: JSON.dumps</li></ul><pre class="ql-syntax">import json
+​
+## Python 字典
+python_dict = {
+  'Name': "Jack",
+  "Score": 99,
+}
+print("Python Dict: ", python_dict)
+print("Type: ", type(python_dict))
+print("From Python Dict Transform To JSON Format")
+print("JSON Format: ", json.dumps(python_dict))
+print("Type: ", type(json.dumps(python_dict)))
+​
+## 存成JSON File
+with open('python2json1.json', 'w') as f:
+  f.write(json.dumps(python_dict))
+
+</pre><p><br></p><p><br></p><p><strong>執行結果</strong></p><pre class="ql-syntax">Python Dict: {'Name': 'Jack', 'Score': 99}
+Type: <class 'dict'>
+From Python Dict Transform To JSON Format
+JSON Format: {"Name": "Jack", "Score": 99}
+Type: <class 'str'>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.webp" onerror="this.srcset='https://assets.matters.news/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.png" onerror="this.srcset='https://assets.matters.news/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.webp">
+
+        <img src="https://assets.matters.news/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.png" srcset="https://assets.matters.news/processed/540w/embed/371739a6-6366-4b97-8036-e03c6d4ba8c3.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><h4><strong>2. 轉成 JSON Format的字符串</strong></h4><ul><li>只能使用函數: json.dumps</li></ul><pre class="ql-syntax">import json
+​
+## Python 字典
+python_dict = {
+  'Name': "Jack",
+  "Score": 99,
+}
+print("Python Dict: ", python_dict)
+print("Type: ", type(python_dict))
+print("From Python Dict Transform To JSON Format")
+print("JSON Format: ", json.dumps(python_dict))
+print("Type: ", type(json.dumps(python_dict)))
+
+</pre><h3><br></h3><p><strong>執行結果</strong></p><pre class="ql-syntax">Python Dict: {'Name': 'Jack', 'Score': 99}
+Type: <class 'dict'>
+From Python Dict Transform To JSON Format
+JSON Format: {"Name": "Jack", "Score": 99}
+Type: <class 'str'>
+</pre><p><br></p><p><br></p><h3><br></h3><p><strong>Python 字典(Dict)中包含list 轉 JSON 字符串</strong></p><p><br></p><ul><li>範例: 這邊是使用dumps來存進檔案</li></ul><pre class="ql-syntax">import json
+​
+## Python 字典
+python_dict = {
+  "Student A": {
+    "Student_id": 126,
+    "Name": "Jack",
+    "Score": 99,
+    "Friends": ["Tim", "Jen", "Cindy"]
+ },
+  
+  "Student B":{
+    "Student_id": 128,
+    "Name": "Ken",
+    "Score": 98,
+    "Friends": ["Jack", "Jessy", "Cathy"]
+ }
+}
+print("Python Dict: ", python_dict)
+print("Type: ", type(python_dict))
+print("From Python Dict Transform To JSON Format")
+print("JSON Format: ", json.dumps(python_dict))
+print("Type: ", type(json.dumps(python_dict)))
+​
+## 存成JSON File
+with open('python2json2.json', 'w') as f:
+  f.write(json.dumps(python_dict))
+
+</pre><p><br></p><p><strong>執行結果</strong></p><pre class="ql-syntax">Python Dict: {'Student A': {'Student_id': 126, 'Name': 'Jack', 'Score': 99, 'Friends': ['Tim', 'Jen', 'Cindy']}, 'Student B': {'Student_id': 128, 'Name': 'Ken', 'Score': 98, 'Friends': ['Jack', 'Jessy', 'Cathy']}}
+Type: <class 'dict'>
+From Python Dict Transform To JSON Format
+JSON Format: {"Student A": {"Student_id": 126, "Name": "Jack", "Score": 99, "Friends": ["Tim", "Jen", "Cindy"]}, "Student B": {"Student_id": 128, "Name": "Ken", "Score": 98, "Friends": ["Jack", "Jessy", "Cathy"]}}
+Type: <class 'str'>
+</pre><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.webp" onerror="this.srcset='https://assets.matters.news/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.png" onerror="this.srcset='https://assets.matters.news/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.webp">
+
+        <img src="https://assets.matters.news/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.png" srcset="https://assets.matters.news/processed/540w/embed/7f4902a6-d7fb-4f7c-81d9-8863a02928bb.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p>大家也可以試試用json.dump的方式存成JSON檔喔</p><p><br></p><p><br></p><h2><strong>5. 重要補充: 如果寫進JSON檔，想要更易讀的格式來寫</strong></h2><p><br></p><ul><li>前面的範例中，當我們把Python Dict轉成JSON Format的字符串時，都會變成一排(行)，但實際上的狀況是我們需要閱讀這些JSON檔，如果數據一多就會很難閱讀</li><li>在json.dumps()裡面填上一個參數indent，用來指定每行開頭要空幾格</li><li>範例一: 我將indent設4，代表空四格</li></ul><pre class="ql-syntax">import json
+​
+## Python 字典
+python_dict = {
+  'Name': "Jack",
+  "Score": 99,
+}
+print("Python Dict: ", python_dict)
+print("Type: ", type(python_dict))
+print("From Python Dict Transform To JSON Format")
+print("JSON Format: ", json.dumps(python_dict))
+print("Type: ", type(json.dumps(python_dict)))
+​
+## 存成JSON File
+with open('python2json3.json', 'w') as f:
+  f.write(json.dumps(python_dict, indent = 4))
+
+</pre><p><br></p><p><strong>執行結果</strong></p><pre class="ql-syntax">Python Dict: {'Name': 'Jack', 'Score': 99}
+Type: <class 'dict'>
+From Python Dict Transform To JSON Format
+JSON Format: {"Name": "Jack", "Score": 99}
+Type: <class 'str'>
+</pre><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.webp" onerror="this.srcset='https://assets.matters.news/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.png" onerror="this.srcset='https://assets.matters.news/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.webp">
+
+        <img src="https://assets.matters.news/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.png" srcset="https://assets.matters.news/processed/540w/embed/10f2cff3-e1f4-4989-bfb4-9aad2b8d9e4e.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p><p><br></p><p><br></p><p><br></p><ul><li>json.dump也擁有參數indent喔</li><li>範例二:</li></ul><pre class="ql-syntax">import json
+​
+## Python 字典
+python_dict = {
+  "Student A": {
+    "Student_id": 126,
+    "Name": "Jack",
+    "Score": 99,
+    "Friends": ["Tim", "Jen", "Cindy"]
+ },
+  
+  "Student B":{
+    "Student_id": 128,
+    "Name": "Ken",
+    "Score": 98,
+    "Friends": ["Jack", "Jessy", "Cathy"]
+ }
+}
+print("Python Dict: ", python_dict)
+print("Type: ", type(python_dict))
+print("From Python Dict Transform To JSON Format")
+print("JSON Format: ", json.dumps(python_dict))
+print("Type: ", type(json.dumps(python_dict)))
+​
+## 存成JSON File
+with open('python2json4.json', 'w') as f:
+  f.write(json.dumps(python_dict, indent = 4))
+  f.write('\n')
+
+</pre><p><br></p><p><strong>執行結果</strong></p><pre class="ql-syntax">Python Dict: {'Student A': {'Student_id': 126, 'Name': 'Jack', 'Score': 99, 'Friends': ['Tim', 'Jen', 'Cindy']}, 'Student B': {'Student_id': 128, 'Name': 'Ken', 'Score': 98, 'Friends': ['Jack', 'Jessy', 'Cathy']}}
+Type: <class 'dict'>
+From Python Dict Transform To JSON Format
+JSON Format: {"Student A": {"Student_id": 126, "Name": "Jack", "Score": 99, "Friends": ["Tim", "Jen", "Cindy"]}, "Student B": {"Student_id": 128, "Name": "Ken", "Score": 98, "Friends": ["Jack", "Jessy", "Cathy"]}}
+Type: <class 'str'>
+</pre><p><br></p><figure class="image">
+      <picture>
+        <source type="image/webp" media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/0878eec6-b248-4aa6-961b-98b258854a4d.webp" onerror="this.srcset='https://assets.matters.news/embed/0878eec6-b248-4aa6-961b-98b258854a4d.png'">
+
+        <source media="(min-width: 768px)" srcset="https://assets.matters.news/processed/1080w/embed/0878eec6-b248-4aa6-961b-98b258854a4d.png" onerror="this.srcset='https://assets.matters.news/embed/0878eec6-b248-4aa6-961b-98b258854a4d.png'">
+
+        <source type="image/webp" srcset="https://assets.matters.news/processed/540w/embed/0878eec6-b248-4aa6-961b-98b258854a4d.webp">
+
+        <img src="https://assets.matters.news/embed/0878eec6-b248-4aa6-961b-98b258854a4d.png" srcset="https://assets.matters.news/processed/540w/embed/0878eec6-b248-4aa6-961b-98b258854a4d.png" loading="lazy" referrerpolicy="no-referrer">
+      </picture>
+    <figcaption><span></span></figcaption></figure><p><br></p>
