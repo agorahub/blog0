@@ -6,6 +6,8 @@ comments_repo: agorahub/blog0
 comments_id: 1
 ---
 
+> This branch has been no longer updated. Please visit the blog0 at https://agora0.gitlab.io/blog, or its landing page at https://agorahub.github.io/blog0.
+
 Read blogs on demand.
 
 | Source  | Importer   | Update |
