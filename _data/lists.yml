@@ -1,0 +1,37 @@
+'initium': 
+  - name: 最新
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/initium
+  - name: 20.Q4
+    repo: https://gitlab.com/agora0/pen/20q4
+    site: https://agora0.gitlab.io/pen/20q4/initium
+  - name: 20.Q3
+    repo: https://gitlab.com/agora0/pen/20q3
+    site: https://agora0.gitlab.io/pen/20q3/initium
+
+'matters': 
+  - name: 最新
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/matters
+  - name: 20.Q4
+    repo: https://gitlab.com/agora0/pen/20q4
+    site: https://agora0.gitlab.io/pen/20q4/matters
+  - name: 20.Q3
+    repo: https://gitlab.com/agora0/pen/20q3
+    site: https://agora0.gitlab.io/pen/20q3/matters
+
+'vocus': 
+  - name: 最新
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/vocus
+  - name: 20.Q4
+    repo: https://gitlab.com/agora0/pen/20q4
+    site: https://agora0.gitlab.io/pen/20q4/vocus
+  - name: 20.Q3
+    repo: https://gitlab.com/agora0/pen/20q3
+    site: https://agora0.gitlab.io/pen/20q3/vocus
+
+'stand': 
+  - name: 最新
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/stand
