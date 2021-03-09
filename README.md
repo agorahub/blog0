@@ -1,19 +1,19 @@
 # BLOG⓪
 
-Landing page of the Agora Blog Aggregation. 👉 https://agora0.gtilab.io/blog
+Landing page of the Agora Blog Aggregator. 👉 https://agora0.gtilab.io/blog
 
-## Blog Aggregation
+## Blog Sources
 
-| [INITIUM](https://agora0.gitlab.io/blog/initium.html) | [MATTERS](https://agora0.gitlab.io/blog/matters.html) | [VOCUS](https://agora0.gitlab.io/blog/vocus.html) |
-| :-------- | :-------- | :-------- |
-| Quarterly | Quarterly | Quarterly |
+| [INITIUM](https://agora0.gitlab.io/blog/initium) | [MATTERS](https://agora0.gitlab.io/blog/matters) | [STAND](https://agora0.gitlab.io/blog/stand) | [VOCUS](https://agora0.gitlab.io/blog/vocus) |
+| -- | -- | -- | -- |
+| [![](./img/portfolio/initium.jpg)](https://theinitium.com) | [![](./img/portfolio/matters.jpg)](https://matters.news) | [![](./img/portfolio/stand.jpg)](https://thestandnews.com) | [![](./img/portfolio/vocus.jpg)](https://vocus.cc) |
 
-## How To Contribute
+## How to Contribute
 
 [Agora Community](https://github.com/agorahub) is an open source driven society.
 - Join the Agora - [agorahub/_join](https://github.com/agorahub/_join)
 - Start exploring - [agorahub/_meta](https://github.com/agorahub/_meta)
-- Leave comments - [agorahub/blog0/issues/1](https://github.com/agorahub/blog0/issues/1)
+- Manage features - [agorahub/blog0#3](https://github.com/agorahub/blog0/issues/3)
 
 ## Disclaimer
 
