@@ -4,9 +4,9 @@ Landing page of the Agora Blog Aggregator. 👉 https://agora0.gtilab.io/blog
 
 ## Blog Sources
 
-| [HKCNEWS](https://agora0.gitlab.io/blog/hkcnews) | [INITIUM](https://agora0.gitlab.io/blog/initium) | [MATTERS](https://agora0.gitlab.io/blog/matters) | [STAND](https://agora0.gitlab.io/blog/stand) | [VOCUS](https://agora0.gitlab.io/blog/vocus) |
-| -- | -- | -- | -- | -- |
-| [![](./img/portfolio/hkcnews.jpg)](https://hkcnews.com) | [![](./img/portfolio/initium.jpg)](https://theinitium.com) | [![](./img/portfolio/matters.jpg)](https://matters.news) | [![](./img/portfolio/stand.jpg)](https://thestandnews.com) | [![](./img/portfolio/vocus.jpg)](https://vocus.cc) |
+| [HKCNEWS](https://agora0.gitlab.io/blog/hkcnews) | [INITIUM](https://agora0.gitlab.io/blog/initium) | [INMEDIA](https://agora0.gitlab.io/blog/inmedia) | [MATTERS](https://agora0.gitlab.io/blog/matters) | [STAND](https://agora0.gitlab.io/blog/stand) | [VOCUS](https://agora0.gitlab.io/blog/vocus) |
+| -- | -- | -- | -- | -- | -- |
+| [![](./img/portfolio/hkcnews.jpg)](https://hkcnews.com) | [![](./img/portfolio/initium.jpg)](https://theinitium.com) | [![](./img/portfolio/inmedia.jpg)](https://inmediahk.net) | [![](./img/portfolio/matters.jpg)](https://matters.news) | [![](./img/portfolio/stand.jpg)](https://thestandnews.com) | [![](./img/portfolio/vocus.jpg)](https://vocus.cc) |
 
 ## How to Contribute
 
