@@ -1,3 +1,8 @@
+'pq': 
+  - name: 最新
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/pq
+
 'inmedia': 
   - name: 最新
     repo: https://gitlab.com/agora0/blog
