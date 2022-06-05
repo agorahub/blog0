@@ -1,6 +1,6 @@
 # BLOG⓪
 
-Landing page of the Agora Blog Aggregator. 👉 https://agora0.gtilab.io/blog
+Landing page of the Agora Blog Aggregator. 👉 https://agora0.gitlab.io/blog
 
 ## Blog Sources
 
