@@ -1,7 +1,7 @@
 # Site settings
 title: BLOG⓪
-url: 'https://agorahub.github.io'
-baseurl: '/blog0'
+baseurl: "/blog0"
+url: "https://agorahub.github.io"
 description: "Agora Blog Aggregation"
 keywords: "agora, 媒体聚合, 海外中文"
 subtitle: "墙裂时光 隙水长流"
@@ -38,7 +38,7 @@ address:
   - line: ⓪pen source ⓵nitiative
 
 # Credits content
-credits: 'AG⓪RA is open to all <br> made with heart by theagora'
+credits: AG⓪RA is open to all <br> made with heart by theagora
 
 # Build settings
 markdown: kramdown
