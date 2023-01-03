@@ -1,7 +1,7 @@
 'pq': 
   - name: 最新
-    repo: https://github.com/agora0/blog
-    site: https://agora0.github.io/blog/pq
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/pq
   - name: 22.Q4
     repo: https://gitlab.com/agora0/pen/22q4
     site: https://agora0.gitlab.io/pen/22q4/pq
@@ -29,8 +29,8 @@
 
 'inmedia': 
   - name: 最新
-    repo: https://github.com/agora0/blog
-    site: https://agora0.github.io/blog/inmedia
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/inmedia
   - name: 22.Q4
     repo: https://gitlab.com/agora0/pen/22q4
     site: https://agora0.gitlab.io/pen/22q4/inmedia
@@ -52,8 +52,8 @@
 
 'initium': 
   - name: 最新
-    repo: https://github.com/agora0/blog
-    site: https://agora0.github.io/blog/initium
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/initium
   - name: 22.Q4
     repo: https://gitlab.com/agora0/pen/22q4
     site: https://agora0.gitlab.io/pen/22q4/initium
@@ -87,8 +87,8 @@
 
 'matters': 
   - name: 最新
-    repo: https://github.com/agora0/blog
-    site: https://agora0.github.io/blog/matters
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/matters
   - name: 22.Q4
     repo: https://gitlab.com/agora0/pen/22q4
     site: https://agora0.gitlab.io/pen/22q4/matters
@@ -122,8 +122,8 @@
 
 'vocus': 
   - name: 最新
-    repo: https://github.com/agora0/blog
-    site: https://agora0.github.io/blog/vocus
+    repo: https://gitlab.com/agora0/blog
+    site: https://agora0.gitlab.io/blog/vocus
   - name: 22.Q4
     repo: https://gitlab.com/agora0/pen/22q4
     site: https://agora0.gitlab.io/pen/22q4/vocus
