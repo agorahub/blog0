@@ -2,6 +2,9 @@
   - name: 最新
     repo: https://gitlab.com/agora0/blog
     site: https://agora0.gitlab.io/blog/pq
+  - name: 24.Q1
+    repo: https://gitlab.com/agora0/pen/24q1
+    site: https://agora0.gitlab.io/pen/24q1/pq
   - name: 23.Q4
     repo: https://gitlab.com/agora0/pen/23q4
     site: https://agora0.gitlab.io/pen/23q4/pq
@@ -43,6 +46,9 @@
   - name: 最新
     repo: https://gitlab.com/agora0/blog
     site: https://agora0.gitlab.io/blog/inmedia
+  - name: 24.Q1
+    repo: https://gitlab.com/agora0/pen/24q1
+    site: https://agora0.gitlab.io/pen/24q1/inmedia
   - name: 23.Q4
     repo: https://gitlab.com/agora0/pen/23q4
     site: https://agora0.gitlab.io/pen/23q4/inmedia
@@ -78,6 +84,9 @@
   - name: 最新
     repo: https://gitlab.com/agora0/blog
     site: https://agora0.gitlab.io/blog/initium
+  - name: 24.Q1
+    repo: https://gitlab.com/agora0/pen/24q1
+    site: https://agora0.gitlab.io/pen/24q1/initium
   - name: 23.Q4
     repo: https://gitlab.com/agora0/pen/23q4
     site: https://agora0.gitlab.io/pen/23q4/initium
@@ -125,6 +134,9 @@
   - name: 最新
     repo: https://gitlab.com/agora0/blog
     site: https://agora0.gitlab.io/blog/matters
+  - name: 24.Q1
+    repo: https://gitlab.com/agora0/pen/24q1
+    site: https://agora0.gitlab.io/pen/24q1/matters
   - name: 23.Q4
     repo: https://gitlab.com/agora0/pen/23q4
     site: https://agora0.gitlab.io/pen/23q4/matters
@@ -172,6 +184,9 @@
   - name: 最新
     repo: https://gitlab.com/agora0/blog
     site: https://agora0.gitlab.io/blog/vocus
+  - name: 24.Q1
+    repo: https://gitlab.com/agora0/pen/24q1
+    site: https://agora0.gitlab.io/pen/24q1/vocus
   - name: 23.Q4
     repo: https://gitlab.com/agora0/pen/23q4
     site: https://agora0.gitlab.io/pen/23q4/vocus
