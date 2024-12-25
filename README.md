@@ -1,12 +1,12 @@
 # BLOG⓪
 
-Landing page of the Agora Blog Aggregator. 👉 https://agora0.gitlab.io/blog
+Landing page of the Agora Blog Aggregator. 👉 https://agora0.github.io/post
 
 ## Blog Sources
 
-| [muitinⒾ](https://agora0.gitlab.io/blog/initium) | [aidemnⒾ](https://agora0.gitlab.io/blog/inmedia) | [srettaⓂ](https://agora0.gitlab.io/blog/matters) | [qⓅ](https://agora0.gitlab.io/blog/pq) | [sucoⓋ](https://agora0.gitlab.io/blog/vocus) |
-| -- | -- | -- | -- | -- |
-| [![](./img/portfolio/initium.jpg)](https://theinitium.com) | [![](./img/portfolio/inmedia.jpg)](https://inmediahk.net) | [![](./img/portfolio/matters.jpg)](https://matters.news) | [![](./img/portfolio/pq.jpg)](https://pourquoi.tw) | [![](./img/portfolio/vocus.jpg)](https://vocus.cc) |
+| [muitinⒾ](https://agora0.github.io/post/initium) | [aidemnⒾ](https://agora0.github.io/post/inmedia) | [srettaⓂ](https://agora0.github.io/post/matters) | [qⓅ](https://agora0.github.io/post/pq) |
+| -- | -- | -- | -- |
+| [![](./img/portfolio/initium.jpg)](https://theinitium.com) | [![](./img/portfolio/inmedia.jpg)](https://inmediahk.net) | [![](./img/portfolio/matters.jpg)](https://matters.news) | [![](./img/portfolio/pq.jpg)](https://pourquoi.tw) |
 
 ## How to Contribute
 
