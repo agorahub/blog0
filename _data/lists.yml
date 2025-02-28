@@ -1,7 +1,4 @@
 'pq': 
-  - name: 最新
-    repo: https://github.com/agora0/post
-    site: https://agora0.github.io/post/pq
   - name: 24.Q4
     repo: https://github.com/agora0/24q4
     site: https://agora0.github.io/24q4/pq
