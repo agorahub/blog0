@@ -52,6 +52,9 @@
   - name: 最新
     repo: https://github.com/agora0/post
     site: https://agora0.github.io/post/inmedia
+  - name: 25.Q3
+    repo: https://github.com/agora0/25q3
+    site: https://agora0.github.io/25q3/inmedia
   - name: 25.Q2
     repo: https://github.com/agora0/25q2
     site: https://agora0.github.io/25q2/inmedia
@@ -105,6 +108,9 @@
   - name: 最新
     repo: https://github.com/agora0/post
     site: https://agora0.github.io/post/initium
+  - name: 25.Q3
+    repo: https://github.com/agora0/25q3
+    site: https://agora0.github.io/25q3/initium
   - name: 25.Q2
     repo: https://github.com/agora0/25q2
     site: https://agora0.github.io/25q2/initium
@@ -170,6 +176,9 @@
   - name: 最新
     repo: https://github.com/agora0/post
     site: https://agora0.github.io/post/matters
+  - name: 25.Q3
+    repo: https://github.com/agora0/25q3
+    site: https://agora0.github.io/25q3/matters
   - name: 25.Q2
     repo: https://github.com/agora0/25q2
     site: https://agora0.github.io/25q2/matters
